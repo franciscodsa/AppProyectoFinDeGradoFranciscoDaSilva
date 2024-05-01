@@ -178,7 +178,7 @@ fun PasswordField(
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         singleLine = true,
         maxLines = 1,
-        label = { Text(text = "Contraseña")}
+        label = { Text(text = stringResource(R.string.contrasena)) }
     )
 }
 
@@ -194,7 +194,7 @@ fun UsernameField(
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
         singleLine = true,
         maxLines = 1,
-        label = { Text(text = "Email")}
+        label = { Text(text = stringResource(R.string.email)) }
     )
 }
 
