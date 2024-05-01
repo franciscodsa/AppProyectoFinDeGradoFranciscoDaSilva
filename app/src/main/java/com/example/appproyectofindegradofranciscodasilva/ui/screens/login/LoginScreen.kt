@@ -11,6 +11,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
@@ -168,7 +169,7 @@ fun PasswordField(
     password: String,
     onTextFieldChanged: (String) -> Unit
 ) {
-    TextField(
+    OutlinedTextField(
         value = password,
         onValueChange = onTextFieldChanged,
         placeholder = { Text(text = stringResource(R.string.contrasena)) },
@@ -177,6 +178,7 @@ fun PasswordField(
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         singleLine = true,
         maxLines = 1,
+        label = { Text(text = "Contraseña")}
     )
 }
 
@@ -184,7 +186,7 @@ fun PasswordField(
 fun UsernameField(
     email: String, onTextFieldChanged: (String) -> Unit
 ) {
-    TextField(
+    OutlinedTextField(
         value = email,
         onValueChange = onTextFieldChanged,
         modifier = Modifier.fillMaxWidth(),
@@ -192,6 +194,7 @@ fun UsernameField(
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
         singleLine = true,
         maxLines = 1,
+        label = { Text(text = "Email")}
     )
 }
 

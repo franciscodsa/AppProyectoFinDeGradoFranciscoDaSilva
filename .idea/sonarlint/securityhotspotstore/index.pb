@@ -3,12 +3,6 @@
 build.gradle.kts,d\b\dbcff70658daf80b53ce624f6adcaa529df5ed8d
 D
 app/build.gradle.kts,d\2\d2a4383452aad84a18429a5844d31330a012a9e6
-É
-Sapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/MainActivity.kt,a\1\a1c572277448de243611f23db43e5475ec47cdef
-ó
-gapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/ui/screens/navigation/Navigation.kt,4\9\4996d49261c2b343e42a20eeb1f452a8d6f00b49
-î
-dapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/ui/screens/navigation/Screens.kt,5\4\54aef09acfbca8392c0f1220da3b658cadfba16c
 è
 _app/src/main/java/com/example/appproyectofindegradofranciscodasilva/ui/navigation/Navigation.kt,2\3\238cce73d05f0588f1126fb8d48963d318d89c3b
 å
@@ -27,3 +21,5 @@ Japp/src/main/java/com/example/appproyectofindegradofranciscodasilva/App.kt,e\a
 Vapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/ui/MainActivity.kt,5\4\54bf41049c0b28d0c7f44ed8fa0a42f5b25885b6
 P
  app/src/main/AndroidManifest.xml,8\c\8c55c3ccc257e5907959013f99656e4c8ec3903e
+ó
+gapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/ui/screens/welcome/WelcomeScreen.kt,a\e\ae985d60d961998c4d740aa0681e922f0fdbd05b
