@@ -2,7 +2,7 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="app">
+      <entry key="ComposablePreview">
         <State>
           <targetSelectedWithDropDown>
             <Target>
@@ -15,10 +15,26 @@
               </deviceKey>
             </Target>
           </targetSelectedWithDropDown>
-          <timeTargetWasSelectedWithDropDown value="2024-04-12T08:14:06.651326Z" />
+          <timeTargetWasSelectedWithDropDown value="2024-05-05T19:52:07.586714400Z" />
         </State>
       </entry>
-      <entry key="composablePreview">
+      <entry key="app">
+        <State>
+          <runningDeviceTargetSelectedWithDropDown>
+            <Target>
+              <type value="RUNNING_DEVICE_TARGET" />
+              <deviceKey>
+                <Key>
+                  <type value="SERIAL_NUMBER" />
+                  <value value="d61bf9bb" />
+                </Key>
+              </deviceKey>
+            </Target>
+          </runningDeviceTargetSelectedWithDropDown>
+          <timeTargetWasSelectedWithDropDown value="2024-05-10T15:24:02.820168900Z" />
+        </State>
+      </entry>
+      <entry key="prev">
         <State />
       </entry>
     </value>

@@ -1,8 +1,11 @@
 package com.example.appproyectofindegradofranciscodasilva.ui.screens.login
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,7 +20,6 @@ import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -27,6 +29,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -36,7 +40,9 @@ import com.example.appproyectofindegradofranciscodasilva.R
 @Composable
 fun LoginScreen(
     viewModel: LoginViewModel = hiltViewModel(),
-    onLogin: () -> Unit
+    onLogin: () -> Unit,
+    toRegistroScreen: () -> Unit,
+    toClaveOlvidadaScreen: () -> Unit,
 ) {
     val state = viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -47,6 +53,8 @@ fun LoginScreen(
 
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
+        modifier = Modifier
+            .fillMaxSize()
     ) { _ ->
         LaunchedEffect(state.value.message) {
             state.value.message?.let {
@@ -60,17 +68,21 @@ fun LoginScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(dimensionResource(id = R.dimen.big_size_space))
         ) {
             AppLogo()
+            Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.big_size_space)))
             Login(
-                Modifier.align(Alignment.Center),
+                Modifier
+                    .align(Alignment.Center)
+                    .padding(dimensionResource(id = R.dimen.big_size_space)),
                 state.value.username,
                 state.value.password,
                 state.value.isLoading,
                 { viewModel.handleEvent(LoginEvent.onPasswordTextChange(it)) },
                 { viewModel.handleEvent(LoginEvent.onUsernameTextChange(it)) },
                 { viewModel.handleEvent(LoginEvent.Login) },
+                { toRegistroScreen() },
+                { toClaveOlvidadaScreen() }
             )
         }
 
@@ -87,6 +99,8 @@ fun Login(
     onChangePasswordText: (String) -> Unit,
     onChangerUsernameText: (String) -> Unit,
     onLoginSelected: () -> Unit,
+    toRegistroScreen: () -> Unit,
+    toClaveOlvidadaScreen: () -> Unit
 ) {
     if (isLoading) {
         Box(
@@ -98,8 +112,6 @@ fun Login(
 
         Column(modifier = modifier) {
 
-
-            Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.big_size_space)))
             UsernameField(username) {
                 onChangerUsernameText(it)
             }
@@ -108,17 +120,38 @@ fun Login(
                 onChangePasswordText(it)
             }
 
-
             Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.medium_size_space)))
             LoginButton {
                 //onLoginSelected()
             }
-            Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.small_size_space)))
+            Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.medium_size_space)))
 
+            Box(
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .background(Color.Cyan)
+                    .clickable { toRegistroScreen() }
+            ) {
+                Text(
+                    text = "Registrarse",
+                    style = TextStyle(fontWeight = FontWeight.Bold)
+                )
+            }
 
+            Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.medium_size_space)))
+
+            Box(
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .background(Color.Red)
+                    .clickable { toClaveOlvidadaScreen() }
+            ) {
+                Text(
+                    text = "¿Has olividado tu contraseña?",
+                    style = TextStyle(fontWeight = FontWeight.Bold)
+                )
+            }
         }
-
-
     }
 
 }
@@ -129,8 +162,6 @@ fun AppLogo() {
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
-        Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.big_size_space)))
 
         Text(text = "Welcome")
 
@@ -190,8 +221,7 @@ fun UsernameField(
         value = email,
         onValueChange = onTextFieldChanged,
         modifier = Modifier.fillMaxWidth(),
-        placeholder = { Text(text = stringResource(R.string.email)) },
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
         singleLine = true,
         maxLines = 1,
         label = { Text(text = stringResource(R.string.email)) }
