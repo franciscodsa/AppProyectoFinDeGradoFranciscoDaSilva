@@ -28,10 +28,7 @@ fun Navigation(
         ) {
             LoginScreen(
                 onLogin = {
-                    /*
-                    usar para navegar a pantalla de bienvenida
-                     navController.navigate()
-                     */
+                     navController.navigate("resumen")
                 },
                 toRegistroScreen={
                     navController.navigate("registro")

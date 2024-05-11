@@ -15,6 +15,6 @@
     <string name="crea_perfil">Crea tu perfil</string>
     <string name="cambia_clave">Cambia tu contraseña</string>
     <string name="primer_paso_cambio">Introduce tu email, presione el botón de enviar y busque en su email el código para cambio de contraseña</string>
-    <string name="segundo_paso_cambio">Introduce el codigo y la nueva contraseña en los campos indicados. La contraseña debe tener al menos seis caracteres e incluir ina combinación de números, letras y caracteres especiales(!$@%).</string>
+    <string name="segundo_paso_cambio">Introduce el codigo y la nueva contraseña en los campos indicados. La contraseña debe tener al menos seis caracteres e incluir una combinación de números, letras y caracteres especiales(!$@%).</string>
     <string name="nueva_contrasena">Nueva contraseña</string>
 </resources>

@@ -5,7 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -75,7 +74,7 @@ fun LoginScreen(
                 Modifier
                     .align(Alignment.Center)
                     .padding(dimensionResource(id = R.dimen.big_size_space)),
-                state.value.username,
+                state.value.email,
                 state.value.password,
                 state.value.isLoading,
                 { viewModel.handleEvent(LoginEvent.onPasswordTextChange(it)) },
@@ -84,6 +83,12 @@ fun LoginScreen(
                 { toRegistroScreen() },
                 { toClaveOlvidadaScreen() }
             )
+
+            LaunchedEffect(state.value.logged) {
+                if (state.value.logged) {
+                    onLogin()
+                }
+            }
         }
 
 
@@ -122,7 +127,7 @@ fun Login(
 
             Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.medium_size_space)))
             LoginButton {
-                //onLoginSelected()
+                onLoginSelected()
             }
             Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.medium_size_space)))
 
