@@ -208,6 +208,7 @@ fun CustomDateField(
             label = { Text(stringResource(R.string.mes)) },
             modifier = Modifier.fillMaxWidth(0.5f),
             value = month,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             onValueChange = {onMonthFieldChange(it.take(2))            }
         )
 
@@ -216,6 +217,7 @@ fun CustomDateField(
             label = { Text(stringResource(R.string.dia)) },
             modifier = Modifier.fillMaxWidth(1f),
             value = day,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             onValueChange = {onDayFieldChange(it.take(2))}
         )
     }

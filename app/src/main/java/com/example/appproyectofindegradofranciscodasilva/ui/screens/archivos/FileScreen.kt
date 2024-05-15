@@ -1,30 +1,45 @@
 package com.example.appproyectofindegradofranciscodasilva.ui.screens.archivos
 
 import android.net.Uri
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.ActivityResult
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import java.io.File
 
 @Composable
-fun FileSelectionScreen(onFileSelected: (File) -> Unit) {
+fun FileSelectionScreen(
+    viewModel: FileViewModel = hiltViewModel(),
+    onFileSelected: (File) -> Unit
+) {
     val context = LocalContext.current
-    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { result: Uri? ->
-        result?.let {
-            val selectedFile = File(it.path)
-            onFileSelected(selectedFile)
+    val launcher =
+        rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { result: Uri? ->
+            result?.let {
+                val contentResolver = context.contentResolver
+
+                val selectedFile = File(context.cacheDir, "selected_file") // You can use any desired file name here
+
+                contentResolver.openInputStream(it)?.use { inputStream ->
+                    selectedFile.outputStream().use { outputStream ->
+                        inputStream.copyTo(outputStream)
+                    }
+                }
+
+                onFileSelected(selectedFile)
+                viewModel.handleEvent(FileEvent.OnFileSelected(selectedFile))
+            }
         }
-    }
 
     Column(
         modifier = Modifier
@@ -36,11 +51,8 @@ fun FileSelectionScreen(onFileSelected: (File) -> Unit) {
         Button(onClick = { launcher.launch("*/*") }) {
             Text("Seleccionar archivo")
         }
+        Button(onClick = { viewModel.handleEvent(FileEvent.UploadFile) }) {
+            Text(text = "Subir")
+        }
     }
-}
-
-@Preview
-@Composable
-fun PreviewFileSelectionScreen() {
-    FileSelectionScreen {}
 }
