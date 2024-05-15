@@ -14,7 +14,9 @@ val screens = listOf(
 
     Screens("login", Icons.Filled.Apps,  Icons.Outlined.Apps,"Log-in"),
 
-    Screens("resumen", Icons.Filled.Home, Icons.Outlined.Home, "Resumen")
+    Screens("resumen", Icons.Filled.Home, Icons.Outlined.Home, "Resumen"),
+
+    Screens("files", Icons.Filled.Home, Icons.Outlined.Home, "Files")
 )
 
 

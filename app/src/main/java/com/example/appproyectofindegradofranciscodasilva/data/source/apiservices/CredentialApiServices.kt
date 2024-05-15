@@ -4,12 +4,12 @@ package com.example.appproyectofindegradofranciscodasilva.data.source.apiservice
 import com.example.appproyectofindegradofranciscodasilva.common.Constantes
 import com.example.appproyectofindegradofranciscodasilva.data.model.CredentialRequest
 import com.example.appproyectofindegradofranciscodasilva.data.model.LoginInfoResponse
+import com.example.appproyectofindegradofranciscodasilva.data.source.di.InfoServer
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
-
 
 interface CredentialApiServices {
     @POST(Constantes.login)

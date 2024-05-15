@@ -2,7 +2,7 @@ package com.example.appproyectofindegradofranciscodasilva.data.repositories
 
 import com.example.appproyectofindegradofranciscodasilva.data.model.CredentialRequest
 import com.example.appproyectofindegradofranciscodasilva.data.model.LoginInfoResponse
-import com.example.appproyectofindegradofranciscodasilva.data.source.data.model.ApiError.CredentialsDataSource
+import com.example.appproyectofindegradofranciscodasilva.data.source.CredentialsDataSource
 import com.example.appproyectofindegradofranciscodasilva.utils.NetworkResultt
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow

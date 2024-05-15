@@ -26,19 +26,19 @@ class LoginViewModel @Inject constructor(
 
     fun handleEvent(event: LoginEvent) {
         when (event) {
-            is LoginEvent.onUsernameTextChange -> _uiState.update {
+            is LoginEvent.OnEmailTextChange -> _uiState.update {
                 it.copy(
-                    email = event.username
+                    email = event.email
                 )
             }
 
-            is LoginEvent.onPasswordTextChange -> _uiState.update {
+            is LoginEvent.OnPasswordTextChange -> _uiState.update {
                 it.copy(
                     password = event.password
                 )
             }
             LoginEvent.Login -> login()
-            LoginEvent.Register -> TODO()
+
             LoginEvent.MessageSeen -> _uiState.update {
                 it.copy(
                     message = null

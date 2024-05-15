@@ -77,8 +77,8 @@ fun LoginScreen(
                 state.value.email,
                 state.value.password,
                 state.value.isLoading,
-                { viewModel.handleEvent(LoginEvent.onPasswordTextChange(it)) },
-                { viewModel.handleEvent(LoginEvent.onUsernameTextChange(it)) },
+                { viewModel.handleEvent(LoginEvent.OnPasswordTextChange(it)) },
+                { viewModel.handleEvent(LoginEvent.OnEmailTextChange(it)) },
                 { viewModel.handleEvent(LoginEvent.Login) },
                 { toRegistroScreen() },
                 { toClaveOlvidadaScreen() }

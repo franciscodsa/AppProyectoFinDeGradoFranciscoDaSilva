@@ -17,10 +17,12 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,13 +32,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.appproyectofindegradofranciscodasilva.R
 import java.time.LocalDate
+import java.time.Month
 
 @Composable
 fun RegisterScreen(
-    innerPadding: PaddingValues
+    viewModel: RegisterViewModel = hiltViewModel()
 ) {
+    val state = viewModel.uiState.collectAsStateWithLifecycle()
 
     val scrollState = rememberScrollState()
 
@@ -47,14 +53,14 @@ fun RegisterScreen(
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
     ) { _ ->
-        /*LaunchedEffect(state.value.message) {
+        LaunchedEffect(state.value.message) {
             state.value.message?.let {
                 snackbarHostState.showSnackbar(
                     message = state.value.message.toString(), duration = SnackbarDuration.Short
                 )
-                viewModel.handleEvent(LoginEvent.MessageSeen)
+                viewModel.handleEvent(RegisterEvent.MessageSeen)
             }
-        }*/
+        }
 
 
         Column(
@@ -77,8 +83,8 @@ fun RegisterScreen(
 
             //First name
             OutlinedTextField(
-                value = "",
-                onValueChange = {},
+                value = state.value.firstName,
+                onValueChange = {viewModel.handleEvent(RegisterEvent.OnFirstNameTextChange(it))},
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
                 maxLines = 1,
@@ -88,20 +94,20 @@ fun RegisterScreen(
 
             //last name
             OutlinedTextField(
-                label = { Text(text = stringResource(R.string.apellidos)) },
-                value = "",
-                onValueChange = {},
+                value = state.value.lastNames,
+                onValueChange = {viewModel.handleEvent(RegisterEvent.OnLastNameChange(it))},
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
-                maxLines = 1
+                maxLines = 1,
+                label = { Text(text = stringResource(R.string.apellidos)) }
             )
             Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.small_size_space)))
 
 
             //Phone field
             OutlinedTextField(
-                value = "",
-                onValueChange = {},
+                value = state.value.phone,
+                onValueChange = {viewModel.handleEvent(RegisterEvent.OnPhoneTextChange(it))},
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
                 maxLines = 1,
@@ -111,16 +117,20 @@ fun RegisterScreen(
 
             //date of birth
             CustomDateField(
-                value = LocalDate.of(2000, 1, 1),
-                onValueChanged = {}
+                year = state.value.year,
+                month= state.value.month,
+                day= state.value.day,
+                onYearFieldChange= {viewModel.handleEvent(RegisterEvent.OnYearFieldChange(it))},
+                onMonthFieldChange = {viewModel.handleEvent(RegisterEvent.OnMonthFieldChange(it))},
+                onDayFieldChange = {viewModel.handleEvent(RegisterEvent.OnDayFieldChange(it))}
             )
             Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.big_size_space)))
 
 
             //email field
             OutlinedTextField(
-                value = "",
-                onValueChange = {},
+                value = state.value.email,
+                onValueChange = {viewModel.handleEvent(RegisterEvent.OnEmailTextChange(it))},
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
                 maxLines = 1,
@@ -129,9 +139,10 @@ fun RegisterScreen(
             Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.small_size_space)))
 
 
+            //Password
             OutlinedTextField(
-                value = "",
-                onValueChange = {  },
+                value = state.value.password,
+                onValueChange = { viewModel.handleEvent(RegisterEvent.OnPasswordTextChange(it)) },
                 modifier = Modifier.fillMaxWidth(),
                 visualTransformation = PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -141,9 +152,10 @@ fun RegisterScreen(
             )
             Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.small_size_space)))
 
+            //Password confirmation
             OutlinedTextField(
-                value = "",
-                onValueChange = {},
+                value = state.value.confirmPassword,
+                onValueChange = {viewModel.handleEvent(RegisterEvent.OnPasswordConfirmTextChange(it))},
                 modifier = Modifier.fillMaxWidth(),
                 visualTransformation = PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -154,7 +166,7 @@ fun RegisterScreen(
             Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.big_size_space)))
 
             Button(
-                onClick = {},
+                onClick = {viewModel.handleEvent(RegisterEvent.Register)},
                 modifier = Modifier
                     .fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(
@@ -174,37 +186,37 @@ fun RegisterScreen(
 
 @Composable
 fun CustomDateField(
-    value: LocalDate,
-    onValueChanged: (LocalDate) -> Unit
+    year: String,
+    month: String,
+    day: String,
+    onYearFieldChange: (String) -> Unit,
+    onMonthFieldChange: (String) -> Unit,
+    onDayFieldChange: (String) -> Unit
 ) {
 
     Row() {
         OutlinedTextField(
             label = { Text(stringResource(R.string.anyo)) },
             modifier = Modifier.fillMaxWidth(0.5f),
-            value = value.year.toString(),
-            onValueChange = {
-            }
+            value = year,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            onValueChange = {onYearFieldChange(it.take(4))}
         )
 
 
         OutlinedTextField(
             label = { Text(stringResource(R.string.mes)) },
             modifier = Modifier.fillMaxWidth(0.5f),
-            value = value.monthValue.toString(),
-            onValueChange = {
-
-            }
+            value = month,
+            onValueChange = {onMonthFieldChange(it.take(2))            }
         )
 
 
         OutlinedTextField(
             label = { Text(stringResource(R.string.dia)) },
             modifier = Modifier.fillMaxWidth(1f),
-            value = value.dayOfMonth.toString(),
-            onValueChange = {
-
-            }
+            value = day,
+            onValueChange = {onDayFieldChange(it.take(2))}
         )
     }
 }

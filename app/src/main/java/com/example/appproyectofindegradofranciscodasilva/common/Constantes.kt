@@ -8,7 +8,7 @@ object Constantes {
 
     //NetworkModule
     const val urlBaseLogin = "http://192.168.1.131:8080/"
-    const val urlBaseGraph = "http://192.168.1.131:8111/graphql"
+    const val urlBaseInfo = "http://192.168.1.131:8082/"
 
     const val empty = ""
     const val rutaALibros = "libros/{autorId}"
