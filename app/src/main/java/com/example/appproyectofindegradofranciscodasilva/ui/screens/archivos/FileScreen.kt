@@ -1,7 +1,7 @@
 package com.example.appproyectofindegradofranciscodasilva.ui.screens.archivos
 
 import android.net.Uri
-import android.util.Log
+import android.provider.OpenableColumns
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
@@ -20,16 +20,26 @@ import java.io.File
 
 @Composable
 fun FileSelectionScreen(
-    viewModel: FileViewModel = hiltViewModel(),
-    onFileSelected: (File) -> Unit
+    viewModel: FileViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
     val launcher =
         rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { result: Uri? ->
             result?.let {
                 val contentResolver = context.contentResolver
+
+                //Conseguir el tipo de archivo
                 val mimeType = contentResolver.getType(it)?:""
-                val selectedFile = File(context.cacheDir, it.lastPathSegment?:"") // You can use any desired file name here
+
+                //Conseguir el nombre del archivo
+                val cursor = context.contentResolver.query(it, null, null, null, null)
+                val nameIndex = cursor?.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+                cursor?.moveToFirst()
+                val name = nameIndex?.let { cursor?.getString(it) }
+                cursor?.close()
+
+                //Crear el File con lo conseguido del selector
+                val selectedFile = File(context.cacheDir, name?:"") // You can use any desired file name here
 
 
                 contentResolver.openInputStream(it)?.use { inputStream ->
@@ -38,7 +48,6 @@ fun FileSelectionScreen(
                     }
                 }
 
-                onFileSelected(selectedFile)
                 viewModel.handleEvent(FileEvent.OnMimeTypeSelected(mimeType))
                 viewModel.handleEvent(FileEvent.OnFileSelected(selectedFile))
             }

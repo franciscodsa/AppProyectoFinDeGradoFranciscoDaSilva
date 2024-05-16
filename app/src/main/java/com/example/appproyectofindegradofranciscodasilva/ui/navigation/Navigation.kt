@@ -61,7 +61,7 @@ fun Navigation(
         composable(
             "files"
         ){
-            FileSelectionScreen(onFileSelected = {})
+            FileSelectionScreen()
         }
 
     }
