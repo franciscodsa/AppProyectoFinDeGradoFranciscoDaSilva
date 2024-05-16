@@ -32,6 +32,11 @@ class FileViewModel @Inject constructor(
             }
 
             FileEvent.UploadFile -> upload()
+            is FileEvent.OnMimeTypeSelected -> _uiState.update {
+                it.copy(
+                    mimeType = event.mimeType
+                )
+            }
         }
     }
 
@@ -45,6 +50,7 @@ class FileViewModel @Inject constructor(
             viewModelScope.launch {
                 fileServices.upload(
                     _uiState.value.selectedFile!!,
+                    _uiState.value.mimeType,
                     "test",
                     "add4@mail.com"
                 ).catch(action = { cause ->

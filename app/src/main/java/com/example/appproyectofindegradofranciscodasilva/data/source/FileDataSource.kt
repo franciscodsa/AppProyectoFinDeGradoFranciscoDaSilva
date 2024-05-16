@@ -21,11 +21,11 @@ class FileDataSource @Inject constructor(
 ) {
     private val fileApiServices: FileApiServices = retrofit.create(FileApiServices::class.java)
 
-    suspend fun upload(file: File, description: String, clientEmail: String) : NetworkResultt<String>{
+    suspend fun upload(file: File, mimeType: String, description: String, clientEmail: String) : NetworkResultt<ApiMessage>{
         try {
             Log.i("data", file.name)
 
-            val requestBody = file.asRequestBody("multipart/form-data".toMediaTypeOrNull())
+            val requestBody = file.asRequestBody(mimeType.toMediaTypeOrNull())
             val filePart = MultipartBody.Part.createFormData("file", file.name, requestBody)
             val descriptionPart = description.toRequestBody("text/plain".toMediaTypeOrNull())
             val emailPart = clientEmail.toRequestBody("text/plain".toMediaTypeOrNull())

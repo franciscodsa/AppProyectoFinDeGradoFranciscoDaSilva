@@ -1,6 +1,7 @@
 package com.example.appproyectofindegradofranciscodasilva.ui.screens.archivos
 
 import android.net.Uri
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
@@ -27,8 +28,9 @@ fun FileSelectionScreen(
         rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { result: Uri? ->
             result?.let {
                 val contentResolver = context.contentResolver
+                val mimeType = contentResolver.getType(it)?:""
+                val selectedFile = File(context.cacheDir, it.lastPathSegment?:"") // You can use any desired file name here
 
-                val selectedFile = File(context.cacheDir, "selected_file") // You can use any desired file name here
 
                 contentResolver.openInputStream(it)?.use { inputStream ->
                     selectedFile.outputStream().use { outputStream ->
@@ -37,6 +39,7 @@ fun FileSelectionScreen(
                 }
 
                 onFileSelected(selectedFile)
+                viewModel.handleEvent(FileEvent.OnMimeTypeSelected(mimeType))
                 viewModel.handleEvent(FileEvent.OnFileSelected(selectedFile))
             }
         }
