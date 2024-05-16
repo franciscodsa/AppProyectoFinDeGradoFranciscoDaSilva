@@ -1,5 +1,6 @@
 package com.example.appproyectofindegradofranciscodasilva.data.repositories
 
+import android.content.Context
 import android.util.Log
 import com.example.appproyectofindegradofranciscodasilva.data.model.ApiMessage
 import com.example.appproyectofindegradofranciscodasilva.data.source.FileDataSource
@@ -8,6 +9,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+
+import okhttp3.ResponseBody
+import retrofit2.Response
 import java.io.File
 import javax.inject.Inject
 
@@ -20,6 +24,15 @@ class FileRepository @Inject constructor(
             emit(NetworkResultt.Loading())
             val result = fileDataSource.upload(file, mimeType, description, clientEmail)
             Log.i("repodespdata", file.name)
+            emit(result)
+        }.flowOn(Dispatchers.IO)
+    }
+
+
+    fun download(fileId: Long, context: Context): Flow<NetworkResultt<String>>{
+        return flow {
+            emit(NetworkResultt.Loading())
+            val result = fileDataSource.download(fileId, context)
             emit(result)
         }.flowOn(Dispatchers.IO)
     }

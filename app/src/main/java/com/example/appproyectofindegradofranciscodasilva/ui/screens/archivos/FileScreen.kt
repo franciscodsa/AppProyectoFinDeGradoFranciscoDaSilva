@@ -7,8 +7,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -16,12 +18,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import java.io.File
 
 @Composable
 fun FileSelectionScreen(
     viewModel: FileViewModel = hiltViewModel()
 ) {
+    val state = viewModel.uiState.collectAsStateWithLifecycle()
+
     val context = LocalContext.current
     val launcher =
         rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { result: Uri? ->
@@ -65,6 +70,22 @@ fun FileSelectionScreen(
         }
         Button(onClick = { viewModel.handleEvent(FileEvent.UploadFile) }) {
             Text(text = "Subir")
+        }
+
+        OutlinedTextField(
+            value = state.value.fileId,
+            onValueChange = {
+                viewModel.handleEvent(FileEvent.OnFileIdChange(it))
+            },
+            label = {
+                Text(text = "Enter id")
+            },
+            maxLines = 1,
+            singleLine = true,
+            modifier = Modifier.fillMaxWidth()
+        )
+        Button(onClick = { viewModel.handleEvent(FileEvent.DownloadFile(context)) }) {
+            Text(text = "descargar")
         }
     }
 }

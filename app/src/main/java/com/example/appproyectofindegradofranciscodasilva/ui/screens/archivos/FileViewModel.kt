@@ -1,5 +1,6 @@
 package com.example.appproyectofindegradofranciscodasilva.ui.screens.archivos
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -36,6 +37,52 @@ class FileViewModel @Inject constructor(
                 it.copy(
                     mimeType = event.mimeType
                 )
+            }
+
+            is FileEvent.DownloadFile -> download(event.context)
+            is FileEvent.OnFileIdChange -> _uiState.update {
+                it.copy(
+                    fileId = event.fileId
+                )
+            }
+        }
+    }
+
+    private fun download(context: Context) {
+        viewModelScope.launch {
+            fileServices.download(_uiState.value.fileId.toLong(), context)
+                .catch(action = { cause ->
+                Log.i("f", "error al catch")
+                _uiState.update {
+                    it.copy(
+                        isLoading = false
+                    )
+                }
+            }).collect { result ->
+                when (result) {
+                    is NetworkResultt.Error -> {
+                        Log.i("f", "error en when")
+                        _uiState.update {
+                            it.copy(
+                                isLoading = false
+                            )
+                        }
+                    }
+
+                    is NetworkResultt.Loading -> {
+                        Log.i("f", "loading")
+                        _uiState.update { it.copy(isLoading = true) }
+                    }
+
+                    is NetworkResultt.Success -> {
+                        Log.i("f", "subido")
+                        _uiState.update {
+                            it.copy(
+                                isLoading = false
+                            )
+                        }
+                    }
+                }
             }
         }
     }
