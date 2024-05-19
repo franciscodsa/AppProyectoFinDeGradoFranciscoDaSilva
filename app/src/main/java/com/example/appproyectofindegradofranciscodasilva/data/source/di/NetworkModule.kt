@@ -5,6 +5,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import com.example.appproyectofindegradofranciscodasilva.common.Constantes
+import com.example.appproyectofindegradofranciscodasilva.data.source.apiservices.BalanceApiServices
 import com.example.appproyectofindegradofranciscodasilva.data.source.apiservices.ClientApiServices
 import com.example.appproyectofindegradofranciscodasilva.data.source.apiservices.CredentialApiServices
 import com.example.appproyectofindegradofranciscodasilva.data.source.apiservices.FileApiServices
@@ -122,6 +123,11 @@ object NetworkModule {
     @Provides
     fun provideFileService(@Named("InfoServer") retrofit: Retrofit): FileApiServices =
         retrofit.create(FileApiServices::class.java)
+
+    @Singleton
+    @Provides
+    fun provideBalanceService(@Named("InfoServer") retrofit: Retrofit): BalanceApiServices =
+        retrofit.create(BalanceApiServices::class.java)
 }
 
 class LocalDateTimeAdapter {
