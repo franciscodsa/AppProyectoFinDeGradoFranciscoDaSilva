@@ -1,6 +1,5 @@
 package com.example.appproyectofindegradofranciscodasilva.ui.screens.resumen
 
-import android.widget.Space
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -9,6 +8,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -31,6 +31,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.appproyectofindegradofranciscodasilva.R
@@ -133,7 +135,6 @@ fun DualSegmentPieChart(
         )
 
 
-
     }
 
 }
@@ -159,8 +160,8 @@ fun DetailsPieChart(
             }
 
         }
-        
-        Row (
+
+        Row(
             modifier = Modifier
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly
@@ -168,13 +169,13 @@ fun DetailsPieChart(
             Button(onClick = { /*TODO*/ }) {
                 Text(text = "Añadir")
             }
-            
+
             Button(onClick = { /*TODO*/ }) {
                 Text(text = "Añadir")
             }
         }
     }
-    
+
 }
 
 @Composable
@@ -194,19 +195,25 @@ fun DetailsPieChartItem(
             verticalAlignment = Alignment.CenterVertically
         ) {
 
-            Box(
-                modifier = Modifier
-                    .background(
-                        color = color,
-                        shape = RoundedCornerShape(10.dp)
+            Column() {
+                Row {
+                    Box(
+                        modifier = Modifier
+                            .background(
+                                color = color,
+                                shape = RoundedCornerShape(5.dp)
+                            )
+                            .align(Alignment.CenterVertically)
+                            .size(height)
                     )
-                    .size(height)
-            )
+                    Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.small_size_space)))
+                    Text(
+                        text =  data.first ,
+                        style = TextStyle(fontWeight = FontWeight.Bold)
+                    )
+                }
 
-            Row() {
-                Text(
-                    text = " " + data.first + ": ",
-                )
+                Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.small_size_space)))
                 Text(
                     text = data.second.toString(),
                 )

@@ -64,25 +64,33 @@ fun LoginScreen(
             }
         }
 
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
-            AppLogo()
-            Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.big_size_space)))
-            Login(
-                Modifier
-                    .align(Alignment.Center)
-                    .padding(dimensionResource(id = R.dimen.big_size_space)),
-                state.value.email,
-                state.value.password,
-                state.value.isLoading,
-                { viewModel.handleEvent(LoginEvent.OnPasswordTextChange(it)) },
-                { viewModel.handleEvent(LoginEvent.OnEmailTextChange(it)) },
-                { viewModel.handleEvent(LoginEvent.Login) },
-                { toRegistroScreen() },
-                { toClaveOlvidadaScreen() }
-            )
+        if (state.value.isLoading) {
+            Box(
+                Modifier.fillMaxSize()
+            ) {
+                CircularProgressIndicator(Modifier.align(Alignment.Center))
+            }
+        } else {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+            ) {
+                AppLogo()
+                Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.big_size_space)))
+                Login(
+                    Modifier
+                        .align(Alignment.Center)
+                        .padding(dimensionResource(id = R.dimen.big_size_space)),
+                    state.value.email,
+                    state.value.password,
+                    { viewModel.handleEvent(LoginEvent.OnPasswordTextChange(it)) },
+                    { viewModel.handleEvent(LoginEvent.OnEmailTextChange(it)) },
+                    { viewModel.handleEvent(LoginEvent.Login) },
+                    { toRegistroScreen() },
+                    { toClaveOlvidadaScreen() }
+                )
+            }
+
 
             LaunchedEffect(state.value.logged) {
                 if (state.value.logged) {
@@ -100,64 +108,57 @@ fun Login(
     modifier: Modifier,
     username: String,
     password: String,
-    isLoading: Boolean,
     onChangePasswordText: (String) -> Unit,
     onChangerUsernameText: (String) -> Unit,
     onLoginSelected: () -> Unit,
     toRegistroScreen: () -> Unit,
     toClaveOlvidadaScreen: () -> Unit
 ) {
-    if (isLoading) {
-        Box(
-            Modifier.fillMaxSize()
-        ) {
-            CircularProgressIndicator(Modifier.align(Alignment.Center))
+
+
+    Column(modifier = modifier) {
+
+        UsernameField(username) {
+            onChangerUsernameText(it)
         }
-    } else {
+        Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.small_size_space)))
+        PasswordField(password) {
+            onChangePasswordText(it)
+        }
 
-        Column(modifier = modifier) {
+        Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.medium_size_space)))
+        LoginButton {
+            onLoginSelected()
+        }
+        Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.medium_size_space)))
 
-            UsernameField(username) {
-                onChangerUsernameText(it)
-            }
-            Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.small_size_space)))
-            PasswordField(password) {
-                onChangePasswordText(it)
-            }
+        Box(
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .background(Color.Cyan)
+                .clickable { toRegistroScreen() }
+        ) {
+            Text(
+                text = "Registrarse",
+                style = TextStyle(fontWeight = FontWeight.Bold)
+            )
+        }
 
-            Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.medium_size_space)))
-            LoginButton {
-                onLoginSelected()
-            }
-            Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.medium_size_space)))
+        Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.medium_size_space)))
 
-            Box(
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .background(Color.Cyan)
-                    .clickable { toRegistroScreen() }
-            ) {
-                Text(
-                    text = "Registrarse",
-                    style = TextStyle(fontWeight = FontWeight.Bold)
-                )
-            }
-
-            Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.medium_size_space)))
-
-            Box(
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .background(Color.Red)
-                    .clickable { toClaveOlvidadaScreen() }
-            ) {
-                Text(
-                    text = "¿Has olividado tu contraseña?",
-                    style = TextStyle(fontWeight = FontWeight.Bold)
-                )
-            }
+        Box(
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .background(Color.Red)
+                .clickable { toClaveOlvidadaScreen() }
+        ) {
+            Text(
+                text = "¿Has olividado tu contraseña?",
+                style = TextStyle(fontWeight = FontWeight.Bold)
+            )
         }
     }
+
 
 }
 

@@ -135,10 +135,3 @@ fun ResumenScreen(
         }
     }
 }
-
-
-@Preview
-@Composable
-fun prev(){
-    ResumenScreen()
-}
