@@ -12,16 +12,17 @@ import retrofit2.http.Part
 import retrofit2.http.Path
 
 interface FileApiServices {
-    @POST("upload")
+    @POST("files/upload")
     @Multipart
     suspend fun uploadFile(
         @Part file: MultipartBody.Part,
         @Part("description") description: RequestBody,
-        @Part("clientEmail") clientEmail: RequestBody
+        @Part("clientEmail") clientEmail: RequestBody,
+        @Part("invoiceType") invoiceType: RequestBody
     ): Response<ApiMessage>
 
 
-    @GET("/download/{fileId}")
+    @GET("files/download/{fileId}")
     suspend fun downloadFile(
         @Path("fileId") fileId: Long
     ): Response<ResponseBody>

@@ -9,6 +9,7 @@ import android.util.Log
 import android.webkit.MimeTypeMap
 import com.example.appproyectofindegradofranciscodasilva.common.Constantes
 import com.example.appproyectofindegradofranciscodasilva.data.model.ApiMessage
+import com.example.appproyectofindegradofranciscodasilva.data.model.InvoiceType
 import com.example.appproyectofindegradofranciscodasilva.data.source.apiservices.FileApiServices
 import com.example.appproyectofindegradofranciscodasilva.data.source.di.InfoServer
 import com.example.appproyectofindegradofranciscodasilva.utils.NetworkResultt
@@ -28,12 +29,13 @@ import java.util.Locale
 import javax.inject.Inject
 
 class FileDataSource @Inject constructor(
-    @InfoServer private val retrofit: Retrofit,
+    /*@InfoServer private val retrofit: Retrofit,*/
+    private val fileApiServices: FileApiServices,
     private val moshi: Moshi
 ) {
-    private val fileApiServices: FileApiServices = retrofit.create(FileApiServices::class.java)
+   /* private val fileApiServices: FileApiServices = retrofit.create(FileApiServices::class.java)*/
 
-    suspend fun upload(file: File, mimeType: String, description: String, clientEmail: String) : NetworkResultt<ApiMessage>{
+    suspend fun upload(file: File, mimeType: String, description: String, clientEmail: String, invoiceType: InvoiceType) : NetworkResultt<ApiMessage>{
         try {
             Log.i("data", file.name)
 
@@ -41,8 +43,9 @@ class FileDataSource @Inject constructor(
             val filePart = MultipartBody.Part.createFormData("file", file.name, requestBody)
             val descriptionPart = description.toRequestBody("text/plain".toMediaTypeOrNull())
             val emailPart = clientEmail.toRequestBody("text/plain".toMediaTypeOrNull())
+            val invoiceTypePart = invoiceType.name.toRequestBody("text/plain".toMediaTypeOrNull())
 
-            val response = fileApiServices.uploadFile(filePart, descriptionPart, emailPart)
+            val response = fileApiServices.uploadFile(filePart, descriptionPart, emailPart, invoiceTypePart)
 
             if (!response.isSuccessful){
 

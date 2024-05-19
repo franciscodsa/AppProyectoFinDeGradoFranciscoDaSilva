@@ -7,6 +7,7 @@ import androidx.datastore.preferences.preferencesDataStore
 import com.example.appproyectofindegradofranciscodasilva.common.Constantes
 import com.example.appproyectofindegradofranciscodasilva.data.source.apiservices.ClientApiServices
 import com.example.appproyectofindegradofranciscodasilva.data.source.apiservices.CredentialApiServices
+import com.example.appproyectofindegradofranciscodasilva.data.source.apiservices.FileApiServices
 import com.example.appproyectofindegradofranciscodasilva.utils.TokenManager
 import com.squareup.moshi.FromJson
 import com.squareup.moshi.Moshi
@@ -24,6 +25,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
+import javax.inject.Named
 import javax.inject.Qualifier
 import javax.inject.Singleton
 
@@ -81,7 +83,7 @@ object NetworkModule {
     }
 
     // Proporciona una instancia de Retrofit para CredentialApiServices
-    @CredentialServer
+    @Named("CredentialServer")
     @Singleton
     @Provides
     fun provideCredentialRetrofit(okHttpClient: OkHttpClient, moshiConverterFactory: MoshiConverterFactory): Retrofit {
@@ -93,7 +95,7 @@ object NetworkModule {
     }
 
     // Proporciona una instancia de Retrofit para el resto
-    @InfoServer
+    @Named("InfoServer")
     @Singleton
     @Provides
     fun provideClientRetrofit(okHttpClient: OkHttpClient, moshiConverterFactory: MoshiConverterFactory): Retrofit {
@@ -107,14 +109,19 @@ object NetworkModule {
     // Proporciona CredentialApiServices utilizando la instancia de Retrofit correspondiente
     @Singleton
     @Provides
-    fun provideCredentialService(@CredentialServer retrofit: Retrofit): CredentialApiServices =
+    fun provideCredentialService(@Named("CredentialServer") retrofit: Retrofit): CredentialApiServices =
         retrofit.create(CredentialApiServices::class.java)
 
     // Proporciona ClientApiServices utilizando la instancia de Retrofit correspondiente
-    /*@Singleton
+    @Singleton
     @Provides
-    fun provideClientService(@InfoServer retrofit: Retrofit): ClientApiServices =
-        retrofit.create(ClientApiServices::class.java)*/
+    fun provideClientService(@Named("InfoServer") retrofit: Retrofit): ClientApiServices =
+        retrofit.create(ClientApiServices::class.java)
+
+    @Singleton
+    @Provides
+    fun provideFileService(@Named("InfoServer") retrofit: Retrofit): FileApiServices =
+        retrofit.create(FileApiServices::class.java)
 }
 
 class LocalDateTimeAdapter {

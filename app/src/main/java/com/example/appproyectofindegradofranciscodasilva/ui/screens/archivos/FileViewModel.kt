@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.appproyectofindegradofranciscodasilva.data.model.InvoiceType
 import com.example.appproyectofindegradofranciscodasilva.domain.services.FileServices
 import com.example.appproyectofindegradofranciscodasilva.utils.NetworkResultt
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -99,7 +100,8 @@ class FileViewModel @Inject constructor(
                     _uiState.value.selectedFile!!,
                     _uiState.value.mimeType,
                     "test",
-                    "add4@mail.com"
+                    "add4@mail.com",
+                    InvoiceType.INCOME
                 ).catch(action = { cause ->
                     Log.i("f", "error al catch")
                     _uiState.update {

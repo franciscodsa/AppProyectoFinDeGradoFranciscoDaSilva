@@ -95,9 +95,9 @@ aapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/data/source
 capp/src/main/java/com/example/appproyectofindegradofranciscodasilva/domain/services/FileServices.kt,5\3\53f2c041b5359e267bb5804e69e2a0b6b453c793
 ò
 happ/src/main/java/com/example/appproyectofindegradofranciscodasilva/ui/screens/archivos/FileViewModel.kt,3\f\3fd41f9a87edb679e02895bc1f811e1c10914550
-ï
-eapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/ui/screens/archivos/FilesEvent.kt,f\3\f33447e9e194ee342296d6bf3f56ffe03c9f31bd
 î
 dapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/ui/screens/archivos/FileEvent.kt,8\1\818f6d33d3a755cd3c7039777ae06f8db5b0a2a1
 î
 dapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/ui/screens/archivos/FileState.kt,0\8\08df115f2714670b4da181b77aa5c69c181bd144
+ç
+]app/src/main/java/com/example/appproyectofindegradofranciscodasilva/data/model/InvoiceType.kt,2\a\2a994cfbd38067ec2380dad42486a5314683724a

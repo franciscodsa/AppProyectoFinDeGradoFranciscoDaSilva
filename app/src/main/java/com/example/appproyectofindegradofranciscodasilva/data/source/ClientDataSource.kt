@@ -12,12 +12,12 @@ import retrofit2.Retrofit
 import javax.inject.Inject
 
 class ClientDataSource @Inject constructor(
-    /*private val clientApiServices: ClientApiServices,*/
-    @InfoServer private val retrofit: Retrofit,
+    private val clientApiServices: ClientApiServices,
+   /* @InfoServer private val retrofit: Retrofit,*/
     private val moshi: Moshi
 ) {
 
-    private val clientApiServices: ClientApiServices = retrofit.create(ClientApiServices::class.java)
+   /* private val clientApiServices: ClientApiServices = retrofit.create(ClientApiServices::class.java)*/
 
 
     suspend fun addClient(client: Client): NetworkResultt<Client> {
