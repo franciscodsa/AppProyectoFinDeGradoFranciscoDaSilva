@@ -105,8 +105,6 @@ dapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/ui/screens/
 iapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/ui/screens/resumen/ResumeViewModel.kt,0\0\00c2894fb36332b77bc19480aa3534aa6ad1ee79
 –
 fapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/ui/screens/resumen/ResumenState.kt,5\d\5d2c36caa022bfee539b14bb2650b693e6ea6ecc
-•
-eapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/ui/screens/resumen/ReumenEvent.kt,d\6\d6462726907adcd03f26d6d48f50461c483f15f9
 –
 fapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/ui/screens/resumen/ResumenEvent.kt,5\8\58c045d57e0a380db59707953bd7ee00fe8e52b0
 ¡

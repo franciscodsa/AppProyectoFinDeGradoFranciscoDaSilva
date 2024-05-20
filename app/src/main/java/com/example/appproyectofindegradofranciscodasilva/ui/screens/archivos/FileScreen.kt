@@ -40,24 +40,24 @@ fun FileSelectionScreen(
     val context = LocalContext.current
     val launcher =
         rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { result: Uri? ->
-            result?.let {
+            result?.let { uri ->
                 val contentResolver = context.contentResolver
 
                 //Conseguir el tipo de archivo
-                val mimeType = contentResolver.getType(it)?:""
+                val mimeType = contentResolver.getType(uri)?:""
 
                 //Conseguir el nombre del archivo
-                val cursor = context.contentResolver.query(it, null, null, null, null)
+                val cursor = context.contentResolver.query(uri, null, null, null, null)
                 val nameIndex = cursor?.getColumnIndex(OpenableColumns.DISPLAY_NAME)
                 cursor?.moveToFirst()
-                val name = nameIndex?.let { cursor?.getString(it) }
+                val name = nameIndex?.let { cursor.getString(it) }
                 cursor?.close()
 
                 //Crear el File con lo conseguido del selector
                 val selectedFile = File(context.cacheDir, name?:"") // You can use any desired file name here
 
 
-                contentResolver.openInputStream(it)?.use { inputStream ->
+                contentResolver.openInputStream(uri)?.use { inputStream ->
                     selectedFile.outputStream().use { outputStream ->
                         inputStream.copyTo(outputStream)
                     }

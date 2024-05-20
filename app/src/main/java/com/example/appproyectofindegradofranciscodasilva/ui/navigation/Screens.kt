@@ -10,7 +10,7 @@ import androidx.compose.material.icons.outlined.Home
 import androidx.compose.ui.graphics.vector.ImageVector
 
 val screens = listOf(
-    Screens("registro", Icons.Filled.Apps, Icons.Outlined.Apps, "Resgistro"),
+    Screens("registro", Icons.Filled.Apps, Icons.Outlined.Apps, "Registro"),
 
     Screens("login", Icons.Filled.Apps,  Icons.Outlined.Apps,"Log-in"),
 

@@ -158,24 +158,8 @@ fun DetailsPieChart(
                     color = colors[index]
                 )
             }
-
-        }
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            Button(onClick = { /*TODO*/ }) {
-                Text(text = "Añadir")
-            }
-
-            Button(onClick = { /*TODO*/ }) {
-                Text(text = "Añadir")
-            }
         }
     }
-
 }
 
 @Composable
@@ -215,12 +199,9 @@ fun DetailsPieChartItem(
 
                 Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.small_size_space)))
                 Text(
-                    text = data.second.toString(),
+                    text = "Total: ${String.format("%.2f€", data.second)}",
                 )
             }
-
         }
-
     }
-
 }
