@@ -3,7 +3,9 @@ package com.example.appproyectofindegradofranciscodasilva.ui.screens.resumen
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.appproyectofindegradofranciscodasilva.data.model.InvoiceType
 import com.example.appproyectofindegradofranciscodasilva.domain.services.BalanceServices
+import com.example.appproyectofindegradofranciscodasilva.domain.services.FileServices
 import com.example.appproyectofindegradofranciscodasilva.utils.NetworkResultt
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,7 +19,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ResumeViewModel @Inject constructor(
-    private val balanceServices: BalanceServices
+    private val balanceServices: BalanceServices,
+    private val fileServices: FileServices
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ResumenState())
@@ -82,6 +85,70 @@ class ResumeViewModel @Inject constructor(
                 it.copy(
                     message = null
                 )
+            }
+
+            is ResumenEvent.OnFileSelected ->  _uiState.update {
+                it.copy(
+                    selectedFile = event.file
+                )
+            }
+
+            is ResumenEvent.OnMimeTypeSelected -> _uiState.update {
+                it.copy(
+                    mimeType = event.mimeType
+                )
+            }
+            ResumenEvent.UploadFile -> upload()
+        }
+    }
+
+    private fun upload() {
+        if (_uiState.value.selectedFile == null) {
+            Log.i("f", "file es null")
+        } else {
+
+            Log.i("f", _uiState.value.selectedFile?.name.toString())
+
+            viewModelScope.launch {
+                fileServices.upload(
+                    _uiState.value.selectedFile!!,
+                    _uiState.value.mimeType,
+                    "test",
+                    "add4@mail.com",
+                    InvoiceType.INCOME
+                ).catch(action = { cause ->
+                    Log.i("f", "error al catch")
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false
+                        )
+                    }
+                }).collect { result ->
+                    when (result) {
+                        is NetworkResultt.Error -> {
+                            Log.i("f", "error en when")
+                            _uiState.update {
+                                it.copy(
+                                    isLoading = false
+                                )
+                            }
+                        }
+
+                        is NetworkResultt.Loading -> {
+                            Log.i("f", "loading")
+                            _uiState.update { it.copy(isLoading = true) }
+                        }
+
+                        is NetworkResultt.Success -> {
+                            Log.i("f", "subido")
+                            _uiState.update {
+                                it.copy(
+                                    isLoading = false
+                                )
+                            }
+                        }
+                    }
+                }
             }
         }
     }

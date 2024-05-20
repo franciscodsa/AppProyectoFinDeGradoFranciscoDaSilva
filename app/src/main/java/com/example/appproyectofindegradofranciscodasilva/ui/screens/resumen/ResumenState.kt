@@ -1,5 +1,7 @@
 package com.example.appproyectofindegradofranciscodasilva.ui.screens.resumen
 
+import java.io.File
+
 data class ResumenState(
     val selectedTrimester: String = "",
     val selectedYear: String = "",
@@ -16,6 +18,10 @@ data class ResumenState(
     val expenses: Double = 0.0,
     val iva: Double = 0.0,
     val irpf: Double = 0.0,
+
+    val selectedFile: File? = null,
+    val mimeType: String = "",
+
     val isLoading: Boolean = false,
     val message: String? = null
 )

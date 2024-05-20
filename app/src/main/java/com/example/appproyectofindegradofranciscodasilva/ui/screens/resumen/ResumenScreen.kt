@@ -191,7 +191,10 @@ fun ResumenScreen(
 
             if (openBottomSheet) {
                 BottomSheetContent(
-                    onClose = { openBottomSheet = false }
+                    onClose = { openBottomSheet = false },
+                    onFileSelected = {viewModel.handleEvent(ResumenEvent.OnFileSelected(it))},
+                    onMimeTypeSelected = {viewModel.handleEvent(ResumenEvent.OnMimeTypeSelected(it))},
+                    onSubmit = {viewModel.handleEvent(ResumenEvent.UploadFile)}
                 )
             }
         }
@@ -283,7 +286,10 @@ fun ExpandableCard(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomSheetContent(
-    onClose: () -> Unit
+    onClose: () -> Unit,
+    onMimeTypeSelected: (String) -> Unit,
+    onFileSelected: (File) -> Unit,
+    onSubmit: () -> Unit
 ) {
 
     var selectedFileName by remember { mutableStateOf("") }
@@ -329,8 +335,9 @@ fun BottomSheetContent(
                     }
 
                     selectedFileName = name?:""
-                    /*  viewModel.handleEvent(FileEvent.OnMimeTypeSelected(mimeType))
-                      viewModel.handleEvent(FileEvent.OnFileSelected(selectedFile))*/
+
+                    onMimeTypeSelected(mimeType)
+                    onFileSelected(selectedFile)
                 }
             }
 
@@ -413,7 +420,7 @@ fun BottomSheetContent(
                 }
                 Button(
                     onClick = {
-                        // Handle button click
+                        onSubmit()
                     },
                 ) {
                     Text("Subir")
