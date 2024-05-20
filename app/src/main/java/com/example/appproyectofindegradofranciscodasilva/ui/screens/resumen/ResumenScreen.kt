@@ -2,6 +2,7 @@ package com.example.appproyectofindegradofranciscodasilva.ui.screens.resumen
 
 import android.net.Uri
 import android.provider.OpenableColumns
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.animateContentSize
@@ -90,11 +91,14 @@ fun ResumenScreen(
         modifier = Modifier
             .fillMaxSize()
     ) { _ ->
+
         LaunchedEffect(state.value.message) {
+
             state.value.message?.let {
                 snackbarHostState.showSnackbar(
                     message = state.value.message.toString(), duration = SnackbarDuration.Short
                 )
+                Log.i("ASD", "mmmmmmmm")
                 viewModel.handleEvent(ResumenEvent.MessageSeen)
             }
         }
@@ -420,6 +424,7 @@ fun BottomSheetContent(
                 }
                 Button(
                     onClick = {
+                        onClose()
                         onSubmit()
                     },
                 ) {

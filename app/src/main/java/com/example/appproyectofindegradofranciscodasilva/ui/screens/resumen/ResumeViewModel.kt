@@ -140,9 +140,9 @@ class ResumeViewModel @Inject constructor(
                         }
 
                         is NetworkResultt.Success -> {
-                            Log.i("f", "subido")
                             _uiState.update {
                                 it.copy(
+                                    message = result.data?.message,
                                     isLoading = false
                                 )
                             }
