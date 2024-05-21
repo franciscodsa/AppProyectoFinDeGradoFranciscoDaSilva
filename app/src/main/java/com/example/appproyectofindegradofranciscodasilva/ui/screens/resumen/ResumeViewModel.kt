@@ -3,6 +3,7 @@ package com.example.appproyectofindegradofranciscodasilva.ui.screens.resumen
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.appproyectofindegradofranciscodasilva.data.model.Balance
 import com.example.appproyectofindegradofranciscodasilva.data.model.InvoiceType
 import com.example.appproyectofindegradofranciscodasilva.domain.services.BalanceServices
 import com.example.appproyectofindegradofranciscodasilva.domain.services.FileServices
@@ -171,13 +172,14 @@ class ResumeViewModel @Inject constructor(
                         }
 
                         is NetworkResultt.Success -> {
-                            _uiState.update {
-                                it.copy(
-                                    message = result.data?.message,
-                                    isLoading = false
-                                )
-                            }
-                            addBalance()
+                            val balance = Balance(
+                                income = if (invoiceType == InvoiceType.INCOME) _uiState.value.newInvoiceTotal.toDouble() else 0.0,
+                                expenses = if (invoiceType == InvoiceType.EXPENSE) _uiState.value.newInvoiceTotal.toDouble() else 0.0,
+                                iva = _uiState.value.newInvoiceIva.toDouble(),
+                                clientEmail = null
+                            )
+
+                            addBalance(balance)
                         }
                     }
                 }
@@ -186,10 +188,49 @@ class ResumeViewModel @Inject constructor(
     }
 
 
-    private fun addBalance(){
+    private fun addBalance(balance: Balance) {
+        viewModelScope.launch {
+            balanceServices.addBalance(balance).catch { cause ->
+                _uiState.update {
+                    it.copy(
+                        message = cause.message,
+                        isLoading = false
+                    )
+                }
+            }.collect { result ->
+                when (result) {
+                    is NetworkResultt.Error -> {
+                        _uiState.update {
+                            it.copy(
+                                message = result.message,
+                                isLoading = false
+                            )
+                        }
+                    }
+                    is NetworkResultt.Loading -> {
+                        _uiState.update { it.copy(isLoading = true) }
+                    }
+                    is NetworkResultt.Success -> {
+                        _uiState.update {
+                            it.copy(
+                                message = "Archivo subido y balance agregado exitosamente.",
+                                isLoading = false,
+                                newInvoiceTotal = "",
+                                newInvoiceIva = "",
+                                newInvoiceDescription = "",
+                                selectedFile = null,
+                                mimeType = ""
+                            )
+                        }
 
-        getBalance()
+                        getBalance()
+                    }
+                }
+            }
+        }
     }
+
+
 
     private fun getBalance() {
         //todo: aqui se tendria que realizar la llamada de obtener el balance para el trimestre y año seleccionado y actualizar el state

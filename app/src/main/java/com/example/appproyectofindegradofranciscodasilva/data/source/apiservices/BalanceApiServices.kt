@@ -27,5 +27,5 @@ interface BalanceApiServices {
     ): Response<Void>
 
     @POST("balances")
-    fun addBalance(@Body balance: Balance): Response<ApiMessage>
+    suspend fun addBalance(@Body balance: Balance): Response<ApiMessage>
 }

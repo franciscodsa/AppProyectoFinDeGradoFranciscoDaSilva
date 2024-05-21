@@ -32,6 +32,7 @@ class BalanceDataSource @Inject constructor(
                 error(Constantes.noData)
             }
         } catch (e: Exception) {
+            Log.e("error", e.message.toString())
             return NetworkResultt.Error(Constantes.unknownError)
         }
     }

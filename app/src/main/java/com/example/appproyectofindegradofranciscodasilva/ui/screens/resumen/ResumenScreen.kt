@@ -98,7 +98,6 @@ fun ResumenScreen(
                 snackbarHostState.showSnackbar(
                     message = state.value.message.toString(), duration = SnackbarDuration.Short
                 )
-                Log.i("ASD", "mmmmmmmm")
                 viewModel.handleEvent(ResumenEvent.MessageSeen)
             }
         }
