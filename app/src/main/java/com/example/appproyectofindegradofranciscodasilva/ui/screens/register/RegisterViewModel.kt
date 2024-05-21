@@ -131,7 +131,8 @@ class RegisterViewModel @Inject constructor(
                             )
                         )
                     } else {
-                        flowOf(credentialResult) // Si la primera llamada no fue exitosa, simplemente propagamos el resultado
+                        // Si la primera llamada no fue exitosa, simplemente propagamos el resultado
+                        flowOf(credentialResult)
                     }
                 }.catch { cause ->
                     _uiState.update {
@@ -145,6 +146,15 @@ class RegisterViewModel @Inject constructor(
                         is NetworkResultt.Success -> {
                             _uiState.update {
                                 it.copy(
+                                    email = "",
+                                    password = "",
+                                    confirmPassword = "",
+                                    firstName = "",
+                                    lastNames = "",
+                                    phone = "",
+                                    year = "",
+                                    month = "",
+                                    day = "",
                                     message = Constantes.registrado,
                                     isLoading = false
                                 )

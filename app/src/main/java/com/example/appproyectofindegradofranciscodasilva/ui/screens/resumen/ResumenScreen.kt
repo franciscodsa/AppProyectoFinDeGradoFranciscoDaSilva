@@ -203,6 +203,9 @@ fun ResumenScreen(
                     onFileSelected = { viewModel.handleEvent(ResumenEvent.OnFileSelected(it)) },
                     onMimeTypeSelected = { viewModel.handleEvent(ResumenEvent.OnMimeTypeSelected(it)) },
                     onInvoiceTypeChange = { viewModel.handleEvent(ResumenEvent.OnInvoiceTypeSelected) },
+                    onTotalChange = { viewModel.handleEvent(ResumenEvent.OnNewInvoiceTotal(it)) },
+                    onIvaChange = { viewModel.handleEvent(ResumenEvent.OnNewInvoiceIva(it)) },
+                    onDescriptionChange = { viewModel.handleEvent(ResumenEvent.OnNewInvoiceDescription(it)) },
                     onSubmit = { viewModel.handleEvent(ResumenEvent.UploadFile) }
                 )
             }
@@ -304,13 +307,13 @@ fun BottomSheetContent(
     onMimeTypeSelected: (String) -> Unit,
     onFileSelected: (File) -> Unit,
     onInvoiceTypeChange: () -> Unit,
-    onSubmit: () -> Unit,
+    onTotalChange: (String) -> Unit,
+    onIvaChange: (String) -> Unit,
+    onDescriptionChange: (String) -> Unit,
+    onSubmit: () -> Unit
 ) {
 
     var selectedFileName by remember { mutableStateOf("") }
-    var field1 by remember { mutableStateOf("") }
-    var field2 by remember { mutableStateOf("") }
-    var field3 by remember { mutableStateOf("") }
 
     val bottomSheetState = rememberModalBottomSheetState()
 
@@ -337,7 +340,7 @@ fun BottomSheetContent(
 
                     //Crear el File con lo conseguido del selector
                     val selectedFile =
-                        File(context.cacheDir, name ?: "") // You can use any desired file name here
+                        File(context.cacheDir, name ?: "")
 
 
                     contentResolver.openInputStream(uri)?.use { inputStream ->
@@ -394,7 +397,7 @@ fun BottomSheetContent(
 
             OutlinedTextField(
                 value = newInvoiveTotal,
-                onValueChange = { field1 = it },
+                onValueChange = { onTotalChange(it) },
                 label = { Text("Total") },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 singleLine = true,
@@ -403,7 +406,7 @@ fun BottomSheetContent(
             Spacer(modifier = Modifier.height(8.dp))
             OutlinedTextField(
                 value = newInvoiceIva,
-                onValueChange = { field2 = it },
+                onValueChange = { onIvaChange(it)  },
                 label = { Text("IVA") },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 singleLine = true,
@@ -412,7 +415,7 @@ fun BottomSheetContent(
             Spacer(modifier = Modifier.height(8.dp))
             OutlinedTextField(
                 value = newInvoiceDescription,
-                onValueChange = { field3 = it },
+                onValueChange = { onDescriptionChange(it) },
                 label = { Text("Descripción") },
                 modifier = Modifier.fillMaxWidth()
             )

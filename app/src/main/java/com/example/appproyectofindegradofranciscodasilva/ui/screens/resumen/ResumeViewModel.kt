@@ -128,14 +128,14 @@ class ResumeViewModel @Inject constructor(
 
     private fun upload() {
         Log.i("isExpense", _uiState.value.isExpense.toString())
-        if (_uiState.value.selectedFile == null) {
+        if (_uiState.value.selectedFile == null || _uiState.value.newInvoiceDescription.isEmpty() || (_uiState.value.newInvoiceIva.isEmpty() || _uiState.value.newInvoiceIva.toDoubleOrNull() == null )||  (_uiState.value.newInvoiceTotal.isEmpty() || _uiState.value.newInvoiceTotal.toDoubleOrNull() == null )) {
             _uiState.update {
                 it.copy(
-                    message = "Seleccione un archivo",
+                    message = "Seleccione archivo y verifique formato de cifras (Ej: 100.00)",
                 )
             }
-        } else {
 
+        } else {
 
             val invoiceType = if (_uiState.value.isExpense) InvoiceType.EXPENSE else InvoiceType.INCOME
 
@@ -177,11 +177,18 @@ class ResumeViewModel @Inject constructor(
                                     isLoading = false
                                 )
                             }
+                            addBalance()
                         }
                     }
                 }
             }
         }
+    }
+
+
+    private fun addBalance(){
+
+        getBalance()
     }
 
     private fun getBalance() {

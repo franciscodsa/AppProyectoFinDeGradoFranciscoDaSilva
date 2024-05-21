@@ -17,14 +17,7 @@ class FileServices @Inject constructor(
     private val tokenManager: TokenManager
 ) {
 
-   /* suspend fun uploadIncome(file: File, mimeType: String, description: String) : Flow<NetworkResultt<ApiMessage>>{
-        return upload(file, mimeType, description,  InvoiceType.INCOME)
-    }
 
-    suspend fun uploadExpense(file: File, mimeType: String, description: String) : Flow<NetworkResultt<ApiMessage>>{
-        Log.i("serv", file.name)
-        return upload(file, mimeType, description,  InvoiceType.EXPENSE)
-    }*/
 
     suspend fun upload(file: File, mimeType: String, description: String, invoiceType: InvoiceType) : Flow<NetworkResultt<ApiMessage>>{
         val clientEmail = tokenManager.getCurrentUser().first() ?:""
@@ -33,6 +26,8 @@ class FileServices @Inject constructor(
         return fileRepository.upload(file, mimeType, description, clientEmail, invoiceType)
     }
 
+
+    //todo: eliminar cuando cambies la pantalla de files a solo descargar, el resumen usa el de arriba
     fun upload(file: File, mimeType: String, description: String, clientEmail: String, invoiceType: InvoiceType) : Flow<NetworkResultt<ApiMessage>>{
 
         Log.i("serv", file.name)

@@ -19,7 +19,6 @@ class BalanceServices @Inject constructor(
         if (balance.clientEmail.isNullOrEmpty()) {
             balance.clientEmail = tokenManager.getCurrentUser().first()
         }
-
         return balanceRepository.addBalance(balance)
     }
 
