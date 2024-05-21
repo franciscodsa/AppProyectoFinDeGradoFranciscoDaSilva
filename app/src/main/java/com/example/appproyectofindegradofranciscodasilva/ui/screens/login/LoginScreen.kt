@@ -39,6 +39,7 @@ import com.example.appproyectofindegradofranciscodasilva.R
 @Composable
 fun LoginScreen(
     viewModel: LoginViewModel = hiltViewModel(),
+
     onLogin: () -> Unit,
     toRegistroScreen: () -> Unit,
     toClaveOlvidadaScreen: () -> Unit,

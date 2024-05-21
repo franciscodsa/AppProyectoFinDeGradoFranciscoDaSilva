@@ -18,7 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val credentialServices: CredentialServices
-) : ViewModel(){
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(LoginState())
     val uiState: StateFlow<LoginState> = _uiState.asStateFlow()
@@ -37,6 +37,7 @@ class LoginViewModel @Inject constructor(
                     password = event.password
                 )
             }
+
             LoginEvent.Login -> login()
 
             LoginEvent.MessageSeen -> _uiState.update {
@@ -82,6 +83,7 @@ class LoginViewModel @Inject constructor(
                             )
                         }
                     }
+
                 }
             }
         }
