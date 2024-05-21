@@ -22,6 +22,12 @@ data class ResumenState(
     val selectedFile: File? = null,
     val mimeType: String = "",
 
+    val newInvoiceIva: String = "",
+    val newInvoiceTotal: String = "",
+    val newInvoiceDescription: String = "",
+    val isExpense: Boolean = false,
+
+
     val isLoading: Boolean = false,
     val message: String? = null
 )

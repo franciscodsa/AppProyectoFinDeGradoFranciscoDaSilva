@@ -99,34 +99,65 @@ class ResumeViewModel @Inject constructor(
                 )
             }
             ResumenEvent.UploadFile -> upload()
+
+            is ResumenEvent.OnNewInvoiceDescription -> _uiState.update {
+                it.copy(
+                    newInvoiceDescription = event.description
+                )
+            }
+
+            is ResumenEvent.OnNewInvoiceIva -> _uiState.update {
+                it.copy(
+                    newInvoiceIva = event.iva
+                )
+            }
+
+            is ResumenEvent.OnNewInvoiceTotal -> _uiState.update {
+                it.copy(
+                    newInvoiceTotal = event.total
+                )
+            }
+
+            ResumenEvent.OnInvoiceTypeSelected -> _uiState.update {
+                it.copy(
+                    isExpense = !_uiState.value.isExpense
+                )
+            }
         }
     }
 
     private fun upload() {
+        Log.i("isExpense", _uiState.value.isExpense.toString())
         if (_uiState.value.selectedFile == null) {
-            Log.i("f", "file es null")
+            _uiState.update {
+                it.copy(
+                    message = "Seleccione un archivo",
+                )
+            }
         } else {
 
-            Log.i("f", _uiState.value.selectedFile?.name.toString())
+
+            val invoiceType = if (_uiState.value.isExpense) InvoiceType.EXPENSE else InvoiceType.INCOME
 
             viewModelScope.launch {
                 fileServices.upload(
                     _uiState.value.selectedFile!!,
                     _uiState.value.mimeType,
-                    "test",
-                    "add4@mail.com",
-                    InvoiceType.INCOME
+                    _uiState.value.newInvoiceDescription,
+                    invoiceType
+
                 ).catch(action = { cause ->
-                    Log.i("f", "error al catch")
+
                     _uiState.update {
                         it.copy(
+                            message = cause.message,
                             isLoading = false
                         )
                     }
                 }).collect { result ->
                     when (result) {
                         is NetworkResultt.Error -> {
-                            Log.i("f", "error en when")
+
                             _uiState.update {
                                 it.copy(
                                     isLoading = false

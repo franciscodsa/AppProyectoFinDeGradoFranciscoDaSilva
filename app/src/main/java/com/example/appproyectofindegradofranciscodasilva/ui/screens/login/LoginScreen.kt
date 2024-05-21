@@ -214,7 +214,6 @@ fun PasswordField(
         visualTransformation = PasswordVisualTransformation(),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         singleLine = true,
-        maxLines = 1,
         label = { Text(text = stringResource(R.string.contrasena)) }
     )
 }
@@ -229,7 +228,6 @@ fun UsernameField(
         modifier = Modifier.fillMaxWidth(),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
         singleLine = true,
-        maxLines = 1,
         label = { Text(text = stringResource(R.string.email)) }
     )
 }

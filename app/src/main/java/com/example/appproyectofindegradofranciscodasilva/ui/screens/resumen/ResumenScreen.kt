@@ -195,12 +195,18 @@ fun ResumenScreen(
 
             if (openBottomSheet) {
                 BottomSheetContent(
+                    newInvoiceIva = state.value.newInvoiceIva,
+                    newInvoiveTotal = state.value.newInvoiceTotal,
+                    newInvoiceDescription = state.value.newInvoiceDescription,
+                    isExpense = state.value.isExpense,
                     onClose = { openBottomSheet = false },
-                    onFileSelected = {viewModel.handleEvent(ResumenEvent.OnFileSelected(it))},
-                    onMimeTypeSelected = {viewModel.handleEvent(ResumenEvent.OnMimeTypeSelected(it))},
-                    onSubmit = {viewModel.handleEvent(ResumenEvent.UploadFile)}
+                    onFileSelected = { viewModel.handleEvent(ResumenEvent.OnFileSelected(it)) },
+                    onMimeTypeSelected = { viewModel.handleEvent(ResumenEvent.OnMimeTypeSelected(it)) },
+                    onInvoiceTypeChange = { viewModel.handleEvent(ResumenEvent.OnInvoiceTypeSelected) },
+                    onSubmit = { viewModel.handleEvent(ResumenEvent.UploadFile) }
                 )
             }
+
         }
     }
 }
@@ -290,19 +296,21 @@ fun ExpandableCard(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomSheetContent(
+    newInvoiveTotal: String,
+    newInvoiceIva: String,
+    newInvoiceDescription: String,
+    isExpense: Boolean,
     onClose: () -> Unit,
     onMimeTypeSelected: (String) -> Unit,
     onFileSelected: (File) -> Unit,
-    onSubmit: () -> Unit
+    onInvoiceTypeChange: () -> Unit,
+    onSubmit: () -> Unit,
 ) {
 
     var selectedFileName by remember { mutableStateOf("") }
     var field1 by remember { mutableStateOf("") }
     var field2 by remember { mutableStateOf("") }
     var field3 by remember { mutableStateOf("") }
-    var checkbox1 by remember { mutableStateOf(false) }
-    var checkbox2 by remember { mutableStateOf(false) }
-    var switchState by remember { mutableStateOf(false) }
 
     val bottomSheetState = rememberModalBottomSheetState()
 
@@ -338,7 +346,7 @@ fun BottomSheetContent(
                         }
                     }
 
-                    selectedFileName = name?:""
+                    selectedFileName = name ?: ""
 
                     onMimeTypeSelected(mimeType)
                     onFileSelected(selectedFile)
@@ -369,7 +377,7 @@ fun BottomSheetContent(
             }
 
 
-            var ingresosSelected by remember { mutableStateOf(true) }
+
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -377,32 +385,35 @@ fun BottomSheetContent(
             ) {
 
                 IngresosGastosToggle(
-                    onIngresosSelected = { ingresosSelected = true },
-                    onGastosSelected = { ingresosSelected = false }
+                    isExpense = isExpense,
+                    onInvoiceTypeChange = onInvoiceTypeChange
                 )
             }
 
             Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedTextField(
-                value = field1,
+                value = newInvoiveTotal,
                 onValueChange = { field1 = it },
-                label = { Text("Field 1") },
-                modifier = Modifier.fillMaxWidth()
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            OutlinedTextField(
-                value = field2,
-                onValueChange = { field2 = it },
-                label = { Text("Field 2") },
+                label = { Text("Total") },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                singleLine = true,
                 modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(8.dp))
             OutlinedTextField(
-                value = field3,
+                value = newInvoiceIva,
+                onValueChange = { field2 = it },
+                label = { Text("IVA") },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            OutlinedTextField(
+                value = newInvoiceDescription,
                 onValueChange = { field3 = it },
-                label = { Text("Field 3") },
+                label = { Text("Descripción") },
                 modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(16.dp))
@@ -413,7 +424,7 @@ fun BottomSheetContent(
                     value = selectedFileName,
                     onValueChange = {},
                     readOnly = true,
-                    label = { Text(text = "Archivo seleccionado")}
+                    label = { Text(text = "Archivo seleccionado") }
                 )
             }
 
@@ -436,30 +447,31 @@ fun BottomSheetContent(
     }
 }
 
+
 @Composable
 fun IngresosGastosToggle(
-    onIngresosSelected: () -> Unit,
-    onGastosSelected: () -> Unit
+    isExpense: Boolean,
+    onInvoiceTypeChange: () -> Unit
 ) {
-    var ingresosSelected by remember { mutableStateOf(true) }
-
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
         ToggleButton(
             text = "Ingresos",
-            selected = ingresosSelected,
+            selected = !isExpense,
             onClick = {
-                ingresosSelected = true
-                onIngresosSelected()
+                if (isExpense) {
+                    onInvoiceTypeChange()
+                }
             }
         )
         ToggleButton(
             text = "Gastos",
-            selected = !ingresosSelected,
+            selected = isExpense,
             onClick = {
-                ingresosSelected = false
-                onGastosSelected()
+                if (!isExpense) {
+                    onInvoiceTypeChange()
+                }
             }
         )
     }
