@@ -233,10 +233,8 @@ class ResumeViewModel @Inject constructor(
 
 
     private fun getBalance() {
-        //todo: aqui se tendria que realizar la llamada de obtener el balance para el trimestre y año seleccionado y actualizar el state
-
         viewModelScope.launch {
-            Log.i("ASD", "Entro")
+
             balanceServices.getQuarterBalance(
                 _uiState.value.selectedYear.toInt(),
                 _uiState.value.selectedTrimester
