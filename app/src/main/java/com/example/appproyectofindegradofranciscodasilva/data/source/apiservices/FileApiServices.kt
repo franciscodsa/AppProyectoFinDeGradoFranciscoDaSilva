@@ -1,15 +1,18 @@
 package com.example.appproyectofindegradofranciscodasilva.data.source.apiservices
 
 import com.example.appproyectofindegradofranciscodasilva.data.model.ApiMessage
+import com.example.appproyectofindegradofranciscodasilva.data.model.FilesInfo
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import retrofit2.Response
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface FileApiServices {
     @POST("files/upload")
@@ -26,4 +29,17 @@ interface FileApiServices {
     suspend fun downloadFile(
         @Path("fileId") fileId: Long
     ): Response<ResponseBody>
+
+    @GET("files/info")
+    suspend fun getFilesByClient(@Query("clientEmail") clientEmail: String): Response<List<FilesInfo>>
+
+    @GET("files/expensesInfo")
+    suspend fun getExpensesFilesByClient(@Query("clientEmail") clientEmail: String): Response<List<FilesInfo>>
+
+    @GET("files/incomeInfo")
+    suspend fun getIncomeFilesByClient(@Query("clientEmail") clientEmail: String): Response<List<FilesInfo>>
+
+    @DELETE("files/delete/{fileId}")
+    suspend fun deleteFile(@Path("fileId") fileId: Long): Response<ApiMessage>
+
 }

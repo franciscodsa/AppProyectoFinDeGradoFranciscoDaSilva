@@ -119,3 +119,9 @@ dapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/data/source
 japp/src/main/java/com/example/appproyectofindegradofranciscodasilva/data/repositories/BalanceRepository.kt,4\4\44a41666b448fa1df6042dd24b717fd975903811
 –
 fapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/domain/services/BalanceServices.kt,f\a\fa6696446d72f8fbf55fcafacd50e28864bcbcbb
+‹
+[app/src/main/java/com/example/appproyectofindegradofranciscodasilva/data/model/FilesInfo.kt,4\0\400df8e27a54bc0276e57be478e49a289149008a
+”
+dapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/ui/navigation/DrawerViewModel.kt,0\8\0853608d35c0ad2fc2bdbbf124028f8ee753769c
+’
+bapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/ui/navigation/MyDrawerState.kt,c\9\c948c33fdc797e578c9cd26a698e186a84fe95fb

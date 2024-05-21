@@ -6,7 +6,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.appproyectofindegradofranciscodasilva.ui.screens.archivos.FileSelectionScreen
+import com.example.appproyectofindegradofranciscodasilva.ui.screens.archivos.FilesScreen
 import com.example.appproyectofindegradofranciscodasilva.ui.screens.login.LoginScreen
 import com.example.appproyectofindegradofranciscodasilva.ui.screens.olvideclave.OlvideClaveScreen
 import com.example.appproyectofindegradofranciscodasilva.ui.screens.register.RegisterScreen
@@ -61,7 +61,7 @@ fun Navigation(
         composable(
             "files"
         ){
-            FileSelectionScreen()
+            FilesScreen()
         }
 
     }

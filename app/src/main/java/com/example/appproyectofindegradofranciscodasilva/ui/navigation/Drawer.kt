@@ -50,6 +50,7 @@ fun Drawer(
     val navState by navController.currentBackStackEntryAsState()
     val currentRoute = navState?.destination?.route
 
+
     val screensList: List<Screens> = screens
 
 
@@ -76,39 +77,42 @@ fun Drawer(
             }
         }, drawerState = drawerState
     ) {
-        if (currentRoute != "login" && currentRoute != "registro" && currentRoute != "resumen") {
-            Scaffold() { innerPadding ->
+        // TODO NO SEAS PAJUO Y ESTO LO TIENES QUE MODIFICAR LUEGO PARA COLOCAR EN QUE PANTALLAS NO QUIERES QUE SE MUESTRE
+        if (
+       /*     currentRoute != "login" && currentRoute != "registro" && currentRoute != "resumen"*/
+            false) {
+        Scaffold() { innerPadding ->
+            Navigation(navController = navController, innerPadding = innerPadding)
+        }
+    } else {
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = {
+                        Text(text = "")
+                    },
+                    navigationIcon = {
+                        IconButton(onClick = {
+                            scope.launch {
+                                drawerState.open()
+                            }
+                        }) {
+                            Icon(
+                                imageVector = Icons.Default.Menu,
+                                contentDescription = "menu"
+                            )
+                        }
+                    }
+                )
+            }
+        ) { innerPadding ->
+            Box(modifier = Modifier.padding(innerPadding)) {
+                Spacer(modifier = Modifier.height(IntrinsicSize.Min))
                 Navigation(navController = navController, innerPadding = innerPadding)
             }
-        } else {
-            Scaffold(
-                topBar = {
-                    TopAppBar(
-                        title = {
-                            Text(text = "")
-                        },
-                        navigationIcon = {
-                            IconButton(onClick = {
-                                scope.launch {
-                                    drawerState.open()
-                                }
-                            }) {
-                                Icon(
-                                    imageVector = Icons.Default.Menu,
-                                    contentDescription = "menu"
-                                )
-                            }
-                        }
-                    )
-                }
-            ) { innerPadding ->
-                Box(modifier = Modifier.padding(innerPadding)){
-                    Spacer(modifier = Modifier.height(IntrinsicSize.Min))
-                    Navigation(navController = navController, innerPadding = innerPadding)
-                }
-            }
-
         }
+
+    }
     }
 
 }

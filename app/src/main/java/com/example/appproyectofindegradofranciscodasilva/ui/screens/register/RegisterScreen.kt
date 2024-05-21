@@ -50,6 +50,8 @@ fun RegisterScreen(
         SnackbarHostState()
     }
 
+
+
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
     ) { _ ->
@@ -222,11 +224,3 @@ fun CustomDateField(
         )
     }
 }
-
-
-/*
-@Preview(showBackground = true)
-@Composable
-fun ComposablePreview() {
-    RegisterScreen()
-}*/

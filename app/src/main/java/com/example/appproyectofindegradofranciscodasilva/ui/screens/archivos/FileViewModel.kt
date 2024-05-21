@@ -40,18 +40,27 @@ class FileViewModel @Inject constructor(
                 )
             }
 
-            is FileEvent.DownloadFile -> download(event.context)
+            is FileEvent.DownloadFile -> download(event.context, event.fileId)
             is FileEvent.OnFileIdChange -> _uiState.update {
                 it.copy(
                     fileId = event.fileId
                 )
             }
+
+            FileEvent.LoadAllFiles -> loadAllFiles()
+            FileEvent.LoadIncomeFiles -> loadIncomeFiles()
+            FileEvent.LoadExpenseFiles -> loadExpenseFiles()
+            FileEvent.MessageSeen -> _uiState.update {
+                it.copy(
+                    message = null
+                )
+            }
         }
     }
 
-    private fun download(context: Context) {
+    private fun download(context: Context, fileId : Long) {
         viewModelScope.launch {
-            fileServices.download(_uiState.value.fileId.toLong(), context)
+            fileServices.download(fileId, context)
                 .catch(action = { cause ->
                 Log.i("f", "error al catch")
                 _uiState.update {
@@ -76,9 +85,9 @@ class FileViewModel @Inject constructor(
                     }
 
                     is NetworkResultt.Success -> {
-                        Log.i("f", "subido")
                         _uiState.update {
                             it.copy(
+                                message = result.data,
                                 isLoading = false
                             )
                         }
@@ -136,6 +145,54 @@ class FileViewModel @Inject constructor(
                     }
                 }
             }
+        }
+    }
+
+    private fun loadAllFiles() {
+        viewModelScope.launch {
+            fileServices.getFilesByClient()
+                .catch { cause ->
+                    _uiState.update { it.copy(message = cause.message, isLoading = false) }
+                }
+                .collect { result ->
+                    when (result) {
+                        is NetworkResultt.Error -> _uiState.update { it.copy(message = result.message, isLoading = false) }
+                        is NetworkResultt.Loading -> _uiState.update { it.copy(isLoading = true) }
+                        is NetworkResultt.Success -> _uiState.update { it.copy(files = result.data ?: emptyList(), isLoading = false) }
+                    }
+                }
+        }
+    }
+
+    private fun loadIncomeFiles() {
+        viewModelScope.launch {
+            fileServices.getIncomeFilesByClient()
+                .catch { cause ->
+                    _uiState.update { it.copy(message = cause.message, isLoading = false) }
+                }
+                .collect { result ->
+                    when (result) {
+                        is NetworkResultt.Error -> _uiState.update { it.copy(message = result.message, isLoading = false) }
+                        is NetworkResultt.Loading -> _uiState.update { it.copy(isLoading = true) }
+                        is NetworkResultt.Success -> _uiState.update { it.copy(files = result.data ?: emptyList(), isLoading = false) }
+                    }
+                }
+        }
+    }
+
+    private fun loadExpenseFiles() {
+        viewModelScope.launch {
+            fileServices.getExpensesFilesByClient()
+                .catch { cause ->
+                    _uiState.update { it.copy(message = cause.message, isLoading = false) }
+                }
+                .collect { result ->
+                    when (result) {
+                        is NetworkResultt.Error -> _uiState.update { it.copy(message = result.message, isLoading = false) }
+                        is NetworkResultt.Loading -> _uiState.update { it.copy(isLoading = true) }
+                        is NetworkResultt.Success -> _uiState.update { it.copy(files = result.data ?: emptyList(), isLoading = false) }
+                    }
+                }
         }
     }
 

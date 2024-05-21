@@ -3,6 +3,7 @@ package com.example.appproyectofindegradofranciscodasilva.data.repositories
 import android.content.Context
 import android.util.Log
 import com.example.appproyectofindegradofranciscodasilva.data.model.ApiMessage
+import com.example.appproyectofindegradofranciscodasilva.data.model.FilesInfo
 import com.example.appproyectofindegradofranciscodasilva.data.model.InvoiceType
 import com.example.appproyectofindegradofranciscodasilva.data.source.FileDataSource
 import com.example.appproyectofindegradofranciscodasilva.utils.NetworkResultt
@@ -37,5 +38,35 @@ class FileRepository @Inject constructor(
             emit(result)
         }.flowOn(Dispatchers.IO)
     }
+    fun getFilesByClient(clientEmail: String): Flow<NetworkResultt<List<FilesInfo>>> {
+        return flow {
+            emit(NetworkResultt.Loading())
+            val result = fileDataSource.getFilesByClient(clientEmail)
+            emit(result)
+        }.flowOn(Dispatchers.IO)
+    }
 
+    fun getExpensesFilesByClient(clientEmail: String): Flow<NetworkResultt<List<FilesInfo>>> {
+        return flow {
+            emit(NetworkResultt.Loading())
+            val result = fileDataSource.getExpensesFilesByClient(clientEmail)
+            emit(result)
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun getIncomeFilesByClient(clientEmail: String): Flow<NetworkResultt<List<FilesInfo>>> {
+        return flow {
+            emit(NetworkResultt.Loading())
+            val result = fileDataSource.getIncomeFilesByClient(clientEmail)
+            emit(result)
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun deleteFile(fileId: Long): Flow<NetworkResultt<ApiMessage>> {
+        return flow {
+            emit(NetworkResultt.Loading())
+            val result = fileDataSource.deleteFile(fileId)
+            emit(result)
+        }.flowOn(Dispatchers.IO)
+    }
 }

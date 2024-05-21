@@ -9,6 +9,7 @@ import android.util.Log
 import android.webkit.MimeTypeMap
 import com.example.appproyectofindegradofranciscodasilva.common.Constantes
 import com.example.appproyectofindegradofranciscodasilva.data.model.ApiMessage
+import com.example.appproyectofindegradofranciscodasilva.data.model.FilesInfo
 import com.example.appproyectofindegradofranciscodasilva.data.model.InvoiceType
 import com.example.appproyectofindegradofranciscodasilva.data.source.apiservices.FileApiServices
 import com.example.appproyectofindegradofranciscodasilva.data.source.di.InfoServer
@@ -109,6 +110,66 @@ class FileDataSource @Inject constructor(
         }
     }
 
+    suspend fun getFilesByClient(clientEmail: String): NetworkResultt<List<FilesInfo>> {
+        return try {
+            val response = fileApiServices.getFilesByClient(clientEmail)
+            if (response.isSuccessful) {
+                val body = response.body()
+                body?.let { NetworkResultt.Success(it) } ?: NetworkResultt.Error("No data")
+            } else {
+                val errorMessage = response.errorBody()?.string() ?: "Unknown error"
+                NetworkResultt.Error(errorMessage)
+            }
+        } catch (e: Exception) {
+            NetworkResultt.Error(e.message ?: "Unknown error")
+        }
+    }
+
+    suspend fun getExpensesFilesByClient(clientEmail: String): NetworkResultt<List<FilesInfo>> {
+        return try {
+            val response = fileApiServices.getExpensesFilesByClient(clientEmail)
+            if (response.isSuccessful) {
+                val body = response.body()
+                body?.let { NetworkResultt.Success(it) } ?: NetworkResultt.Error("No data")
+            } else {
+                val errorMessage = response.errorBody()?.string() ?: "Unknown error"
+                NetworkResultt.Error(errorMessage)
+            }
+        } catch (e: Exception) {
+            NetworkResultt.Error(e.message ?: "Unknown error")
+        }
+    }
+
+    suspend fun getIncomeFilesByClient(clientEmail: String): NetworkResultt<List<FilesInfo>> {
+        return try {
+            val response = fileApiServices.getIncomeFilesByClient(clientEmail)
+            if (response.isSuccessful) {
+                val body = response.body()
+                body?.let { NetworkResultt.Success(it) } ?: NetworkResultt.Error("No data")
+            } else {
+                val errorMessage = response.errorBody()?.string() ?: "Unknown error"
+                NetworkResultt.Error(errorMessage)
+            }
+        } catch (e: Exception) {
+            NetworkResultt.Error(e.message ?: "Unknown error")
+        }
+    }
+
+    suspend fun deleteFile(fileId: Long): NetworkResultt<ApiMessage> {
+        return try {
+            val response = fileApiServices.deleteFile(fileId)
+            if (response.isSuccessful) {
+                val body = response.body()
+                body?.let { NetworkResultt.Success(it) } ?: NetworkResultt.Error("No data")
+            } else {
+                val errorMessage = response.errorBody()?.string() ?: "Unknown error"
+                NetworkResultt.Error(errorMessage)
+            }
+        } catch (e: Exception) {
+            NetworkResultt.Error(e.message ?: "Unknown error")
+        }
+    }
+
 
 
     private fun saveDownloadedFile(
@@ -192,28 +253,7 @@ class FileDataSource @Inject constructor(
     }
 
 
-//    suspend fun uploadFile(uri: Uri, description: String, clientEmail: String) {
-//        val context = LocalContext.current
-//        val parcelFileDescriptor = context.contentResolver.openFileDescriptor(uri, "r")
-//        val file = File(parcelFileDescriptor?.fileDescriptor)
-//        val requestFile = file.asRequestBody("*/*".toMediaTypeOrNull())
-//        val body = MultipartBody.Part.createFormData("file", file.name, requestFile)
-//        val descriptionPart = description.toRequestBody("text/plain".toMediaTypeOrNull())
-//        val emailPart = clientEmail.toRequestBody("text/plain".toMediaTypeOrNull())
-//
-//        val retrofit = Retrofit.Builder()
-//            .baseUrl("https://your-api-url.com/")
-//            .build()
-//
-//        val service = retrofit.create(ApiService::class.java)
-//        val response = service.uploadFile(body, descriptionPart, emailPart)
-//
-//        if (response.isSuccessful) {
-//            // Handle success
-//        } else {
-//            // Handle error
-//        }
-//    }
+
 
 }
 
