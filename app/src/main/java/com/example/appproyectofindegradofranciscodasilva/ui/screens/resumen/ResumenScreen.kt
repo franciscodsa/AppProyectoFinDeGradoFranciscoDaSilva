@@ -17,8 +17,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
@@ -68,28 +70,41 @@ import java.io.File
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ResumenScreen(
-    viewModel: ResumeViewModel = hiltViewModel()
+    viewModel: ResumeViewModel = hiltViewModel(),
+    bottomNavigationBar: @Composable () -> Unit = {}
 ) {
 
     var openBottomSheet by remember { mutableStateOf(false) }
 
     val state = viewModel.uiState.collectAsStateWithLifecycle()
 
+    val scrollState = rememberScrollState()
+
     val snackbarHostState = remember {
         SnackbarHostState()
     }
 
+    val isConditionMet = remember { mutableStateOf(true) }  // Condición para alternar los FABs
+    val isExpanded = remember { mutableStateOf(false) }
+
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(onClick = {
-                openBottomSheet = true
-            }) {
-                Icon(imageVector = Icons.Default.Add, contentDescription = "Añadir")
+            if (isConditionMet.value) {
+                ExpandableFloatingActionButton(
+                    expanded = isExpanded.value,
+                    onExpandChange = { isExpanded.value = it },
+                    onClientesClick = { /* Acción para Clientes */ },
+                    onContadoresClick = { /* Acción para Contadores */ }
+                )
+            } else {
+                FloatingActionButton(onClick = { openBottomSheet = true }) {
+                    Icon(imageVector = Icons.Default.Add, contentDescription = "Añadir")
+                }
             }
         },
+        bottomBar = bottomNavigationBar,
         snackbarHost = { SnackbarHost(snackbarHostState) },
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = Modifier.fillMaxSize()
     ) { _ ->
 
         LaunchedEffect(state.value.message) {
@@ -104,6 +119,7 @@ fun ResumenScreen(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
+                .verticalScroll(scrollState)
                 .padding(dimensionResource(id = R.dimen.big_size_space))
         ) {
             Row {
@@ -183,14 +199,13 @@ fun ResumenScreen(
                 )
             )
 
-            Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.big_size_space)))
+            Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.medium_size_space)))
 
             ExpandableCard(
                 irpfAmount = "${state.value.irpf}",
                 ivaAmount = "${state.value.iva}",
                 warningMessage = "Recuerda tener suficiente dinero en la cuenta bancaria al final de cada trimestre para evitar sanciones."
             )
-
 
             if (openBottomSheet) {
                 BottomSheetContent(

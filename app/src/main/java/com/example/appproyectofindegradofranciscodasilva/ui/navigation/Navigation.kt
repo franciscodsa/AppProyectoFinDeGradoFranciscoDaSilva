@@ -1,11 +1,9 @@
 package com.example.appproyectofindegradofranciscodasilva.ui.navigation
 
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.appproyectofindegradofranciscodasilva.ui.screens.archivos.FilesScreen
 import com.example.appproyectofindegradofranciscodasilva.ui.screens.login.LoginScreen
 import com.example.appproyectofindegradofranciscodasilva.ui.screens.olvideclave.OlvideClaveScreen
@@ -17,9 +15,9 @@ const val login = "login"
 
 @Composable
 fun Navigation(
-    navController: NavHostController,
-    innerPadding: PaddingValues
 ) {
+    val navController = rememberNavController()
+
     NavHost(
         navController = navController,
         startDestination = login
@@ -29,39 +27,61 @@ fun Navigation(
         ) {
             LoginScreen(
                 onLogin = {
-                     navController.navigate("resumen")
+                    navController.navigate("resumen")
                 },
-                toRegistroScreen={
+                toRegistroScreen = {
                     navController.navigate("registro")
                 },
-                toClaveOlvidadaScreen={
+                toClaveOlvidadaScreen = {
                     navController.navigate("olvide")
                 },
+                bottomNavigationBar = {
+                    BottomBar(
+                        navController = navController,
+                        screens = screens
+                    )
+                }
 
             )
         }
         composable(
             "registro"
-        ){
-            RegisterScreen()
-        }
+        ) {
+            RegisterScreen(
 
-        composable(
-            "resumen"
-        ){
-            ResumenScreen()
+            )
         }
 
         composable(
             "olvide"
-        ){
-            OlvideClaveScreen()
+        ) {
+            OlvideClaveScreen(
+            )
+        }
+
+        composable(
+            "resumen"
+        ) {
+            ResumenScreen(
+                bottomNavigationBar = {
+                    BottomBar(
+                        navController = navController,
+                        screens = screens
+                    )
+                })
         }
 
         composable(
             "files"
-        ){
-            FilesScreen()
+        ) {
+            FilesScreen(
+                bottomNavigationBar = {
+                    BottomBar(
+                        navController = navController,
+                        screens = screens
+                    )
+                }
+            )
         }
 
     }

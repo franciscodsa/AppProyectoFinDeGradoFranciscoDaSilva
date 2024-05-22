@@ -44,7 +44,7 @@ import kotlinx.coroutines.launch
 fun Drawer(
 
 ) {
-    val navController = rememberNavController()
+  /*  val navController = rememberNavController()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val navState by navController.currentBackStackEntryAsState()
@@ -79,7 +79,7 @@ fun Drawer(
     ) {
         // TODO NO SEAS PAJUO Y ESTO LO TIENES QUE MODIFICAR LUEGO PARA COLOCAR EN QUE PANTALLAS NO QUIERES QUE SE MUESTRE
         if (
-       /*     currentRoute != "login" && currentRoute != "registro" && currentRoute != "resumen"*/
+       *//*     currentRoute != "login" && currentRoute != "registro" && currentRoute != "resumen"*//*
             false) {
         Scaffold() { innerPadding ->
             Navigation(navController = navController, innerPadding = innerPadding)
@@ -113,7 +113,7 @@ fun Drawer(
         }
 
     }
-    }
+    }*/
 
 }
 

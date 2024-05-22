@@ -2,7 +2,10 @@ package com.example.appproyectofindegradofranciscodasilva.ui.screens.archivos
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,12 +17,22 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.ArrowDropUp
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Download
+import androidx.compose.material.icons.filled.ExpandLess
+import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.filled.InsertDriveFile
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
@@ -27,36 +40,45 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.appproyectofindegradofranciscodasilva.data.model.FilesInfo
-import com.example.appproyectofindegradofranciscodasilva.ui.screens.register.RegisterEvent
-import com.example.appproyectofindegradofranciscodasilva.ui.screens.resumen.ToggleButton
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FilesScreen(viewModel: FileViewModel = hiltViewModel()) {
-
+fun FilesScreen(
+    viewModel: FileViewModel = hiltViewModel(),
+    bottomNavigationBar: @Composable () -> Unit = {}
+) {
     val state = viewModel.uiState.collectAsStateWithLifecycle()
-
-    val snackbarHostState = remember {
-        SnackbarHostState()
-    }
+    val snackbarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
 
-
     Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(text = "Facturas", style = MaterialTheme.typography.headlineMedium) }
+            )
+        },
+        bottomBar = bottomNavigationBar,
         snackbarHost = { SnackbarHost(snackbarHostState) },
-    ) { _ ->
+    ) { innerPadding ->
         LaunchedEffect(state.value.message) {
             state.value.message?.let {
                 snackbarHostState.showSnackbar(
-                    message = state.value.message.toString(), duration = SnackbarDuration.Short
+                    message = it,
+                    duration = SnackbarDuration.Short
                 )
                 viewModel.handleEvent(FileEvent.MessageSeen)
             }
@@ -65,49 +87,101 @@ fun FilesScreen(viewModel: FileViewModel = hiltViewModel()) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .padding(innerPadding)
                 .padding(16.dp)
         ) {
             FilterButtons(viewModel = viewModel)
-
             Spacer(modifier = Modifier.height(16.dp))
-
-            LazyColumn(
-                modifier = Modifier.fillMaxSize()
-            ) {
-                items(items = state.value.files, key = { file -> file.id }) { file ->
-                    ExpandableFileCard(
-                        file = file,
-                        onDownloadClick = { viewModel.handleEvent(FileEvent.DownloadFile(context, file.id)) })
-                    Spacer(modifier = Modifier.height(8.dp))
+            Box(modifier = Modifier.fillMaxSize()) {
+                if (state.value.isLoading) {
+                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                }else{
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        items(items = state.value.files, key = { file -> file.id }) { file ->
+                            ExpandableFileCard(
+                                file = file,
+                                onDownloadClick = {
+                                    viewModel.handleEvent(
+                                        FileEvent.DownloadFile(context, file.id)
+                                    )
+                                }
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+                        }
+                    }
                 }
             }
         }
+
+
     }
-    LaunchedEffect(Unit){
+
+    LaunchedEffect(Unit) {
         viewModel.handleEvent(FileEvent.LoadAllFiles)
     }
 }
 
 @Composable
 fun FilterButtons(viewModel: FileViewModel) {
+    var selectedFilter by remember { mutableStateOf("Todos") }
+
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Start
     ) {
-        ToggleButton(
+        SmallToggleButton(
             text = "Todos",
-            selected = true,
-            onClick = { viewModel.handleEvent(FileEvent.LoadAllFiles) }
+            selected = selectedFilter == "Todos",
+            onClick = {
+                selectedFilter = "Todos"
+                viewModel.handleEvent(FileEvent.LoadAllFiles)
+            }
         )
-        ToggleButton(
+        Spacer(modifier = Modifier.width(8.dp))
+        SmallToggleButton(
             text = "Ingresos",
-            selected = false,
-            onClick = { viewModel.handleEvent(FileEvent.LoadIncomeFiles) }
+            selected = selectedFilter == "Ingresos",
+            onClick = {
+                selectedFilter = "Ingresos"
+                viewModel.handleEvent(FileEvent.LoadIncomeFiles)
+            }
         )
-        ToggleButton(
+        Spacer(modifier = Modifier.width(8.dp))
+        SmallToggleButton(
             text = "Gastos",
-            selected = false,
-            onClick = { viewModel.handleEvent(FileEvent.LoadExpenseFiles) }
+            selected = selectedFilter == "Gastos",
+            onClick = {
+                selectedFilter = "Gastos"
+                viewModel.handleEvent(FileEvent.LoadExpenseFiles)
+            }
+        )
+    }
+}
+
+@Composable
+fun SmallToggleButton(
+    text: String,
+    selected: Boolean,
+    onClick: () -> Unit
+) {
+    Button(
+        onClick = onClick,
+        colors = ButtonDefaults.buttonColors(
+            containerColor = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface.copy(
+                alpha = 0.3f
+            ),
+            contentColor = if (selected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface
+        ),
+        contentPadding = PaddingValues(4.dp),
+        modifier = Modifier
+            .height(ButtonDefaults.MinHeight)
+    ) {
+        Text(
+            text = text,
+            style = MaterialTheme.typography.labelSmall,
+            fontSize = 12.sp
         )
     }
 }
@@ -123,102 +197,53 @@ fun ExpandableFileCard(file: FilesInfo, onDownloadClick: () -> Unit) {
         shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation()
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-        ) {
+        Column {
             Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(imageVector = Icons.Default.InsertDriveFile, contentDescription = "Archivo")
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(text = file.fileName, style = MaterialTheme.typography.titleMedium)
-            }
+                Column(
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.InsertDriveFile,
+                            contentDescription = "Archivo"
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(text = file.fileName, style = MaterialTheme.typography.titleMedium)
+                    }
 
-            if (expanded) {
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = "Descripción: ${file.description}",
-                    style = MaterialTheme.typography.bodyMedium
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(text = "Fecha: ${file.date}", style = MaterialTheme.typography.bodyMedium)
-                Spacer(modifier = Modifier.height(8.dp))
-                Button(onClick = onDownloadClick) {
-                    Text(text = "Descargar")
+                    if (expanded) {
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = "Descripción: ${file.description}",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(text = "Fecha: ${file.date}", style = MaterialTheme.typography.bodyMedium)
+                    }
+                }
+                Spacer(modifier = Modifier.width(8.dp))
+                IconButton(onClick = onDownloadClick) {
+                    Icon(imageVector = Icons.Default.Download, contentDescription = "Descargar", tint = MaterialTheme.colorScheme.primary)
                 }
             }
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Icon(
+                        imageVector = if (expanded) Icons.Default.ArrowDropDown else Icons.Default.ArrowDropUp,
+                        contentDescription = if (expanded) "Collapse" else "Expand"
+                    )
+                }
+
         }
     }
 }
-
-
-//@Composable
-//fun FileSelectionScreen(
-//    viewModel: FileViewModel = hiltViewModel()
-//) {
-//    val state = viewModel.uiState.collectAsStateWithLifecycle()
-//
-//    val context = LocalContext.current
-//    val launcher =
-//        rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { result: Uri? ->
-//            result?.let { uri ->
-//                val contentResolver = context.contentResolver
-//
-//                //Conseguir el tipo de archivo
-//                val mimeType = contentResolver.getType(uri)?:""
-//
-//                //Conseguir el nombre del archivo
-//                val cursor = context.contentResolver.query(uri, null, null, null, null)
-//                val nameIndex = cursor?.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-//                cursor?.moveToFirst()
-//                val name = nameIndex?.let { cursor.getString(it) }
-//                cursor?.close()
-//
-//                //Crear el File con lo conseguido del selector
-//                val selectedFile = File(context.cacheDir, name?:"") // You can use any desired file name here
-//
-//
-//                contentResolver.openInputStream(uri)?.use { inputStream ->
-//                    selectedFile.outputStream().use { outputStream ->
-//                        inputStream.copyTo(outputStream)
-//                    }
-//                }
-//
-//                viewModel.handleEvent(FileEvent.OnMimeTypeSelected(mimeType))
-//                viewModel.handleEvent(FileEvent.OnFileSelected(selectedFile))
-//            }
-//        }
-//
-//    Column(
-//        modifier = Modifier
-//            .fillMaxSize()
-//            .padding(16.dp),
-//        verticalArrangement = Arrangement.Center,
-//        horizontalAlignment = Alignment.CenterHorizontally
-//    ) {
-//        Button(onClick = { launcher.launch("*/*") }) {
-//            Text("Seleccionar archivo")
-//        }
-//        Button(onClick = { viewModel.handleEvent(FileEvent.UploadFile) }) {
-//            Text(text = "Subir")
-//        }
-//
-//        OutlinedTextField(
-//            value = state.value.fileId,
-//            onValueChange = {
-//                viewModel.handleEvent(FileEvent.OnFileIdChange(it))
-//            },
-//            label = {
-//                Text(text = "Enter id")
-//            },
-//            maxLines = 1,
-//            singleLine = true,
-//            modifier = Modifier.fillMaxWidth()
-//        )
-//        Button(onClick = { viewModel.handleEvent(FileEvent.DownloadFile(context)) }) {
-//            Text(text = "descargar")
-//        }
-//    }
-//}
