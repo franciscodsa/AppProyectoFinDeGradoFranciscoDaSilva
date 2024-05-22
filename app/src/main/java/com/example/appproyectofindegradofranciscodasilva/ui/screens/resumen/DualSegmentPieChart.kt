@@ -124,23 +124,44 @@ fun DetailsPieChart(data: Map<String, Double>, colors: List<Color>) {
 }
 
 @Composable
-fun DetailsPieChartItem(data: Pair<String, Double>, height: Dp = 10.dp, color: Color) {
+fun DetailsPieChartItem(
+    data: Pair<String, Double>,
+    height: Dp = 10.dp,
+    color: Color
+) {
+
     Surface(
-        modifier = Modifier.padding(16.dp),
+        modifier = Modifier
+            .padding(16.dp),
         color = Color.Transparent
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Box(
-                modifier = Modifier
-                    .background(color = color, shape = RoundedCornerShape(5.dp))
-                    .align(Alignment.CenterVertically)
-                    .size(height)
-            )
-            Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.small_size_space)))
-            Column {
-                Text(text = data.first, style = TextStyle(fontWeight = FontWeight.Bold))
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            Column() {
+                Row {
+                    Box(
+                        modifier = Modifier
+                            .background(
+                                color = color,
+                                shape = RoundedCornerShape(5.dp)
+                            )
+                            .align(Alignment.CenterVertically)
+                            .size(height)
+                    )
+                    Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.small_size_space)))
+                    Text(
+                        text = data.first,
+                        style = TextStyle(fontWeight = FontWeight.Bold)
+                    )
+                }
+
                 Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.small_size_space)))
-                Text(text = "Total: ${String.format("%.2f€", data.second)}")
+                Text(
+                    text = String.format("%.2f€", data.second),
+                )
             }
         }
     }
