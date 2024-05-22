@@ -8,14 +8,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -45,55 +43,32 @@ fun DualSegmentPieChart(
     chartBarWidth: Dp = 25.dp,
     animDuration: Int = 1000,
 ) {
-
     val totalSum = data.values.sum()
-    val floatValue = mutableListOf<Float>()
-
-    // To set the value of each Arc according to
-    // the value given in the data, we have used a simple formula.
-    // For a detailed explanation check out the Medium Article.
-    // The link is in the about section and readme file of this GitHub Repository
-    data.values.forEachIndexed { index, values ->
-        floatValue.add(index, 360 * values.toFloat() / totalSum.toFloat())
-    }
-
-    // add the colors as per the number of data(no. of pie chart entries)
-    // so that each data will get a color
-    val colors = listOf(
-        Color.Green,
-        Color.Red,
-    )
+    val floatValue = data.values.map { 360 * it.toFloat() / totalSum.toFloat() }
+    val colors = listOf(Color.Green, Color.Red)
 
     var animationPlayed by remember { mutableStateOf(false) }
-
     var lastValue = 0f
 
-    // it is the diameter value of the Pie
     val animateSize by animateFloatAsState(
-        targetValue = if (animationPlayed) radiusOuter.value * 1f else 0f,
+        targetValue = if (animationPlayed) radiusOuter.value else 0f,
         animationSpec = tween(
             durationMillis = animDuration,
-            delayMillis = 0,
             easing = LinearOutSlowInEasing
-        ), label = ""
+        )
     )
 
-    // if you want to stabilize the Pie Chart you can use value -90f
-    // 90f is used to complete 1/4 of the rotation
     val animateRotation by animateFloatAsState(
-        targetValue = if (animationPlayed) 90f * 11f else 0f,
+        targetValue = if (animationPlayed) 360f else 0f,
         animationSpec = tween(
             durationMillis = animDuration,
-            delayMillis = 0,
             easing = LinearOutSlowInEasing
-        ), label = ""
+        )
     )
 
-    // to play the animation only once when the function is Created or Recomposed
-    LaunchedEffect(key1 = true) {
+    LaunchedEffect(Unit) {
         animationPlayed = true
     }
-
 
     Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.big_size_space)))
 
@@ -101,23 +76,20 @@ fun DualSegmentPieChart(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
-        // Pie Chart using Canvas Arc
         Box(
             modifier = Modifier.size(animateSize.dp),
             contentAlignment = Alignment.Center
         ) {
             Canvas(
                 modifier = Modifier
-                    .size(radiusOuter * 1f)
+                    .size(radiusOuter * 2)
                     .rotate(animateRotation)
             ) {
-                // draw each Arc for each data entry in Pie Chart
                 floatValue.forEachIndexed { index, value ->
                     drawArc(
                         color = colors[index],
-                        lastValue,
-                        value,
+                        startAngle = lastValue,
+                        sweepAngle = value,
                         useCenter = false,
                         style = Stroke(chartBarWidth.toPx(), cap = StrokeCap.Butt)
                     )
@@ -127,23 +99,13 @@ fun DualSegmentPieChart(
         }
 
         Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.medium_size_space)))
-        // To see the data in more structured way
-        // Compose Function in which Items are showing data
-        DetailsPieChart(
-            data = data,
-            colors = colors
-        )
 
-
+        DetailsPieChart(data = data, colors = colors)
     }
-
 }
 
 @Composable
-fun DetailsPieChart(
-    data: Map<String, Double>,
-    colors: List<Color>
-) {
+fun DetailsPieChart(data: Map<String, Double>, colors: List<Color>) {
     Column {
         Row(
             modifier = Modifier
@@ -151,7 +113,6 @@ fun DetailsPieChart(
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            // create the data items
             data.values.forEachIndexed { index, value ->
                 DetailsPieChartItem(
                     data = Pair(data.keys.elementAt(index), value),
@@ -163,45 +124,25 @@ fun DetailsPieChart(
 }
 
 @Composable
-fun DetailsPieChartItem(
-    data: Pair<String, Double>,
-    height: Dp = 10.dp,
-    color: Color
-) {
-
+fun DetailsPieChartItem(data: Pair<String, Double>, height: Dp = 10.dp, color: Color) {
     Surface(
-        modifier = Modifier
-            .padding(16.dp),
+        modifier = Modifier.padding(16.dp),
         color = Color.Transparent
     ) {
-
-        Row(
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-
-            Column() {
-                Row {
-                    Box(
-                        modifier = Modifier
-                            .background(
-                                color = color,
-                                shape = RoundedCornerShape(5.dp)
-                            )
-                            .align(Alignment.CenterVertically)
-                            .size(height)
-                    )
-                    Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.small_size_space)))
-                    Text(
-                        text =  data.first ,
-                        style = TextStyle(fontWeight = FontWeight.Bold)
-                    )
-                }
-
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Box(
+                modifier = Modifier
+                    .background(color = color, shape = RoundedCornerShape(5.dp))
+                    .align(Alignment.CenterVertically)
+                    .size(height)
+            )
+            Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.small_size_space)))
+            Column {
+                Text(text = data.first, style = TextStyle(fontWeight = FontWeight.Bold))
                 Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.small_size_space)))
-                Text(
-                    text = "Total: ${String.format("%.2f€", data.second)}",
-                )
+                Text(text = "Total: ${String.format("%.2f€", data.second)}")
             }
         }
     }
 }
+

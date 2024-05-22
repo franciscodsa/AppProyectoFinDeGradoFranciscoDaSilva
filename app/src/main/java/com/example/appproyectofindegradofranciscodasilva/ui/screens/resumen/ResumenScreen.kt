@@ -232,13 +232,7 @@ fun ExpandableCard(
             .fillMaxWidth()
             .padding(16.dp)
             .clickable { expanded = !expanded }
-            .shadow(4.dp, RoundedCornerShape(8.dp))
-            .animateContentSize(
-                animationSpec = tween(
-                    durationMillis = 300,
-                    easing = FastOutSlowInEasing
-                )
-            ),
+            .shadow(4.dp, RoundedCornerShape(8.dp)),
         shape = RoundedCornerShape(8.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
