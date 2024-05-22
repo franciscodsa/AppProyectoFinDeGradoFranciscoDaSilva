@@ -5,6 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.appproyectofindegradofranciscodasilva.ui.screens.archivos.FilesScreen
+import com.example.appproyectofindegradofranciscodasilva.ui.screens.clients.ClientScreen
 import com.example.appproyectofindegradofranciscodasilva.ui.screens.login.LoginScreen
 import com.example.appproyectofindegradofranciscodasilva.ui.screens.olvideclave.OlvideClaveScreen
 import com.example.appproyectofindegradofranciscodasilva.ui.screens.profile.ProfileScreen
@@ -64,6 +65,7 @@ fun Navigation(
             "resumen"
         ) {
             ResumenScreen(
+                onClientsClick= {navController.navigate("clients")},
                 bottomNavigationBar = {
                     BottomBar(
                         navController = navController,
@@ -96,6 +98,12 @@ fun Navigation(
                     )
                 }
             )
+        }
+
+        composable(
+            "clients"
+        ) {
+            ClientScreen(onChatClick = {}, onFilesClick = {})
         }
 
     }

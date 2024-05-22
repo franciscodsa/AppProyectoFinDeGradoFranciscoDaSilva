@@ -35,19 +35,20 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.appproyectofindegradofranciscodasilva.R
+import com.example.appproyectofindegradofranciscodasilva.ui.navigation.FilterButton
 import java.io.File
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ResumenScreen(
     viewModel: ResumeViewModel = hiltViewModel(),
+    onClientsClick: () -> Unit,
     bottomNavigationBar: @Composable () -> Unit = {}
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val scrollState = rememberScrollState()
     val snackbarHostState = remember { SnackbarHostState() }
     var openBottomSheet by remember { mutableStateOf(false) }
-    val isConditionMet by remember { mutableStateOf(false) }
+    val isConditionMet by remember { mutableStateOf(true) }
     var isExpanded by remember { mutableStateOf(false) }
 
     LaunchedEffect(state.message) {
@@ -66,7 +67,7 @@ fun ResumenScreen(
                 ExpandableFloatingActionButton(
                     expanded = isExpanded,
                     onExpandChange = { isExpanded = it },
-                    onClientesClick = { /* Acción para Clientes */ },
+                    onClientesClick = { onClientsClick() },
                     onContadoresClick = { /* Acción para Contadores */ }
                 )
             } else {
@@ -422,7 +423,7 @@ fun IngresosGastosToggle(
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
-        ToggleButton(
+        FilterButton(
             text = "Ingresos",
             selected = !isExpense,
             onClick = {
@@ -431,7 +432,7 @@ fun IngresosGastosToggle(
                 }
             }
         )
-        ToggleButton(
+        FilterButton(
             text = "Gastos",
             selected = isExpense,
             onClick = {
@@ -443,7 +444,7 @@ fun IngresosGastosToggle(
     }
 }
 
-@Composable
+/*@Composable
 fun ToggleButton(
     text: String,
     selected: Boolean,
@@ -464,4 +465,4 @@ fun ToggleButton(
             style = MaterialTheme.typography.bodySmall,
         )
     }
-}
+}*/

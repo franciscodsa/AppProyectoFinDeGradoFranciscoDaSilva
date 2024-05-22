@@ -135,3 +135,17 @@ japp/src/main/java/com/example/appproyectofindegradofranciscodasilva/ui/screens/
 fapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/ui/screens/profile/ProfileEvent.kt,0\b\0be36bb3e7d3cd431b442e17ee94b0f97d8204ac
 –
 fapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/ui/screens/profile/ProfileState.kt,4\c\4caeb61047b8be5f9c927f760dcd3db7159411fb
+˜
+happ/src/main/java/com/example/appproyectofindegradofranciscodasilva/ui/screens/clientes/ClientsScreen.kt,e\c\ececb500c820112943464740544d0f9ad6c425e1
+™
+iapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/ui/screens/clients/ClientViewModel.kt,9\d\9dc78505574b3206bfdada66c928d41181ee387e
+•
+eapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/ui/screens/clients/ClientEvent.kt,6\a\6a682198f4ea5d54f6141208d003b4cbd12b5a29
+”
+dapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/domain/services/ClientService.kt,d\a\dac46f0f962cd968ce4088f5c97c7ae8ae3f85fd
+•
+eapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/ui/screens/clients/ClientState.kt,a\4\a4818e1a020fa49430d863ec94855262f12547f7
+—
+gapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/ui/screens/clients/ClientsScreen.kt,4\4\44e0448add2635a6092b290d187b74a647064e2b
+‘
+aapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/ui/navigation/FilterButton.kt,8\7\875501af91568a7b64b96c79d7064154dbc02d06

@@ -54,6 +54,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.appproyectofindegradofranciscodasilva.data.model.FilesInfo
+import com.example.appproyectofindegradofranciscodasilva.ui.navigation.FilterButton
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -131,7 +132,7 @@ fun FilterButtons(viewModel: FileViewModel) {
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Start
     ) {
-        SmallToggleButton(
+        FilterButton(
             text = "Todos",
             selected = selectedFilter == "Todos",
             onClick = {
@@ -140,7 +141,7 @@ fun FilterButtons(viewModel: FileViewModel) {
             }
         )
         Spacer(modifier = Modifier.width(8.dp))
-        SmallToggleButton(
+        FilterButton(
             text = "Ingresos",
             selected = selectedFilter == "Ingresos",
             onClick = {
@@ -149,7 +150,7 @@ fun FilterButtons(viewModel: FileViewModel) {
             }
         )
         Spacer(modifier = Modifier.width(8.dp))
-        SmallToggleButton(
+        FilterButton(
             text = "Gastos",
             selected = selectedFilter == "Gastos",
             onClick = {
@@ -160,7 +161,7 @@ fun FilterButtons(viewModel: FileViewModel) {
     }
 }
 
-@Composable
+/*@Composable
 fun SmallToggleButton(
     text: String,
     selected: Boolean,
@@ -184,7 +185,7 @@ fun SmallToggleButton(
             fontSize = 12.sp
         )
     }
-}
+}*/
 
 @Composable
 fun ExpandableFileCard(file: FilesInfo, onDownloadClick: () -> Unit) {
