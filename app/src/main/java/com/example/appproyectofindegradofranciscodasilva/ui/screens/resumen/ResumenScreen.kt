@@ -2,6 +2,7 @@ package com.example.appproyectofindegradofranciscodasilva.ui.screens.resumen
 
 import android.net.Uri
 import android.provider.OpenableColumns
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.animateContentSize
@@ -22,6 +23,7 @@ import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -45,11 +47,17 @@ fun ResumenScreen(
     bottomNavigationBar: @Composable () -> Unit = {}
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+
+
     val scrollState = rememberScrollState()
     val snackbarHostState = remember { SnackbarHostState() }
     var openBottomSheet by remember { mutableStateOf(false) }
     val isConditionMet by remember { mutableStateOf(true) }
     var isExpanded by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        viewModel.handleEvent(ResumenEvent.SetUserRole)
+    }
 
     LaunchedEffect(state.message) {
         state.message?.let {
@@ -61,9 +69,10 @@ fun ResumenScreen(
         }
     }
 
+
     Scaffold(
         floatingActionButton = {
-            if (isConditionMet) {
+            if (state.userRole == "accountant") {
                 ExpandableFloatingActionButton(
                     expanded = isExpanded,
                     onExpandChange = { isExpanded = it },

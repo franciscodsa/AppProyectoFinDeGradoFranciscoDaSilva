@@ -4,6 +4,8 @@ import com.example.appproyectofindegradofranciscodasilva.ui.screens.archivos.Fil
 import java.io.File
 
 sealed class ResumenEvent {
+    object SetUserRole: ResumenEvent()
+
     object UploadFile: ResumenEvent()
     class OnFileSelected(val file: File): ResumenEvent()
     class OnMimeTypeSelected(val mimeType : String): ResumenEvent()

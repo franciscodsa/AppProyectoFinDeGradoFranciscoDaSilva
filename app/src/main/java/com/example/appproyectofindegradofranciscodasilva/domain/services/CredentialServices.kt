@@ -1,6 +1,5 @@
 package com.example.appproyectofindegradofranciscodasilva.domain.services
 
-import android.util.Log
 import com.example.appproyectofindegradofranciscodasilva.data.model.CredentialRequest
 import com.example.appproyectofindegradofranciscodasilva.data.model.LoginInfoResponse
 import com.example.appproyectofindegradofranciscodasilva.data.repositories.CredentialRepository
@@ -26,7 +25,7 @@ class CredentialServices @Inject constructor(
             if (result is NetworkResultt.Success) {
                 result.data?.accessToken?.let { tokenManager.saveAccessToken(it) }
                 result.data?.refreshToken?.let { tokenManager.saveRefreshToken(it) }
-
+                result.data?.role?.let { tokenManager.saveRole(it) }
                 tokenManager.saveCurrentUser(credentials.email)
             }
         }
@@ -34,7 +33,11 @@ class CredentialServices @Inject constructor(
         return loginResult
     }
 
-     suspend fun logout(): Unit{
+    suspend fun getRole(): String{
+        return tokenManager.getRole().first()?:""
+    }
+
+    suspend fun logout(): Unit {
         tokenManager.clearStoredData()
     }
 }

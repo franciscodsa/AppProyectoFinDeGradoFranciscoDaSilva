@@ -11,6 +11,7 @@ data class ResumenState(
         "T3",
         "T4"
     ),
+    val userRole: String= "",
     val years: List<String> = emptyList(),
     val expandedTrimestre: Boolean = false,
     val expandedYear: Boolean = false,

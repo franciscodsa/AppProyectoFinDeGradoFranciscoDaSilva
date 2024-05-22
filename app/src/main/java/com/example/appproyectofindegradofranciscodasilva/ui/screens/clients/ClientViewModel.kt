@@ -2,7 +2,7 @@ package com.example.appproyectofindegradofranciscodasilva.ui.screens.clients
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.appproyectofindegradofranciscodasilva.domain.services.ClientService
+import com.example.appproyectofindegradofranciscodasilva.domain.services.ClientServices
 import com.example.appproyectofindegradofranciscodasilva.utils.NetworkResultt
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ClientViewModel @Inject constructor(
-    private val clientService: ClientService
+    private val clientService: ClientServices
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ClientState())

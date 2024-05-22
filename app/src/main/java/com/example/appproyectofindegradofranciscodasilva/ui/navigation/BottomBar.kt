@@ -33,7 +33,7 @@ fun BottomBar(
                     },
                         contentDescription = screen.titulo)
                 },
-                label = { Text(screen.route) },
+                label = { Text(screen.titulo) },
                 selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
                 onClick = {
                     navController.navigate(screen.route) {

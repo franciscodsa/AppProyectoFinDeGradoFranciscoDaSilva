@@ -15,6 +15,7 @@ class TokenManager @Inject constructor(@ApplicationContext private val context: 
         private val accessTokenKey = stringPreferencesKey(ConstantesUtils.jwtToken)
         private val refreshTokenKey = stringPreferencesKey(ConstantesUtils.refreshJwt)
         private val currentUser = stringPreferencesKey(ConstantesUtils.currentUser)
+        private val role = stringPreferencesKey(ConstantesUtils.role)
     }
 
     fun getAccessToken(): Flow<String?> {
@@ -55,11 +56,24 @@ class TokenManager @Inject constructor(@ApplicationContext private val context: 
         }
     }
 
+    fun getRole(): Flow<String?>{
+        return context.dataStore.data.map{ preferences ->
+            preferences[role]
+        }
+    }
+
+    suspend fun saveRole(userRole: String){
+        context.dataStore.edit { preferences ->
+            preferences[role] = userRole
+        }
+    }
+
     suspend fun clearStoredData() {
         context.dataStore.edit { preferences ->
             preferences.remove(accessTokenKey)
             preferences.remove(refreshTokenKey)
             preferences.remove(currentUser)
+            preferences.remove(role)
         }
     }
 }

@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.appproyectofindegradofranciscodasilva.data.model.Balance
 import com.example.appproyectofindegradofranciscodasilva.data.model.InvoiceType
 import com.example.appproyectofindegradofranciscodasilva.domain.services.BalanceServices
+import com.example.appproyectofindegradofranciscodasilva.domain.services.CredentialServices
 import com.example.appproyectofindegradofranciscodasilva.domain.services.FileServices
 import com.example.appproyectofindegradofranciscodasilva.utils.NetworkResultt
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,6 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ResumeViewModel @Inject constructor(
     private val balanceServices: BalanceServices,
+    private val credentialServices: CredentialServices,
     private val fileServices: FileServices
 ) : ViewModel() {
 
@@ -124,6 +126,22 @@ class ResumeViewModel @Inject constructor(
                     isExpense = !_uiState.value.isExpense
                 )
             }
+
+            is ResumenEvent.SetUserRole ->  setRole()
+
+        }
+    }
+
+    private fun setRole() {
+        viewModelScope.launch {
+            val role = credentialServices.getRole()
+
+            _uiState.update {
+                it.copy(
+                    userRole = role
+                )
+            }
+
         }
     }
 
