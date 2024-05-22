@@ -2,21 +2,15 @@ package com.example.appproyectofindegradofranciscodasilva.ui.screens.resumen
 
 import android.net.Uri
 import android.provider.OpenableColumns
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -26,38 +20,15 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.rememberModalBottomSheetState
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -66,33 +37,35 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.appproyectofindegradofranciscodasilva.R
 import java.io.File
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ResumenScreen(
     viewModel: ResumeViewModel = hiltViewModel(),
     bottomNavigationBar: @Composable () -> Unit = {}
 ) {
-
-    var openBottomSheet by remember { mutableStateOf(false) }
-
-    val state = viewModel.uiState.collectAsStateWithLifecycle()
-
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
     val scrollState = rememberScrollState()
+    val snackbarHostState = remember { SnackbarHostState() }
+    var openBottomSheet by remember { mutableStateOf(false) }
+    val isConditionMet by remember { mutableStateOf(true) }
+    var isExpanded by remember { mutableStateOf(false) }
 
-    val snackbarHostState = remember {
-        SnackbarHostState()
+    LaunchedEffect(state.message) {
+        state.message?.let {
+            snackbarHostState.showSnackbar(
+                message = it,
+                duration = SnackbarDuration.Short
+            )
+            viewModel.handleEvent(ResumenEvent.MessageSeen)
+        }
     }
-
-    val isConditionMet = remember { mutableStateOf(true) }  // Condición para alternar los FABs
-    val isExpanded = remember { mutableStateOf(false) }
 
     Scaffold(
         floatingActionButton = {
-            if (isConditionMet.value) {
+            if (isConditionMet) {
                 ExpandableFloatingActionButton(
-                    expanded = isExpanded.value,
-                    onExpandChange = { isExpanded.value = it },
+                    expanded = isExpanded,
+                    onExpandChange = { isExpanded = it },
                     onClientesClick = { /* Acción para Clientes */ },
                     onContadoresClick = { /* Acción para Contadores */ }
                 )
@@ -105,114 +78,19 @@ fun ResumenScreen(
         bottomBar = bottomNavigationBar,
         snackbarHost = { SnackbarHost(snackbarHostState) },
         modifier = Modifier.fillMaxSize()
-    ) { _ ->
-
-        LaunchedEffect(state.value.message) {
-
-            state.value.message?.let {
-                snackbarHostState.showSnackbar(
-                    message = state.value.message.toString(), duration = SnackbarDuration.Short
-                )
-                viewModel.handleEvent(ResumenEvent.MessageSeen)
-            }
-        }
+    ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .verticalScroll(scrollState)
+                .padding(innerPadding)
                 .padding(dimensionResource(id = R.dimen.big_size_space))
         ) {
-            Row {
-                ExposedDropdownMenuBox(
-                    modifier = Modifier.weight(0.66f),
-                    expanded = state.value.expandedTrimestre,
-                    onExpandedChange = { viewModel.handleEvent(ResumenEvent.OnTrimesterMenuExpandedChanged) }
-                ) {
-                    TextField(
-                        value = state.value.selectedTrimester,
-                        onValueChange = {},
-                        readOnly = true,
-                        label = { Text("Trimestre") },
-                        trailingIcon = {
-                            ExposedDropdownMenuDefaults.TrailingIcon(
-                                expanded = state.value.expandedTrimestre
-                            )
-                        },
-                        modifier = Modifier
-                            .menuAnchor()
-                    )
-                    ExposedDropdownMenu(
-                        expanded = state.value.expandedTrimestre,
-                        onDismissRequest = { viewModel.handleEvent(ResumenEvent.OnTrimesterMenuExpandedChanged) }
-                    ) {
-                        state.value.trimestres.forEach { trimestre ->
-                            DropdownMenuItem(
-                                text = { Text(trimestre) },
-                                onClick = {
-                                    viewModel.handleEvent(ResumenEvent.OnTrimesterSelected(trimestre))
-                                }
-                            )
-                        }
-                    }
-                }
-
-                Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.small_size_space)))
-
-                ExposedDropdownMenuBox(
-                    modifier = Modifier.weight(0.33f),
-                    expanded = state.value.expandedYear,
-                    onExpandedChange = { viewModel.handleEvent(ResumenEvent.OnYearMenuExpandedChanged) }
-                ) {
-                    TextField(
-                        value = state.value.selectedYear,
-                        onValueChange = {},
-                        readOnly = true,
-                        label = { Text("Año") },
-                        trailingIcon = {
-                            ExposedDropdownMenuDefaults.TrailingIcon(
-                                expanded = state.value.expandedYear
-                            )
-                        },
-                        modifier = Modifier
-                            .menuAnchor()
-                    )
-                    ExposedDropdownMenu(
-                        expanded = state.value.expandedYear,
-                        onDismissRequest = { viewModel.handleEvent(ResumenEvent.OnYearMenuExpandedChanged) }
-                    ) {
-                        state.value.years.forEach { year ->
-                            DropdownMenuItem(
-                                text = { Text(year) },
-                                onClick = {
-                                    viewModel.handleEvent(ResumenEvent.OnYearSelected(year))
-                                }
-                            )
-                        }
-                    }
-                }
-            }
-            Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.small_size_space)))
-            DualSegmentPieChart(
-                data = mapOf(
-                    Pair("Ingresos", state.value.income),
-                    Pair("Gastos", state.value.expenses),
-                )
-            )
-
-            Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.medium_size_space)))
-
-            ExpandableCard(
-                irpfAmount = "${state.value.irpf}",
-                ivaAmount = "${state.value.iva}",
-                warningMessage = "Recuerda tener suficiente dinero en la cuenta bancaria al final de cada trimestre para evitar sanciones."
-            )
-
+            TopSection(state, viewModel)
+            ContentSection(state)
             if (openBottomSheet) {
                 BottomSheetContent(
-                    newInvoiceIva = state.value.newInvoiceIva,
-                    newInvoiveTotal = state.value.newInvoiceTotal,
-                    newInvoiceDescription = state.value.newInvoiceDescription,
-                    isExpense = state.value.isExpense,
+                    state,
                     onClose = { openBottomSheet = false },
                     onFileSelected = { viewModel.handleEvent(ResumenEvent.OnFileSelected(it)) },
                     onMimeTypeSelected = { viewModel.handleEvent(ResumenEvent.OnMimeTypeSelected(it)) },
@@ -223,9 +101,119 @@ fun ResumenScreen(
                     onSubmit = { viewModel.handleEvent(ResumenEvent.UploadFile) }
                 )
             }
-
         }
     }
+}
+
+@Composable
+fun TopSection(state: ResumenState, viewModel: ResumeViewModel) {
+    Row {
+        CustomDropdown(
+            modifier = Modifier.weight(0.66f),
+            label = "Trimestre",
+            selectedText = state.selectedTrimester,
+            expanded = state.expandedTrimestre,
+            onExpandedChange = { viewModel.handleEvent(ResumenEvent.OnTrimesterMenuExpandedChanged) },
+            items = state.trimestres,
+            onItemSelected = { viewModel.handleEvent(ResumenEvent.OnTrimesterSelected(it)) }
+        )
+
+        Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.small_size_space)))
+
+        CustomDropdown(
+            modifier = Modifier.weight(0.33f),
+            label = "Año",
+            selectedText = state.selectedYear,
+            expanded = state.expandedYear,
+            onExpandedChange = { viewModel.handleEvent(ResumenEvent.OnYearMenuExpandedChanged) },
+            items = state.years,
+            onItemSelected = { viewModel.handleEvent(ResumenEvent.OnYearSelected(it)) }
+        )
+    }
+}
+
+@Composable
+fun CustomDropdown(
+    modifier: Modifier,
+    label: String,
+    selectedText: String,
+    expanded: Boolean,
+    onExpandedChange: () -> Unit,
+    items: List<String>,
+    onItemSelected: (String) -> Unit
+) {
+    Column(
+        modifier = modifier
+            .clip(RoundedCornerShape(8.dp))
+            .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f))
+            .padding(8.dp)
+    ) {
+        Text(
+            text = label,
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.primary
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        Divider()
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { onExpandedChange() }
+                .background(
+                    color = MaterialTheme.colorScheme.surface.copy(alpha = 0.12f),
+                    shape = RoundedCornerShape(4.dp)
+                )
+                .padding(horizontal = 12.dp, vertical = 8.dp)
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    text = selectedText,
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                Icon(
+                    imageVector = if (expanded) Icons.Default.ExpandLess else Icons.Default.ExpandMore,
+                    contentDescription = if (expanded) "Collapse" else "Expand",
+                    tint = MaterialTheme.colorScheme.onSurface
+                )
+            }
+        }
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { onExpandedChange() },
+        ) {
+            items.forEach { item ->
+                DropdownMenuItem(
+                    text = { Text(item) },
+                    onClick = {
+                        onItemSelected(item)
+                        onExpandedChange()
+                    }
+                )
+            }
+        }
+    }
+}
+
+
+@Composable
+fun ContentSection(state: ResumenState) {
+    DualSegmentPieChart(
+        data = mapOf(
+            "Ingresos" to state.income,
+            "Gastos" to state.expenses
+        )
+    )
+    Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.medium_size_space)))
+    ExpandableCard(
+        irpfAmount = state.irpf.toString(),
+        ivaAmount = state.iva.toString(),
+        warningMessage = "Recuerda tener suficiente dinero en la cuenta bancaria al final de cada trimestre para evitar sanciones."
+    )
 }
 
 @Composable
@@ -274,14 +262,12 @@ fun ExpandableCard(
                     contentDescription = if (expanded) "Collapse" else "Expand"
                 )
             }
-
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = "Total: ${String.format("%.2f€", total)}",
                 style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )
-
             if (expanded) {
                 Spacer(modifier = Modifier.height(16.dp))
                 Column(
@@ -309,14 +295,10 @@ fun ExpandableCard(
     }
 }
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomSheetContent(
-    newInvoiveTotal: String,
-    newInvoiceIva: String,
-    newInvoiceDescription: String,
-    isExpense: Boolean,
+    state: ResumenState,
     onClose: () -> Unit,
     onMimeTypeSelected: (String) -> Unit,
     onFileSelected: (File) -> Unit,
@@ -326,51 +308,34 @@ fun BottomSheetContent(
     onDescriptionChange: (String) -> Unit,
     onSubmit: () -> Unit
 ) {
-
     var selectedFileName by remember { mutableStateOf("") }
-
     val bottomSheetState = rememberModalBottomSheetState()
 
     ModalBottomSheet(
         onDismissRequest = { onClose() },
         sheetState = bottomSheetState
     ) {
-
         val context = LocalContext.current
-        val launcher =
-            rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { result: Uri? ->
-                result?.let { uri ->
-                    val contentResolver = context.contentResolver
-
-                    //Conseguir el tipo de archivo
-                    val mimeType = contentResolver.getType(uri) ?: ""
-
-                    //Conseguir el nombre del archivo
-                    val cursor = context.contentResolver.query(uri, null, null, null, null)
-                    val nameIndex = cursor?.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-                    cursor?.moveToFirst()
-                    val name = nameIndex?.let { cursor.getString(it) }
-                    cursor?.close()
-
-                    //Crear el File con lo conseguido del selector
-                    val selectedFile =
-                        File(context.cacheDir, name ?: "")
-
-
-                    contentResolver.openInputStream(uri)?.use { inputStream ->
-                        selectedFile.outputStream().use { outputStream ->
-                            inputStream.copyTo(outputStream)
-                        }
+        val launcher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { result: Uri? ->
+            result?.let { uri ->
+                val contentResolver = context.contentResolver
+                val mimeType = contentResolver.getType(uri) ?: ""
+                val cursor = context.contentResolver.query(uri, null, null, null, null)
+                val nameIndex = cursor?.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+                cursor?.moveToFirst()
+                val name = nameIndex?.let { cursor.getString(it) }
+                cursor?.close()
+                val selectedFile = File(context.cacheDir, name ?: "")
+                contentResolver.openInputStream(uri)?.use { inputStream ->
+                    selectedFile.outputStream().use { outputStream ->
+                        inputStream.copyTo(outputStream)
                     }
-
-                    selectedFileName = name ?: ""
-
-                    onMimeTypeSelected(mimeType)
-                    onFileSelected(selectedFile)
                 }
+                selectedFileName = name ?: ""
+                onMimeTypeSelected(mimeType)
+                onFileSelected(selectedFile)
             }
-
-
+        }
 
         Column(
             modifier = Modifier
@@ -392,26 +357,19 @@ fun BottomSheetContent(
                     Icon(imageVector = Icons.Default.Close, contentDescription = "Close")
                 }
             }
-
-
-
-
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()
             ) {
-
                 IngresosGastosToggle(
-                    isExpense = isExpense,
+                    isExpense = state.isExpense,
                     onInvoiceTypeChange = onInvoiceTypeChange
                 )
             }
-
             Spacer(modifier = Modifier.height(16.dp))
-
             OutlinedTextField(
-                value = newInvoiveTotal,
-                onValueChange = { onTotalChange(it) },
+                value = state.newInvoiceTotal,
+                onValueChange = onTotalChange,
                 label = { Text("Total") },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 singleLine = true,
@@ -419,8 +377,8 @@ fun BottomSheetContent(
             )
             Spacer(modifier = Modifier.height(8.dp))
             OutlinedTextField(
-                value = newInvoiceIva,
-                onValueChange = { onIvaChange(it)  },
+                value = state.newInvoiceIva,
+                onValueChange = onIvaChange,
                 label = { Text("IVA") },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 singleLine = true,
@@ -428,13 +386,12 @@ fun BottomSheetContent(
             )
             Spacer(modifier = Modifier.height(8.dp))
             OutlinedTextField(
-                value = newInvoiceDescription,
-                onValueChange = { onDescriptionChange(it) },
+                value = state.newInvoiceDescription,
+                onValueChange = onDescriptionChange,
                 label = { Text("Descripción") },
                 modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(16.dp))
-
             Row {
                 Spacer(modifier = Modifier.weight(1f))
                 OutlinedTextField(
@@ -444,7 +401,6 @@ fun BottomSheetContent(
                     label = { Text(text = "Archivo seleccionado") }
                 )
             }
-
             Row {
                 Spacer(modifier = Modifier.weight(1f))
                 Button(onClick = { launcher.launch("*/*") }) {
@@ -463,7 +419,6 @@ fun BottomSheetContent(
         }
     }
 }
-
 
 @Composable
 fun IngresosGastosToggle(
