@@ -21,7 +21,10 @@ interface FileApiServices {
         @Part file: MultipartBody.Part,
         @Part("description") description: RequestBody,
         @Part("clientEmail") clientEmail: RequestBody,
-        @Part("invoiceType") invoiceType: RequestBody
+        @Part("invoiceType") invoiceType: RequestBody,
+        @Part("income") income: RequestBody,
+        @Part("expenses") expenses: RequestBody,
+        @Part("iva") iva: RequestBody
     ): Response<ApiMessage>
 
 

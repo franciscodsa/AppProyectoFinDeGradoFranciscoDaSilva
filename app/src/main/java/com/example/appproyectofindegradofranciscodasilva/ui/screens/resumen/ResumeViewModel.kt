@@ -157,13 +157,20 @@ class ResumeViewModel @Inject constructor(
         } else {
 
             val invoiceType = if (_uiState.value.isExpense) InvoiceType.EXPENSE else InvoiceType.INCOME
+            val balance = Balance(
+                income = if (invoiceType == InvoiceType.INCOME) _uiState.value.newInvoiceTotal.toDouble() else 0.0,
+                expenses = if (invoiceType == InvoiceType.EXPENSE) _uiState.value.newInvoiceTotal.toDouble() else 0.0,
+                iva = _uiState.value.newInvoiceIva.toDouble(),
+                clientEmail = null
+            )
 
             viewModelScope.launch {
                 fileServices.upload(
                     _uiState.value.selectedFile!!,
                     _uiState.value.mimeType,
                     _uiState.value.newInvoiceDescription,
-                    invoiceType
+                    invoiceType,
+                    balance
 
                 ).catch(action = { cause ->
 
@@ -190,14 +197,27 @@ class ResumeViewModel @Inject constructor(
                         }
 
                         is NetworkResultt.Success -> {
-                            val balance = Balance(
+                            _uiState.update {
+                                it.copy(
+                                    message = "Archivo subido y balance agregado exitosamente.",
+                                    isLoading = false,
+                                    newInvoiceTotal = "",
+                                    newInvoiceIva = "",
+                                    newInvoiceDescription = "",
+                                    selectedFile = null,
+                                    mimeType = ""
+                                )
+                            }
+
+                            getBalance()
+                         /*   val balance = Balance(
                                 income = if (invoiceType == InvoiceType.INCOME) _uiState.value.newInvoiceTotal.toDouble() else 0.0,
                                 expenses = if (invoiceType == InvoiceType.EXPENSE) _uiState.value.newInvoiceTotal.toDouble() else 0.0,
                                 iva = _uiState.value.newInvoiceIva.toDouble(),
                                 clientEmail = null
                             )
 
-                            addBalance(balance)
+                            addBalance(balance)*/
                         }
                     }
                 }

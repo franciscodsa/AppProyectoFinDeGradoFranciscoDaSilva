@@ -9,6 +9,7 @@ import android.util.Log
 import android.webkit.MimeTypeMap
 import com.example.appproyectofindegradofranciscodasilva.common.Constantes
 import com.example.appproyectofindegradofranciscodasilva.data.model.ApiMessage
+import com.example.appproyectofindegradofranciscodasilva.data.model.Balance
 import com.example.appproyectofindegradofranciscodasilva.data.model.FilesInfo
 import com.example.appproyectofindegradofranciscodasilva.data.model.InvoiceType
 import com.example.appproyectofindegradofranciscodasilva.data.source.apiservices.FileApiServices
@@ -36,7 +37,7 @@ class FileDataSource @Inject constructor(
 ) {
    /* private val fileApiServices: FileApiServices = retrofit.create(FileApiServices::class.java)*/
 
-    suspend fun upload(file: File, mimeType: String, description: String, clientEmail: String, invoiceType: InvoiceType) : NetworkResultt<ApiMessage>{
+    suspend fun upload(file: File, mimeType: String, description: String, clientEmail: String, invoiceType: InvoiceType, balance: Balance) : NetworkResultt<ApiMessage>{
         try {
             Log.i("data", file.name)
 
@@ -45,8 +46,11 @@ class FileDataSource @Inject constructor(
             val descriptionPart = description.toRequestBody("text/plain".toMediaTypeOrNull())
             val emailPart = clientEmail.toRequestBody("text/plain".toMediaTypeOrNull())
             val invoiceTypePart = invoiceType.name.toRequestBody("text/plain".toMediaTypeOrNull())
+            val incomePart = balance.income.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+            val expensesPart = balance.expenses.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+            val ivaPart = balance.iva.toString().toRequestBody("text/plain".toMediaTypeOrNull())
 
-            val response = fileApiServices.uploadFile(filePart, descriptionPart, emailPart, invoiceTypePart)
+            val response = fileApiServices.uploadFile(filePart, descriptionPart, emailPart, invoiceTypePart, incomePart, expensesPart, ivaPart)
 
             if (!response.isSuccessful){
 

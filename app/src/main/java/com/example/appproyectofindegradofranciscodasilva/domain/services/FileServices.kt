@@ -3,6 +3,7 @@ package com.example.appproyectofindegradofranciscodasilva.domain.services
 import android.content.Context
 import android.util.Log
 import com.example.appproyectofindegradofranciscodasilva.data.model.ApiMessage
+import com.example.appproyectofindegradofranciscodasilva.data.model.Balance
 import com.example.appproyectofindegradofranciscodasilva.data.model.FilesInfo
 import com.example.appproyectofindegradofranciscodasilva.data.model.InvoiceType
 import com.example.appproyectofindegradofranciscodasilva.data.repositories.FileRepository
@@ -23,27 +24,29 @@ class FileServices @Inject constructor(
         file: File,
         mimeType: String,
         description: String,
-        invoiceType: InvoiceType
+        invoiceType: InvoiceType,
+        balance: Balance
     ): Flow<NetworkResultt<ApiMessage>> {
         val clientEmail = tokenManager.getCurrentUser().first() ?: ""
 
         Log.i("serv", file.name)
-        return fileRepository.upload(file, mimeType, description, clientEmail, invoiceType)
+        return fileRepository.upload(file, mimeType, description, clientEmail, invoiceType, balance)
     }
 
 
     //todo: eliminar cuando cambies la pantalla de files a solo descargar, el resumen usa el de arriba
-    fun upload(
+  /*  fun upload(
         file: File,
         mimeType: String,
         description: String,
         clientEmail: String,
-        invoiceType: InvoiceType
+        invoiceType: InvoiceType,
+
     ): Flow<NetworkResultt<ApiMessage>> {
 
         Log.i("serv", file.name)
         return fileRepository.upload(file, mimeType, description, clientEmail, invoiceType)
-    }
+    }*/
 
     fun download(fileId: Long, context: Context): Flow<NetworkResultt<String>> {
         return fileRepository.download(fileId, context)

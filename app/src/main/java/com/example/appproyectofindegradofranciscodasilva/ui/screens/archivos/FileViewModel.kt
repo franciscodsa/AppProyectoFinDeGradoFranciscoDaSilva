@@ -33,7 +33,9 @@ class FileViewModel @Inject constructor(
                 )
             }
 
-            FileEvent.UploadFile -> upload()
+            FileEvent.UploadFile -> {
+                /*upload()*/
+            }
             is FileEvent.OnMimeTypeSelected -> _uiState.update {
                 it.copy(
                     mimeType = event.mimeType
@@ -97,7 +99,7 @@ class FileViewModel @Inject constructor(
         }
     }
 
-    private fun upload() {
+  /*  private fun upload() {
         if (_uiState.value.selectedFile == null) {
             Log.i("f", "file es null")
         } else {
@@ -146,7 +148,7 @@ class FileViewModel @Inject constructor(
                 }
             }
         }
-    }
+    }*/
 
     private fun loadAllFiles() {
         viewModelScope.launch {

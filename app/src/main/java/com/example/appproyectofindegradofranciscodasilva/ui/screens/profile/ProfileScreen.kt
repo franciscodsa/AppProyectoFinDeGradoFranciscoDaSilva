@@ -23,7 +23,7 @@ fun ProfileScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Perfil") },
+                title = { Text(text= "Perfil", style = MaterialTheme.typography.headlineMedium) },
                 actions = {
                     IconButton(onClick = { viewModel.handleEvent(ProfileEvent.Logout) }) {
                         Icon(Icons.Default.ExitToApp, contentDescription = "Logout")

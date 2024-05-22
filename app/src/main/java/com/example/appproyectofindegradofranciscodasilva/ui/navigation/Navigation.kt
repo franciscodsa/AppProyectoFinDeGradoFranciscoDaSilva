@@ -1,11 +1,9 @@
 package com.example.appproyectofindegradofranciscodasilva.ui.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.example.appproyectofindegradofranciscodasilva.ui.screens.archivos.FilesScreen
 import com.example.appproyectofindegradofranciscodasilva.ui.screens.clients.ClientScreen
 import com.example.appproyectofindegradofranciscodasilva.ui.screens.login.LoginScreen
@@ -45,7 +43,6 @@ fun Navigation(
                         screens = screens
                     )
                 }
-
             )
         }
         composable(
@@ -67,7 +64,7 @@ fun Navigation(
             route = "resumen",
         ) {
             ResumenScreen(
-                onClientsClick= {navController.navigate("clients")},
+                onClientsClick = { navController.navigate("clients") },
                 bottomNavigationBar = {
                     BottomBar(
                         navController = navController,
