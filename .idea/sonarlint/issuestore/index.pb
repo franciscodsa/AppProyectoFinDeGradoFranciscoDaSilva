@@ -127,3 +127,11 @@ gapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/ui/screens/
 ^app/src/main/java/com/example/appproyectofindegradofranciscodasilva/ui/navigation/BottomBar.kt,b\9\b98e54e76f8586ecee2d728f9811c557eb9cd03a
 …
 Uapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/ui/theme/Theme.kt,0\b\0be4d1fe67d6fdbff6f110eb711de81184d39a7c
+—
+gapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/ui/screens/profile/ProfileScreen.kt,0\3\03cc2c077592e90243e1bc00a0f3bb0806223c1b
+š
+japp/src/main/java/com/example/appproyectofindegradofranciscodasilva/ui/screens/profile/ProfileViewModel.kt,a\d\ad6a93b1c052b485b215590860f8521e3bc814bb
+–
+fapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/ui/screens/profile/ProfileEvent.kt,0\b\0be36bb3e7d3cd431b442e17ee94b0f97d8204ac
+–
+fapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/ui/screens/profile/ProfileState.kt,4\c\4caeb61047b8be5f9c927f760dcd3db7159411fb

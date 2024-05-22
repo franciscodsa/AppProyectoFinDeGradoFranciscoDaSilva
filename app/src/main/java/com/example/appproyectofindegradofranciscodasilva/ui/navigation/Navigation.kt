@@ -7,6 +7,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.appproyectofindegradofranciscodasilva.ui.screens.archivos.FilesScreen
 import com.example.appproyectofindegradofranciscodasilva.ui.screens.login.LoginScreen
 import com.example.appproyectofindegradofranciscodasilva.ui.screens.olvideclave.OlvideClaveScreen
+import com.example.appproyectofindegradofranciscodasilva.ui.screens.profile.ProfileScreen
 import com.example.appproyectofindegradofranciscodasilva.ui.screens.register.RegisterScreen
 import com.example.appproyectofindegradofranciscodasilva.ui.screens.resumen.ResumenScreen
 
@@ -75,6 +76,19 @@ fun Navigation(
             "files"
         ) {
             FilesScreen(
+                bottomNavigationBar = {
+                    BottomBar(
+                        navController = navController,
+                        screens = screens
+                    )
+                }
+            )
+        }
+
+        composable(
+            "profile"
+        ) {
+            ProfileScreen(
                 bottomNavigationBar = {
                     BottomBar(
                         navController = navController,
