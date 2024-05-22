@@ -47,7 +47,7 @@ fun ResumenScreen(
     val scrollState = rememberScrollState()
     val snackbarHostState = remember { SnackbarHostState() }
     var openBottomSheet by remember { mutableStateOf(false) }
-    val isConditionMet by remember { mutableStateOf(true) }
+    val isConditionMet by remember { mutableStateOf(false) }
     var isExpanded by remember { mutableStateOf(false) }
 
     LaunchedEffect(state.message) {
