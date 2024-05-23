@@ -14,9 +14,9 @@ class BalanceDataSource @Inject constructor(
     private val balanceApiServices: BalanceApiServices,
     private val moshi: Moshi
 ) {
-    suspend fun addBalance(balance: Balance): NetworkResultt<ApiMessage> {
+    suspend fun updateBalance(balance: Balance): NetworkResultt<ApiMessage> {
         try {
-            val response = balanceApiServices.addBalance(balance)
+            val response = balanceApiServices.updateBalance(balance)
 
             if (!response.isSuccessful) {
                 val errorMessage = response.errorBody()?.string() ?: Constantes.unknownError

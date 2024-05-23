@@ -4,8 +4,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,19 +15,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowDropUp
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.ExpandLess
-import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.filled.InsertDriveFile
 import androidx.compose.material.icons.filled.Save
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -54,7 +46,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.appproyectofindegradofranciscodasilva.data.model.FilesInfo
@@ -95,7 +86,7 @@ fun FilesScreen(
                 .padding(innerPadding)
                 .padding(16.dp)
         ) {
-            FilterButtons(viewModel = viewModel)
+            FilterButtons(viewModel = viewModel, selectedFilter = state.value.selectedFilter)
             Spacer(modifier = Modifier.height(16.dp))
             Box(modifier = Modifier.fillMaxSize()) {
                 if (state.value.isLoading) {
@@ -107,14 +98,18 @@ fun FilesScreen(
                         items(items = state.value.files, key = { file -> file.id }) { file ->
                             ExpandableFileCard(
                                 file = file,
+                                total = state.value.total,
+                                iva = state.value.iva,
                                 onDownloadClick = {
                                     viewModel.handleEvent(
                                         FileEvent.DownloadFile(context, file.id)
                                     )
                                 },
                                 onUpdateClick = { fileId, total, iva ->
-                                   /* viewModel.handleEvent(FileEvent.UpdateFile(fileId, total, iva))*/
-                                }
+                                     viewModel.handleEvent(FileEvent.UpdateFile(fileId, total, iva))
+                                },
+                                onTotalChange = { viewModel.handleEvent(FileEvent.OnTotalChange(it)) },
+                                onIvaChange = { viewModel.handleEvent(FileEvent.OnIvaChange(it)) },
                             )
                             Spacer(modifier = Modifier.height(8.dp))
                         }
@@ -128,52 +123,59 @@ fun FilesScreen(
         viewModel.handleEvent(FileEvent.LoadAllFiles)
     }
 }
-@Composable
-fun FilterButtons(viewModel: FileViewModel) {
-    var selectedFilter by remember { mutableStateOf("Todos") }
 
+
+@Composable
+fun FilterButtons(viewModel: FileViewModel, selectedFilter: FileFilter) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Start
     ) {
         FilterButton(
             text = "Todos",
-            selected = selectedFilter == "Todos",
+            selected = selectedFilter == FileFilter.Todos,
             onClick = {
-                selectedFilter = "Todos"
-                viewModel.handleEvent(FileEvent.LoadAllFiles)
+                viewModel.handleEvent(FileEvent.OnFilterChanged(FileFilter.Todos))
             }
         )
         Spacer(modifier = Modifier.width(8.dp))
         FilterButton(
             text = "Ingresos",
-            selected = selectedFilter == "Ingresos",
+            selected = selectedFilter == FileFilter.Ingresos,
             onClick = {
-                selectedFilter = "Ingresos"
-                viewModel.handleEvent(FileEvent.LoadIncomeFiles)
+                viewModel.handleEvent(FileEvent.OnFilterChanged(FileFilter.Ingresos))
             }
         )
         Spacer(modifier = Modifier.width(8.dp))
         FilterButton(
             text = "Gastos",
-            selected = selectedFilter == "Gastos",
+            selected = selectedFilter == FileFilter.Gastos,
             onClick = {
-                selectedFilter = "Gastos"
-                viewModel.handleEvent(FileEvent.LoadExpenseFiles)
+                viewModel.handleEvent(FileEvent.OnFilterChanged(FileFilter.Gastos))
             }
         )
     }
 }
 
 @Composable
-fun ExpandableFileCard(file: FilesInfo, onDownloadClick: () -> Unit, onUpdateClick: (Long, Double, Double) -> Unit) {
+fun ExpandableFileCard(
+    file: FilesInfo,
+    total: String,
+    iva: String,
+    onDownloadClick: () -> Unit,
+    onUpdateClick: (Long, String, String) -> Unit,
+    onTotalChange: (String) -> Unit,
+    onIvaChange: (String) -> Unit,
+) {
     var expanded by remember { mutableStateOf(false) }
     var isEditing by remember { mutableStateOf(false) }
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { expanded = !expanded },
+            .clickable {
+                expanded = !expanded
+            },
         shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation()
     ) {
@@ -205,18 +207,21 @@ fun ExpandableFileCard(file: FilesInfo, onDownloadClick: () -> Unit, onUpdateCli
                             style = MaterialTheme.typography.bodyMedium
                         )
                         Spacer(modifier = Modifier.height(8.dp))
-                        Text(text = "Fecha: ${file.date}", style = MaterialTheme.typography.bodyMedium)
+                        Text(
+                            text = "Fecha: ${file.date}",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
                         if (isEditing) {
                             OutlinedTextField(
-                                value = file.total.toString(),
-                                onValueChange = {/* total = it*/ },
+                                value = total,
+                                onValueChange = { onTotalChange(it) },
                                 label = { Text("Total") },
                                 modifier = Modifier.fillMaxWidth()
                             )
                             Spacer(modifier = Modifier.height(8.dp))
                             OutlinedTextField(
-                                value = file.iva.toString(),
-                                onValueChange = {/* iva = it*/ },
+                                value = iva,
+                                onValueChange = { onIvaChange(it) },
                                 label = { Text("IVA") },
                                 modifier = Modifier.fillMaxWidth()
                             )
@@ -237,37 +242,56 @@ fun ExpandableFileCard(file: FilesInfo, onDownloadClick: () -> Unit, onUpdateCli
                 Column {
                     Spacer(modifier = Modifier.width(8.dp))
 
-                    if (expanded){
-                        if (isEditing) {
-                            IconButton(onClick = {
-                                onUpdateClick(file.id, /*total.toDouble()*/0.0, /*iva.toDouble()*/0.0)
-                                isEditing = false
-                            }) {
-                                Icon(imageVector = Icons.Default.Done, contentDescription = "Guardar", tint = MaterialTheme.colorScheme.primary)
-                            }
-                        } else {
-                            IconButton(onClick = { isEditing = true } ) {
-                                Icon(imageVector = Icons.Default.Edit, contentDescription = "Editar", tint = MaterialTheme.colorScheme.primary)
-                            }
+                    if (expanded) {
+
+
+                        IconButton(onClick = { isEditing = !isEditing }) {
+                            Icon(
+                                imageVector = Icons.Default.Edit,
+                                contentDescription = "Editar",
+                                tint = MaterialTheme.colorScheme.primary
+                            )
                         }
-                    }else{
+
+                        IconButton(onClick = {
+                            onUpdateClick(
+                                file.balanceId,
+                                total,
+                                iva
+                            )
+                            isEditing = false
+
+
+                        }) {
+                            Icon(
+                                imageVector = Icons.Default.Save,
+                                contentDescription = "Guardar",
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+                        }
+
+                    } else {
                         IconButton(onClick = onDownloadClick) {
-                            Icon(imageVector = Icons.Default.Download, contentDescription = "Descargar", tint = MaterialTheme.colorScheme.primary)
+                            Icon(
+                                imageVector = Icons.Default.Download,
+                                contentDescription = "Descargar",
+                                tint = MaterialTheme.colorScheme.primary
+                            )
                         }
                     }
 
                 }
             }
 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Icon(
-                        imageVector = if (expanded) Icons.Default.ArrowDropDown else Icons.Default.ArrowDropUp,
-                        contentDescription = if (expanded) "Collapse" else "Expand"
-                    )
-                }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Icon(
+                    imageVector = if (expanded) Icons.Default.ArrowDropDown else Icons.Default.ArrowDropUp,
+                    contentDescription = if (expanded) "Collapse" else "Expand"
+                )
+            }
 
         }
     }

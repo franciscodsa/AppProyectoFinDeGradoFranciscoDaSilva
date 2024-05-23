@@ -229,7 +229,7 @@ class ResumeViewModel @Inject constructor(
 
     private fun addBalance(balance: Balance) {
         viewModelScope.launch {
-            balanceServices.addBalance(balance).catch { cause ->
+            balanceServices.updateBalance(balance).catch { cause ->
                 _uiState.update {
                     it.copy(
                         message = cause.message,

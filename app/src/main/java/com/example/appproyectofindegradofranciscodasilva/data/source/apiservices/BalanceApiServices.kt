@@ -19,13 +19,6 @@ interface BalanceApiServices {
         @Query("quarter") quarter: String
     ): Response<QuarterBalance>
 
-    @DELETE("balances/delete-quarter")
-    fun deleteBalancesByClientIdAndYearAndQuarter(
-        @Query("clientEmail") clientEmail: String,
-        @Query("year") year: Int,
-        @Query("quarter") quarter: String
-    ): Response<Void>
-
-    @POST("balances")
-    suspend fun addBalance(@Body balance: Balance): Response<ApiMessage>
+    @POST("balances/update")
+    suspend fun updateBalance(@Body balance: Balance): Response<ApiMessage>
 }

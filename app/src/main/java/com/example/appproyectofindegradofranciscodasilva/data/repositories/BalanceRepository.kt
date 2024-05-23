@@ -14,10 +14,10 @@ import javax.inject.Inject
 class BalanceRepository @Inject constructor(
     private val balanceDataSource: BalanceDataSource,
 ){
-    fun addBalance(balance: Balance): Flow<NetworkResultt<ApiMessage>> {
+    fun updateBalance(balance: Balance): Flow<NetworkResultt<ApiMessage>> {
         return flow {
             emit(NetworkResultt.Loading())
-            val result = balanceDataSource.addBalance(balance)
+            val result = balanceDataSource.updateBalance(balance)
             emit(result)
         }.flowOn(Dispatchers.IO)
     }

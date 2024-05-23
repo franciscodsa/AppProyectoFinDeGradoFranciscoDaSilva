@@ -7,8 +7,17 @@ data class FileState(
     val selectedFile: File? = null,
     val mimeType: String = "",
     val isLoading: Boolean = false,
+    //todo, no lo vas a necesitar
     val fileId: String = "",
 
     val files: List<FilesInfo> = emptyList(),
-    val message: String? = null
+    val message: String? = null,
+    val selectedFilter: FileFilter = FileFilter.Todos,
+
+    val total: String = "",
+    val iva: String = ""
 )
+
+enum class FileFilter {
+    Todos, Ingresos, Gastos
+}

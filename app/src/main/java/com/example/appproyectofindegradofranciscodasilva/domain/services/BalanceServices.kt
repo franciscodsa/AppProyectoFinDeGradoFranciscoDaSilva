@@ -15,11 +15,11 @@ class BalanceServices @Inject constructor(
     private val balanceRepository: BalanceRepository,
     private val tokenManager: TokenManager
 ) {
-    suspend fun addBalance(balance: Balance): Flow<NetworkResultt<ApiMessage>> {
+    suspend fun updateBalance(balance: Balance): Flow<NetworkResultt<ApiMessage>> {
         if (balance.clientEmail.isNullOrEmpty()) {
             balance.clientEmail = tokenManager.getCurrentUser().first()
         }
-        return balanceRepository.addBalance(balance)
+        return balanceRepository.updateBalance(balance)
     }
 
     suspend fun getQuarterBalance(

@@ -6,9 +6,8 @@ import java.io.File
 
 sealed class FileEvent {
 
-    object UploadFile: FileEvent()
+    class UpdateFile (val balanceId: Long, val total: String, val iva: String ): FileEvent()
 
-   /* class DownloadFile (val context: Context): FileEvent()*/
     class DownloadFile (val context: Context, val fileId: Long): FileEvent()
 
     class OnFileSelected(val file: File): FileEvent()
@@ -22,5 +21,11 @@ sealed class FileEvent {
     object LoadExpenseFiles : FileEvent()
 
     object MessageSeen : FileEvent()
+
+    class OnFilterChanged(val filter: FileFilter) : FileEvent()
+
+    class OnTotalChange(val total: String): FileEvent()
+
+    class OnIvaChange (val iva: String): FileEvent()
 
 }
