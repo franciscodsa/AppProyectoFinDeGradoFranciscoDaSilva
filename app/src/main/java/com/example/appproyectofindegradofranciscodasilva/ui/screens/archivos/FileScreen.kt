@@ -21,10 +21,13 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Download
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.filled.InsertDriveFile
+import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -34,6 +37,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
@@ -96,7 +100,7 @@ fun FilesScreen(
             Box(modifier = Modifier.fillMaxSize()) {
                 if (state.value.isLoading) {
                     CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-                }else{
+                } else {
                     LazyColumn(
                         modifier = Modifier.fillMaxSize()
                     ) {
@@ -107,6 +111,9 @@ fun FilesScreen(
                                     viewModel.handleEvent(
                                         FileEvent.DownloadFile(context, file.id)
                                     )
+                                },
+                                onUpdateClick = { fileId, total, iva ->
+                                   /* viewModel.handleEvent(FileEvent.UpdateFile(fileId, total, iva))*/
                                 }
                             )
                             Spacer(modifier = Modifier.height(8.dp))
@@ -115,15 +122,12 @@ fun FilesScreen(
                 }
             }
         }
-
-
     }
 
     LaunchedEffect(Unit) {
         viewModel.handleEvent(FileEvent.LoadAllFiles)
     }
 }
-
 @Composable
 fun FilterButtons(viewModel: FileViewModel) {
     var selectedFilter by remember { mutableStateOf("Todos") }
@@ -161,35 +165,10 @@ fun FilterButtons(viewModel: FileViewModel) {
     }
 }
 
-/*@Composable
-fun SmallToggleButton(
-    text: String,
-    selected: Boolean,
-    onClick: () -> Unit
-) {
-    Button(
-        onClick = onClick,
-        colors = ButtonDefaults.buttonColors(
-            containerColor = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface.copy(
-                alpha = 0.3f
-            ),
-            contentColor = if (selected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface
-        ),
-        contentPadding = PaddingValues(4.dp),
-        modifier = Modifier
-            .height(ButtonDefaults.MinHeight)
-    ) {
-        Text(
-            text = text,
-            style = MaterialTheme.typography.labelSmall,
-            fontSize = 12.sp
-        )
-    }
-}*/
-
 @Composable
-fun ExpandableFileCard(file: FilesInfo, onDownloadClick: () -> Unit) {
+fun ExpandableFileCard(file: FilesInfo, onDownloadClick: () -> Unit, onUpdateClick: (Long, Double, Double) -> Unit) {
     var expanded by remember { mutableStateOf(false) }
+    var isEditing by remember { mutableStateOf(false) }
 
     Card(
         modifier = Modifier
@@ -227,11 +206,56 @@ fun ExpandableFileCard(file: FilesInfo, onDownloadClick: () -> Unit) {
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(text = "Fecha: ${file.date}", style = MaterialTheme.typography.bodyMedium)
+                        if (isEditing) {
+                            OutlinedTextField(
+                                value = file.total.toString(),
+                                onValueChange = {/* total = it*/ },
+                                label = { Text("Total") },
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+                            OutlinedTextField(
+                                value = file.iva.toString(),
+                                onValueChange = {/* iva = it*/ },
+                                label = { Text("IVA") },
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+                        } else {
+                            Text(
+                                text = "Total: ${file.total}",
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                            Text(
+                                text = "IVA: ${file.iva}",
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                        }
                     }
                 }
-                Spacer(modifier = Modifier.width(8.dp))
-                IconButton(onClick = onDownloadClick) {
-                    Icon(imageVector = Icons.Default.Download, contentDescription = "Descargar", tint = MaterialTheme.colorScheme.primary)
+
+                Column {
+                    Spacer(modifier = Modifier.width(8.dp))
+
+                    if (expanded){
+                        if (isEditing) {
+                            IconButton(onClick = {
+                                onUpdateClick(file.id, /*total.toDouble()*/0.0, /*iva.toDouble()*/0.0)
+                                isEditing = false
+                            }) {
+                                Icon(imageVector = Icons.Default.Done, contentDescription = "Guardar", tint = MaterialTheme.colorScheme.primary)
+                            }
+                        } else {
+                            IconButton(onClick = { isEditing = true } ) {
+                                Icon(imageVector = Icons.Default.Edit, contentDescription = "Editar", tint = MaterialTheme.colorScheme.primary)
+                            }
+                        }
+                    }else{
+                        IconButton(onClick = onDownloadClick) {
+                            Icon(imageVector = Icons.Default.Download, contentDescription = "Descargar", tint = MaterialTheme.colorScheme.primary)
+                        }
+                    }
+
                 }
             }
 

@@ -158,6 +158,7 @@ class ResumeViewModel @Inject constructor(
 
             val invoiceType = if (_uiState.value.isExpense) InvoiceType.EXPENSE else InvoiceType.INCOME
             val balance = Balance(
+                id= 0,
                 income = if (invoiceType == InvoiceType.INCOME) _uiState.value.newInvoiceTotal.toDouble() else 0.0,
                 expenses = if (invoiceType == InvoiceType.EXPENSE) _uiState.value.newInvoiceTotal.toDouble() else 0.0,
                 iva = _uiState.value.newInvoiceIva.toDouble(),
