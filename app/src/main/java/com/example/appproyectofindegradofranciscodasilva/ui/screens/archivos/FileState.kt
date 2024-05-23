@@ -7,7 +7,7 @@ data class FileState(
     val selectedFile: File? = null,
     val mimeType: String = "",
     val isLoading: Boolean = false,
-    //todo, no lo vas a necesitar
+    //todo,creo no lo vas a necesitar, pero revisa
     val fileId: String = "",
 
     val files: List<FilesInfo> = emptyList(),
