@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AppProyectoFinDeGradoFranciscoDaSilva</string>
+    <string name="app_name">ContaEasy</string>
     <string name="email">Email</string>
     <string name="contrasena">Contraseña</string>
     <string name="login">Log in</string>

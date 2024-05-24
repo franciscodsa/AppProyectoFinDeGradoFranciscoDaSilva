@@ -90,12 +90,12 @@ fun AppLogo() {
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = "Welcome",
+            text = "ContaEasy",
             style = MaterialTheme.typography.headlineMedium
         )
         Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.medium_size_space)))
         Image(
-            painter = painterResource(id = R.drawable.ic_launcher_background),
+            painter = painterResource(id = R.drawable.ic_contaeasy),
             contentDescription = "Logo",
             modifier = Modifier.size(100.dp)
         )
