@@ -2,6 +2,7 @@ package com.example.appproyectofindegradofranciscodasilva.ui.screens.clients
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.appproyectofindegradofranciscodasilva.data.model.Client
 import com.example.appproyectofindegradofranciscodasilva.domain.services.ClientServices
 import com.example.appproyectofindegradofranciscodasilva.utils.NetworkResultt
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -30,32 +31,97 @@ class ClientViewModel @Inject constructor(
             is ClientEvent.OnClientExpandChanged -> _uiState.update {
                 it.copy(expandedClientId = if (it.expandedClientId == event.clientId) null else event.clientId)
             }
-            is ClientEvent.OnAccountantEmailChanged -> _uiState.update { state ->
-                state.copy(
-                    clients = state.clients.map {
-                        if (it.email == event.clientId) it.copy(accountantEmail = event.email) else it
-                    }
+
+            is ClientEvent.OnAccountantEmailChanged -> _uiState.update {
+                it.copy(
+                    selectedAccountantEmail = event.email
                 )
             }
-            is ClientEvent.OnSaveAccountantEmail -> saveAccountantEmail(event.clientId)
+
+            is ClientEvent.OnSaveAccountantEmail -> saveAccountantEmail(event.client)
+
+            ClientEvent.LoadClients -> loadClients()
+            ClientEvent.LoadClientsWithNoAccountant -> loadClientsWithNoAccountant()
+            is ClientEvent.OnAccountantEmailSelected -> {
+                _uiState.update { it.copy(selectedAccountantEmail = event.email) }
+            }
         }
     }
 
     private fun loadClients() {
         viewModelScope.launch {
             clientService.getClients()
-                .catch { cause -> _uiState.update { it.copy(message = cause.message) } }
+                .catch { cause ->
+                    _uiState.update {
+                        it.copy(
+                            message = cause.message,
+                            isLoading = false
+                        )
+                    }
+                }
                 .collect { result ->
                     when (result) {
-                        is NetworkResultt.Success -> _uiState.update { it.copy(clients = result.data?: emptyList()) }
-                        is NetworkResultt.Error -> _uiState.update { it.copy(message = result.message) }
-                        is NetworkResultt.Loading -> {} // Handle loading state if needed
+                        is NetworkResultt.Success -> {
+                            _uiState.update {
+                                it.copy(
+                                    clients = result.data ?: emptyList(),
+                                    isLoading = false
+                                )
+                            }
+                        }
+
+                        is NetworkResultt.Error -> {
+                            _uiState.update {
+                                it.copy(message = result.message, isLoading = false)
+                            }
+                        }
+
+                        is NetworkResultt.Loading -> {
+                            _uiState.update { it.copy(isLoading = true) }
+                        }
                     }
                 }
         }
     }
 
-    private fun saveAccountantEmail(clientId: String) {
+
+    private fun loadClientsWithNoAccountant() {
+        viewModelScope.launch {
+            clientService.getClientsWithNoAccountant()
+                .catch { cause ->
+                    _uiState.update {
+                        it.copy(
+                            message = cause.message,
+                            isLoading = false
+                        )
+                    }
+                }
+                .collect { result ->
+                    when (result) {
+                        is NetworkResultt.Success -> {
+                            _uiState.update {
+                                it.copy(
+                                    clients = result.data ?: emptyList(),
+                                    isLoading = false
+                                )
+                            }
+                        }
+
+                        is NetworkResultt.Error -> {
+                            _uiState.update {
+                                it.copy(message = result.message, isLoading = false)
+                            }
+                        }
+
+                        is NetworkResultt.Loading -> {
+                            _uiState.update { it.copy(isLoading = true) }
+                        }
+                    }
+                }
+        }
+    }
+
+    private fun saveAccountantEmail(client: Client) {
         // Implement logic to save accountant email
     }
 }

@@ -12,9 +12,15 @@ interface ClientApiServices {
     @POST("clients")
     suspend fun addClient(@Body client: Client): Response<Client>
 
+    @POST("clients/update")
+    suspend fun updateClient(@Body client: Client): Response<Client>
+
     @GET("clients")
     suspend fun getAllClients(): Response<List<Client>>
 
-    @GET("clientes/{clientEmail}")
+    @GET("clients/noAccountant")
+    suspend fun getClientsWithNoAccountant(): Response<List<Client>>
+
+    @GET("clients/{clientEmail}")
     fun getClientByEmail(@Path("clientEmail") clientEmail: String): Response<Client>
 }

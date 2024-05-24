@@ -19,4 +19,29 @@ class ClientRepository @Inject constructor(
             emit(result)
         }.flowOn(Dispatchers.IO)
     }
+
+    fun updateClient(client: Client): Flow<NetworkResultt<Client>>{
+        return flow {
+            emit(NetworkResultt.Loading())
+            val result= clientDataSource.updateClient(client)
+            emit(result)
+        }.flowOn(Dispatchers.IO)
+    }
+
+
+    fun getClients(): Flow<NetworkResultt<List<Client>>>{
+        return flow {
+            emit(NetworkResultt.Loading())
+            val result= clientDataSource.getClients()
+            emit(result)
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun getClientsWithNoAccountant(): Flow<NetworkResultt<List<Client>>>{
+        return flow {
+            emit(NetworkResultt.Loading())
+            val result= clientDataSource.getClientsWithNoAccountant()
+            emit(result)
+        }.flowOn(Dispatchers.IO)
+    }
 }

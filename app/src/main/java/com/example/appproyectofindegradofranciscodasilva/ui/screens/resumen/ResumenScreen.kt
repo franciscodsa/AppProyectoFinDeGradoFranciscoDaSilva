@@ -152,6 +152,7 @@ fun CustomDropdown(
     items: List<String>,
     onItemSelected: (String) -> Unit
 ) {
+
     Column(
         modifier = modifier
             .clip(RoundedCornerShape(8.dp))
@@ -200,8 +201,8 @@ fun CustomDropdown(
                 DropdownMenuItem(
                     text = { Text(item) },
                     onClick = {
-                        onItemSelected(item)
                         onExpandedChange()
+                        onItemSelected(item)
                     }
                 )
             }
