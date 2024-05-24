@@ -3,6 +3,7 @@ package com.example.appproyectofindegradofranciscodasilva.ui.screens.clients
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.appproyectofindegradofranciscodasilva.data.model.Client
+import com.example.appproyectofindegradofranciscodasilva.domain.services.AccountantServices
 import com.example.appproyectofindegradofranciscodasilva.domain.services.ClientServices
 import com.example.appproyectofindegradofranciscodasilva.utils.NetworkResultt
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +17,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ClientViewModel @Inject constructor(
-    private val clientService: ClientServices
+    private val clientService: ClientServices,
+    private val accountantServices: AccountantServices
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ClientState())
@@ -41,7 +43,9 @@ class ClientViewModel @Inject constructor(
             is ClientEvent.OnSaveNewClientsAccountant -> updateClientAccountant(event.client)
 
             ClientEvent.LoadClients -> loadClients()
+
             ClientEvent.LoadClientsWithNoAccountant -> loadClientsWithNoAccountant()
+
             is ClientEvent.OnAccountantEmailSelected -> {
                 _uiState.update { it.copy(selectedAccountantEmail = event.email) }
             }
@@ -60,6 +64,45 @@ class ClientViewModel @Inject constructor(
                     message = null
                 )
             }
+
+            ClientEvent.GetAccountantsEmails -> loadAccountantsEmails()
+        }
+    }
+
+
+    private fun loadAccountantsEmails(){
+        viewModelScope.launch {
+            accountantServices.getAccountants().catch { cause ->
+                _uiState.update {
+                    it.copy(
+                        message = cause.message,
+                        isLoading = false
+                    )
+                }
+            }
+                .collect { result ->
+                    when (result) {
+                        is NetworkResultt.Success -> {
+                            _uiState.update {
+                                it.copy(
+                                    accountantEmails = result.data?.map { accountant -> accountant.email }
+                                        ?: emptyList(),
+                                    isLoading = false
+                                )
+                            }
+                        }
+
+                        is NetworkResultt.Error -> {
+                            _uiState.update {
+                                it.copy(message = result.message, isLoading = false)
+                            }
+                        }
+
+                        is NetworkResultt.Loading -> {
+                            _uiState.update { it.copy(isLoading = true) }
+                        }
+                    }
+                }
         }
     }
 

@@ -45,7 +45,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.appproyectofindegradofranciscodasilva.data.model.Client
 import com.example.appproyectofindegradofranciscodasilva.ui.navigation.FilterButton
-import com.example.appproyectofindegradofranciscodasilva.ui.screens.archivos.FileEvent
 import com.example.appproyectofindegradofranciscodasilva.ui.screens.resumen.CustomDropdown
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -61,11 +60,11 @@ fun ClientScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Clientes") }
+                title = { Text("Clientes", style = MaterialTheme.typography.headlineMedium) }
             )
         },
         snackbarHost = { SnackbarHost(snackbarHostState) }
-    ){ innerPadding ->
+    ) { innerPadding ->
 
         LaunchedEffect(state.message) {
             state.message?.let {
@@ -77,6 +76,10 @@ fun ClientScreen(
             }
         }
 
+        LaunchedEffect(Unit) {
+            viewModel.handleEvent(ClientEvent.GetAccountantsEmails)
+        }
+
         Column(
             modifier = Modifier
                 .padding(innerPadding)
@@ -85,7 +88,7 @@ fun ClientScreen(
         ) {
             FilterButtons(
                 selectedFilter = state.selectedFilter,
-                onFilterChange = {viewModel.handleEvent(ClientEvent.OnFilterChanged(it))}
+                onFilterChange = { viewModel.handleEvent(ClientEvent.OnFilterChanged(it)) }
             )
             Spacer(modifier = Modifier.height(16.dp))
             LazyColumn {
@@ -94,7 +97,7 @@ fun ClientScreen(
                         client = client,
                         expanded = state.expandedClientId == client.email,
                         accountantEmails = state.accountantEmails,
-                        selectedAccountantEmail = state.selectedAccountantEmail ?: "",
+                        selectedAccountantEmail = state.selectedAccountantEmail,
                         onExpandChange = {
                             viewModel.handleEvent(
                                 ClientEvent.OnClientExpandChanged(
@@ -256,7 +259,11 @@ fun ClientCard(
                     }
                     Column {
                         IconButton(onClick = { isEditing = !isEditing }) {
-                            Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit")
+                            Icon(
+                                imageVector = Icons.Default.Edit,
+                                contentDescription = "Edit",
+                                tint = MaterialTheme.colorScheme.primary
+                            )
                         }
                         if (isEditing) {
                             IconButton(onClick = {
@@ -264,7 +271,11 @@ fun ClientCard(
                                 onSaveNewClientsAccountant()
                                 isEditing = false
                             }) {
-                                Icon(imageVector = Icons.Default.Save, contentDescription = "Save")
+                                Icon(
+                                    imageVector = Icons.Default.Save,
+                                    contentDescription = "Save",
+                                    tint = MaterialTheme.colorScheme.primary
+                                )
                             }
                         }
 

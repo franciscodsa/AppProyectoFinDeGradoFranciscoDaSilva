@@ -16,6 +16,7 @@ import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
@@ -66,7 +67,7 @@ fun OlvideClaveScreen() {
                     .fillMaxWidth(),
                 contentAlignment = Alignment.Center
             ) {
-                Text(text = stringResource(R.string.cambia_clave))
+                Text(text = stringResource(R.string.cambia_clave), style = MaterialTheme.typography.headlineMedium)
             }
 
             Column(modifier = Modifier.weight(0.7f)) {

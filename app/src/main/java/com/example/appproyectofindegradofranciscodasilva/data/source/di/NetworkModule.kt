@@ -5,6 +5,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import com.example.appproyectofindegradofranciscodasilva.common.Constantes
+import com.example.appproyectofindegradofranciscodasilva.data.source.apiservices.AccountantApiServices
 import com.example.appproyectofindegradofranciscodasilva.data.source.apiservices.BalanceApiServices
 import com.example.appproyectofindegradofranciscodasilva.data.source.apiservices.ClientApiServices
 import com.example.appproyectofindegradofranciscodasilva.data.source.apiservices.CredentialApiServices
@@ -118,6 +119,11 @@ object NetworkModule {
     @Provides
     fun provideClientService(@Named("InfoServer") retrofit: Retrofit): ClientApiServices =
         retrofit.create(ClientApiServices::class.java)
+
+    @Singleton
+    @Provides
+    fun provideAccountantService(@Named("InfoServer") retrofit: Retrofit): AccountantApiServices =
+        retrofit.create(AccountantApiServices::class.java)
 
     @Singleton
     @Provides

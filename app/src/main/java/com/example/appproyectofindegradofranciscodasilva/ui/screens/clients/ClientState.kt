@@ -7,7 +7,7 @@ data class ClientState(
     val clients: List<Client> = emptyList(),
     val expandedClientId: String? = null,
     val message: String? = null,
-    val accountantEmails: List<String> = listOf("accountant1@example.com", "accountant2@example.com"),
+    val accountantEmails: List<String> = emptyList(),
     val selectedAccountantEmail: String = "",
     val isLoading: Boolean = false,
     val selectedFilter: ClientFilter = ClientFilter.Todos,

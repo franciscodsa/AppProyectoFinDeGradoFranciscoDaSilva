@@ -143,3 +143,15 @@ eapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/ui/screens/
 gapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/ui/screens/clients/ClientsScreen.kt,4\4\44e0448add2635a6092b290d187b74a647064e2b
 ë
 aapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/ui/navigation/FilterButton.kt,8\7\875501af91568a7b64b96c79d7064154dbc02d06
+§
+tapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/data/source/apiservices/AccountantApiServices.kt,0\5\054ef7efc588599f054ca38a426db8de9b47219d
+ó
+gapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/data/source/AccountantDataSource.kt,7\e\7e2bec008a075816a787c31dc3f96af67e850222
+å
+\app/src/main/java/com/example/appproyectofindegradofranciscodasilva/data/model/Accountant.kt,6\b\6bbb09abc296a57fdda3496424354de80b602e9b
+ù
+mapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/data/repositories/AccountantRepository.kt,e\5\e59827ad49d5f9f5365d04b65ab355be1a2f5ad8
+ö
+japp/src/main/java/com/example/appproyectofindegradofranciscodasilva/domain/services/AccountantServicess.kt,f\2\f2bcb6fdd31b1c54bf1fa12a5de71d0ba7207056
+ô
+iapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/domain/services/AccountantServices.kt,6\0\60434f99bf98e33222e4346f2ca52c37a70e7430
