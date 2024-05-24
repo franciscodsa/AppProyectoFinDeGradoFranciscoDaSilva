@@ -27,9 +27,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,6 +45,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.appproyectofindegradofranciscodasilva.data.model.Client
 import com.example.appproyectofindegradofranciscodasilva.ui.navigation.FilterButton
+import com.example.appproyectofindegradofranciscodasilva.ui.screens.archivos.FileEvent
 import com.example.appproyectofindegradofranciscodasilva.ui.screens.resumen.CustomDropdown
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -51,6 +56,7 @@ fun ClientScreen(
     onFilesClick: (String) -> Unit
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val snackbarHostState = remember { SnackbarHostState() }
 
     Scaffold(
         topBar = {
@@ -58,62 +64,73 @@ fun ClientScreen(
                 title = { Text("Clientes") }
             )
         },
-        content = { innerPadding ->
-            Column(
-                modifier = Modifier
-                    .padding(innerPadding)
-                    .padding(16.dp)
-                    .fillMaxSize()
-            ) {
-                FilterButtons(
-                    selectedFilter = state.selectedFilter,
-                    onFilterChange = {viewModel.handleEvent(ClientEvent.OnFilterChanged(it))}
+        snackbarHost = { SnackbarHost(snackbarHostState) }
+    ){ innerPadding ->
+
+        LaunchedEffect(state.message) {
+            state.message?.let {
+                snackbarHostState.showSnackbar(
+                    message = it,
+                    duration = SnackbarDuration.Short
                 )
-                Spacer(modifier = Modifier.height(16.dp))
-                LazyColumn {
-                    items(state.clients) { client ->
-                        ClientCard(
-                            client = client,
-                            expanded = state.expandedClientId == client.email,
-                            accountantEmails = state.accountantEmails,
-                            selectedAccountantEmail = state.selectedAccountantEmail ?: "",
-                            onExpandChange = {
-                                viewModel.handleEvent(
-                                    ClientEvent.OnClientExpandChanged(
-                                        client.email
-                                    )
+                viewModel.handleEvent(ClientEvent.MessageSeen)
+            }
+        }
+
+        Column(
+            modifier = Modifier
+                .padding(innerPadding)
+                .padding(16.dp)
+                .fillMaxSize()
+        ) {
+            FilterButtons(
+                selectedFilter = state.selectedFilter,
+                onFilterChange = {viewModel.handleEvent(ClientEvent.OnFilterChanged(it))}
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            LazyColumn {
+                items(state.clients) { client ->
+                    ClientCard(
+                        client = client,
+                        expanded = state.expandedClientId == client.email,
+                        accountantEmails = state.accountantEmails,
+                        selectedAccountantEmail = state.selectedAccountantEmail ?: "",
+                        onExpandChange = {
+                            viewModel.handleEvent(
+                                ClientEvent.OnClientExpandChanged(
+                                    client.email
                                 )
-                            },
-                            onChatClick = onChatClick,
-                            onFilesClick = onFilesClick,
-                            onAccountantEmailChange = {
-                                viewModel.handleEvent(
-                                    ClientEvent.OnAccountantEmailChanged(
-                                        it
-                                    )
+                            )
+                        },
+                        onChatClick = onChatClick,
+                        onFilesClick = onFilesClick,
+                        onAccountantEmailChange = {
+                            viewModel.handleEvent(
+                                ClientEvent.OnAccountantEmailChanged(
+                                    it
                                 )
-                            },
-                            onSaveNewClientsAccountant = {
-                                viewModel.handleEvent(
-                                    ClientEvent.OnSaveNewClientsAccountant(
-                                        client
-                                    )
+                            )
+                        },
+                        onSaveNewClientsAccountant = {
+                            viewModel.handleEvent(
+                                ClientEvent.OnSaveNewClientsAccountant(
+                                    client
                                 )
-                            },
-                            onAccountantEmailSelected = {
-                                viewModel.handleEvent(
-                                    ClientEvent.OnAccountantEmailSelected(
-                                        it
-                                    )
+                            )
+                        },
+                        onAccountantEmailSelected = {
+                            viewModel.handleEvent(
+                                ClientEvent.OnAccountantEmailSelected(
+                                    it
                                 )
-                            }
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                    }
+                            )
+                        }
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
                 }
             }
         }
-    )
+    }
 }
 
 @Composable

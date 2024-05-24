@@ -54,6 +54,12 @@ class ClientViewModel @Inject constructor(
                     ClientFilter.NoAsignados -> loadClientsWithNoAccountant()
                 }
             }
+
+            ClientEvent.MessageSeen ->  _uiState.update {
+                it.copy(
+                    message = null
+                )
+            }
         }
     }
 

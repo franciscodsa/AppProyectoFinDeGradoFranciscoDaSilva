@@ -12,5 +12,6 @@ sealed class ClientEvent {
     object LoadClientsWithNoAccountant: ClientEvent()
     class OnAccountantEmailSelected(val email: String) : ClientEvent()
     class OnFilterChanged(val filter: ClientFilter) : ClientEvent()
+    object MessageSeen :ClientEvent()
 }
 
