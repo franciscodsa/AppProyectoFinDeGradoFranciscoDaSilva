@@ -46,6 +46,14 @@ class ClientViewModel @Inject constructor(
                 _uiState.update { it.copy(selectedAccountantEmail = event.email) }
             }
 
+            is ClientEvent.OnFilterChanged -> {
+                _uiState.update { it.copy(selectedFilter = event.filter) }
+
+                when(event.filter){
+                    ClientFilter.Todos -> loadClients()
+                    ClientFilter.NoAsignados -> loadClientsWithNoAccountant()
+                }
+            }
         }
     }
 
@@ -70,6 +78,11 @@ class ClientViewModel @Inject constructor(
                                     message = "Actualizado",
                                     isLoading = false
                                 )
+                            }
+
+                            when(_uiState.value.selectedFilter) {
+                                ClientFilter.Todos -> loadClients()
+                                ClientFilter.NoAsignados -> loadClientsWithNoAccountant()
                             }
                         }
 

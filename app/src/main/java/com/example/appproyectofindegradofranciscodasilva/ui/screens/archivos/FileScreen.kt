@@ -17,7 +17,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowDropUp
-import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.InsertDriveFile
@@ -86,7 +85,10 @@ fun FilesScreen(
                 .padding(innerPadding)
                 .padding(16.dp)
         ) {
-            FilterButtons(viewModel = viewModel, selectedFilter = state.value.selectedFilter)
+            FilterButtons(
+                selectedFilter = state.value.selectedFilter,
+                onFilterChange = { viewModel.handleEvent(FileEvent.OnFilterChanged(it)) }
+            )
             Spacer(modifier = Modifier.height(16.dp))
             Box(modifier = Modifier.fillMaxSize()) {
                 if (state.value.isLoading) {
@@ -106,7 +108,7 @@ fun FilesScreen(
                                     )
                                 },
                                 onUpdateClick = { fileId, total, iva ->
-                                     viewModel.handleEvent(FileEvent.UpdateFile(fileId, total, iva))
+                                    viewModel.handleEvent(FileEvent.UpdateFile(fileId, total, iva))
                                 },
                                 onTotalChange = { viewModel.handleEvent(FileEvent.OnTotalChange(it)) },
                                 onIvaChange = { viewModel.handleEvent(FileEvent.OnIvaChange(it)) },
@@ -126,7 +128,10 @@ fun FilesScreen(
 
 
 @Composable
-fun FilterButtons(viewModel: FileViewModel, selectedFilter: FileFilter) {
+fun FilterButtons(
+    selectedFilter: FileFilter,
+    onFilterChange: (FileFilter) -> Unit
+) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Start
@@ -135,7 +140,7 @@ fun FilterButtons(viewModel: FileViewModel, selectedFilter: FileFilter) {
             text = "Todos",
             selected = selectedFilter == FileFilter.Todos,
             onClick = {
-                viewModel.handleEvent(FileEvent.OnFilterChanged(FileFilter.Todos))
+                onFilterChange(FileFilter.Todos)
             }
         )
         Spacer(modifier = Modifier.width(8.dp))
@@ -143,7 +148,7 @@ fun FilterButtons(viewModel: FileViewModel, selectedFilter: FileFilter) {
             text = "Ingresos",
             selected = selectedFilter == FileFilter.Ingresos,
             onClick = {
-                viewModel.handleEvent(FileEvent.OnFilterChanged(FileFilter.Ingresos))
+                onFilterChange(FileFilter.Ingresos)
             }
         )
         Spacer(modifier = Modifier.width(8.dp))
@@ -151,7 +156,7 @@ fun FilterButtons(viewModel: FileViewModel, selectedFilter: FileFilter) {
             text = "Gastos",
             selected = selectedFilter == FileFilter.Gastos,
             onClick = {
-                viewModel.handleEvent(FileEvent.OnFilterChanged(FileFilter.Gastos))
+                onFilterChange(FileFilter.Gastos)
             }
         )
     }

@@ -66,8 +66,9 @@ fun ClientScreen(
                     .fillMaxSize()
             ) {
                 FilterButtons(
-                    onLoadClients = { viewModel.handleEvent(ClientEvent.LoadClients) }
-                ) { viewModel.handleEvent(ClientEvent.LoadClientsWithNoAccountant) }
+                    selectedFilter = state.selectedFilter,
+                    onFilterChange = {viewModel.handleEvent(ClientEvent.OnFilterChanged(it))}
+                )
                 Spacer(modifier = Modifier.height(16.dp))
                 LazyColumn {
                     items(state.clients) { client ->
@@ -117,30 +118,26 @@ fun ClientScreen(
 
 @Composable
 fun FilterButtons(
-    onLoadClients: () -> Unit,
-    onLoadClientsWithNoAccountant: () -> Unit
+    selectedFilter: ClientFilter,
+    onFilterChange: (ClientFilter) -> Unit
 ) {
-    var selectedFilter by remember { mutableStateOf("Todos") }
-
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Start
     ) {
         FilterButton(
             text = "Todos",
-            selected = selectedFilter == "Todos",
+            selected = selectedFilter == ClientFilter.Todos,
             onClick = {
-                selectedFilter = "Todos"
-                onLoadClients()
+                onFilterChange(ClientFilter.Todos)
             }
         )
         Spacer(modifier = Modifier.width(8.dp))
         FilterButton(
             text = "No Asignados",
-            selected = selectedFilter == "No Asignado",
+            selected = selectedFilter == ClientFilter.NoAsignados,
             onClick = {
-                selectedFilter = "No Asignado"
-                onLoadClientsWithNoAccountant()
+                onFilterChange(ClientFilter.NoAsignados)
             }
         )
     }
