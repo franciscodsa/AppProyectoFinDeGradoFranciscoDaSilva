@@ -1,5 +1,6 @@
 package com.example.appproyectofindegradofranciscodasilva.data.repositories
 
+import com.example.appproyectofindegradofranciscodasilva.data.model.ApiMessage
 import com.example.appproyectofindegradofranciscodasilva.data.model.Client
 import com.example.appproyectofindegradofranciscodasilva.data.source.ClientDataSource
 import com.example.appproyectofindegradofranciscodasilva.utils.NetworkResultt
@@ -12,7 +13,7 @@ import javax.inject.Inject
 class ClientRepository @Inject constructor(
     private val clientDataSource: ClientDataSource
 ) {
-    fun addClient(client: Client): Flow<NetworkResultt<Client>>{
+    fun addClient(client: Client): Flow<NetworkResultt<ApiMessage>>{
         return flow {
             emit(NetworkResultt.Loading())
             val result= clientDataSource.addClient(client)
@@ -20,7 +21,7 @@ class ClientRepository @Inject constructor(
         }.flowOn(Dispatchers.IO)
     }
 
-    fun updateClient(client: Client): Flow<NetworkResultt<Client>>{
+    fun updateClient(client: Client): Flow<NetworkResultt<ApiMessage>>{
         return flow {
             emit(NetworkResultt.Loading())
             val result= clientDataSource.updateClient(client)

@@ -2,16 +2,19 @@ package com.example.appproyectofindegradofranciscodasilva.ui.screens.resumen
 
 import android.net.Uri
 import android.provider.OpenableColumns
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -21,16 +24,37 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Divider
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -80,7 +104,11 @@ fun ResumenScreen(
                     onContadoresClick = { /* Acción para Contadores */ }
                 )
             } else {
-                FloatingActionButton(onClick = { openBottomSheet = true }) {
+                FloatingActionButton(
+                    onClick = { openBottomSheet = true },
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
+                ) {
                     Icon(imageVector = Icons.Default.Add, contentDescription = "Añadir")
                 }
             }
@@ -107,7 +135,13 @@ fun ResumenScreen(
                     onInvoiceTypeChange = { viewModel.handleEvent(ResumenEvent.OnInvoiceTypeSelected) },
                     onTotalChange = { viewModel.handleEvent(ResumenEvent.OnNewInvoiceTotal(it)) },
                     onIvaChange = { viewModel.handleEvent(ResumenEvent.OnNewInvoiceIva(it)) },
-                    onDescriptionChange = { viewModel.handleEvent(ResumenEvent.OnNewInvoiceDescription(it)) },
+                    onDescriptionChange = {
+                        viewModel.handleEvent(
+                            ResumenEvent.OnNewInvoiceDescription(
+                                it
+                            )
+                        )
+                    },
                     onSubmit = { viewModel.handleEvent(ResumenEvent.UploadFile) }
                 )
             }
@@ -321,26 +355,27 @@ fun BottomSheetContent(
         sheetState = bottomSheetState
     ) {
         val context = LocalContext.current
-        val launcher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { result: Uri? ->
-            result?.let { uri ->
-                val contentResolver = context.contentResolver
-                val mimeType = contentResolver.getType(uri) ?: ""
-                val cursor = context.contentResolver.query(uri, null, null, null, null)
-                val nameIndex = cursor?.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-                cursor?.moveToFirst()
-                val name = nameIndex?.let { cursor.getString(it) }
-                cursor?.close()
-                val selectedFile = File(context.cacheDir, name ?: "")
-                contentResolver.openInputStream(uri)?.use { inputStream ->
-                    selectedFile.outputStream().use { outputStream ->
-                        inputStream.copyTo(outputStream)
+        val launcher =
+            rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { result: Uri? ->
+                result?.let { uri ->
+                    val contentResolver = context.contentResolver
+                    val mimeType = contentResolver.getType(uri) ?: ""
+                    val cursor = context.contentResolver.query(uri, null, null, null, null)
+                    val nameIndex = cursor?.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+                    cursor?.moveToFirst()
+                    val name = nameIndex?.let { cursor.getString(it) }
+                    cursor?.close()
+                    val selectedFile = File(context.cacheDir, name ?: "")
+                    contentResolver.openInputStream(uri)?.use { inputStream ->
+                        selectedFile.outputStream().use { outputStream ->
+                            inputStream.copyTo(outputStream)
+                        }
                     }
+                    selectedFileName = name ?: ""
+                    onMimeTypeSelected(mimeType)
+                    onFileSelected(selectedFile)
                 }
-                selectedFileName = name ?: ""
-                onMimeTypeSelected(mimeType)
-                onFileSelected(selectedFile)
             }
-        }
 
         Column(
             modifier = Modifier

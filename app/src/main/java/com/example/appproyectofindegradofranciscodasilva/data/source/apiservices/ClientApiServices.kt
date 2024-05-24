@@ -1,5 +1,6 @@
 package com.example.appproyectofindegradofranciscodasilva.data.source.apiservices
 
+import com.example.appproyectofindegradofranciscodasilva.data.model.ApiMessage
 import com.example.appproyectofindegradofranciscodasilva.data.model.Client
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -10,10 +11,10 @@ import retrofit2.http.Path
 
 interface ClientApiServices {
     @POST("clients")
-    suspend fun addClient(@Body client: Client): Response<Client>
+    suspend fun addClient(@Body client: Client): Response<ApiMessage>
 
     @POST("clients/update")
-    suspend fun updateClient(@Body client: Client): Response<Client>
+    suspend fun updateClient(@Body client: Client): Response<ApiMessage>
 
     @GET("clients")
     suspend fun getAllClients(): Response<List<Client>>

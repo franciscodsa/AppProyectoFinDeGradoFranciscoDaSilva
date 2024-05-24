@@ -124,8 +124,9 @@ class ClientViewModel @Inject constructor(
                         is NetworkResultt.Success -> {
                             _uiState.update {
                                 it.copy(
-                                    message = "Actualizado",
-                                    isLoading = false
+                                    message = result.data?.message,
+                                    isLoading = false,
+                                    selectedAccountantEmail = ""
                                 )
                             }
 

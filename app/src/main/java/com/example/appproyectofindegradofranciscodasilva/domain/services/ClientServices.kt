@@ -1,5 +1,6 @@
 package com.example.appproyectofindegradofranciscodasilva.domain.services
 
+import com.example.appproyectofindegradofranciscodasilva.data.model.ApiMessage
 import com.example.appproyectofindegradofranciscodasilva.data.model.Client
 import com.example.appproyectofindegradofranciscodasilva.data.repositories.ClientRepository
 import com.example.appproyectofindegradofranciscodasilva.utils.NetworkResultt
@@ -11,11 +12,11 @@ import javax.inject.Inject
 class ClientServices @Inject constructor(
     private val clientRepository: ClientRepository
 ) {
-    fun addClient(client: Client): Flow<NetworkResultt<Client>>{
+    fun addClient(client: Client): Flow<NetworkResultt<ApiMessage>>{
         return clientRepository.addClient(client)
     }
 
-    fun updateClient(client: Client): Flow<NetworkResultt<Client>>{
+    fun updateClient(client: Client): Flow<NetworkResultt<ApiMessage>>{
         return clientRepository.updateClient(client)
     }
 

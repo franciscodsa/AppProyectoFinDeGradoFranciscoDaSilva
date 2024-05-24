@@ -16,7 +16,7 @@ class ClientDataSource @Inject constructor(
     private val moshi: Moshi
 ) {
 
-    suspend fun addClient(client: Client): NetworkResultt<Client> {
+    suspend fun addClient(client: Client): NetworkResultt<ApiMessage> {
         try {
             Log.i("asdasd", "AAAAAAAAAAAAAAAAAAAAAAA")
 
@@ -40,7 +40,7 @@ class ClientDataSource @Inject constructor(
         }
     }
 
-    suspend fun updateClient(client: Client): NetworkResultt<Client> {
+    suspend fun updateClient(client: Client): NetworkResultt<ApiMessage> {
         try {
             Log.i("asdasd", "AAAAAAAAAAAAAAAAAAAAAAA")
 
