@@ -127,7 +127,10 @@ class RegisterViewModel @Inject constructor(
                                     uiState.value.month.toInt(),
                                     uiState.value.day.toInt()
                                 ),
-                                accountantEmail = "admin@mail.com",
+                                accountantEmail = null
+                                /*todo: verifica si mandando a null el client se agrega
+                                ,
+                                accountantEmail = "admin@mail.com",*/
                             )
                         )
                     } else {

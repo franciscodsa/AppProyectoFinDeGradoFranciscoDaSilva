@@ -7,6 +7,6 @@ data class ClientState(
     val expandedClientId: String? = null,
     val message: String? = null,
     val accountantEmails: List<String> = listOf("accountant1@example.com", "accountant2@example.com"),
-    val selectedAccountantEmail: String? = null,
+    val selectedAccountantEmail: String = "",
     val isLoading: Boolean = false
 )

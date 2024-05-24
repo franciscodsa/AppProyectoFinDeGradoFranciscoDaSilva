@@ -16,7 +16,7 @@ class ClientServices @Inject constructor(
     }
 
     fun updateClient(client: Client): Flow<NetworkResultt<Client>>{
-        return clientRepository.addClient(client)
+        return clientRepository.updateClient(client)
     }
 
     fun getClients(): Flow<NetworkResultt<List<Client>>> {

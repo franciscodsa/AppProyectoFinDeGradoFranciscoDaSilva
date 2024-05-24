@@ -9,5 +9,5 @@ data class Client(
     val firstName: String,
     val lastName: String,
     val dateOfBirth: LocalDate,
-    val accountantEmail: String
+    val accountantEmail: String?
 )

@@ -38,13 +38,52 @@ class ClientViewModel @Inject constructor(
                 )
             }
 
-            is ClientEvent.OnSaveAccountantEmail -> saveAccountantEmail(event.client)
+            is ClientEvent.OnSaveNewClientsAccountant -> updateClientAccountant(event.client)
 
             ClientEvent.LoadClients -> loadClients()
             ClientEvent.LoadClientsWithNoAccountant -> loadClientsWithNoAccountant()
             is ClientEvent.OnAccountantEmailSelected -> {
                 _uiState.update { it.copy(selectedAccountantEmail = event.email) }
             }
+
+        }
+    }
+
+    private fun updateClientAccountant(client: Client) {
+        val updatedClient = client.copy(accountantEmail = _uiState.value.selectedAccountantEmail.ifEmpty { null })
+
+        viewModelScope.launch {
+            clientService.updateClient(updatedClient)
+                .catch { cause ->
+                    _uiState.update {
+                        it.copy(
+                            message = cause.message,
+                            isLoading = false
+                        )
+                    }
+                }
+                .collect { result ->
+                    when (result) {
+                        is NetworkResultt.Success -> {
+                            _uiState.update {
+                                it.copy(
+                                    message = "Actualizado",
+                                    isLoading = false
+                                )
+                            }
+                        }
+
+                        is NetworkResultt.Error -> {
+                            _uiState.update {
+                                it.copy(message = result.message, isLoading = false)
+                            }
+                        }
+
+                        is NetworkResultt.Loading -> {
+                            _uiState.update { it.copy(isLoading = true) }
+                        }
+                    }
+                }
         }
     }
 
@@ -121,7 +160,4 @@ class ClientViewModel @Inject constructor(
         }
     }
 
-    private fun saveAccountantEmail(client: Client) {
-        // Implement logic to save accountant email
-    }
 }

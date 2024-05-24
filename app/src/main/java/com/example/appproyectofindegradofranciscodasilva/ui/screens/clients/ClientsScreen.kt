@@ -14,7 +14,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
@@ -67,7 +66,7 @@ fun ClientScreen(
                     .fillMaxSize()
             ) {
                 FilterButtons(
-                    onLoadClients = {viewModel.handleEvent(ClientEvent.LoadClients)}
+                    onLoadClients = { viewModel.handleEvent(ClientEvent.LoadClients) }
                 ) { viewModel.handleEvent(ClientEvent.LoadClientsWithNoAccountant) }
                 Spacer(modifier = Modifier.height(16.dp))
                 LazyColumn {
@@ -76,13 +75,37 @@ fun ClientScreen(
                             client = client,
                             expanded = state.expandedClientId == client.email,
                             accountantEmails = state.accountantEmails,
-                            selectedAccountantEmail = state.selectedAccountantEmail?:"",
-                            onExpandChange = { viewModel.handleEvent(ClientEvent.OnClientExpandChanged(client.email)) },
+                            selectedAccountantEmail = state.selectedAccountantEmail ?: "",
+                            onExpandChange = {
+                                viewModel.handleEvent(
+                                    ClientEvent.OnClientExpandChanged(
+                                        client.email
+                                    )
+                                )
+                            },
                             onChatClick = onChatClick,
                             onFilesClick = onFilesClick,
-                            onAccountantEmailChange = { viewModel.handleEvent(ClientEvent.OnAccountantEmailChanged(it)) },
-                            onSaveAccountantEmail = { viewModel.handleEvent(ClientEvent.OnSaveAccountantEmail(client)) },
-                            onAccountantEmailSelected= { viewModel.handleEvent(ClientEvent.OnAccountantEmailSelected(it)) }
+                            onAccountantEmailChange = {
+                                viewModel.handleEvent(
+                                    ClientEvent.OnAccountantEmailChanged(
+                                        it
+                                    )
+                                )
+                            },
+                            onSaveNewClientsAccountant = {
+                                viewModel.handleEvent(
+                                    ClientEvent.OnSaveNewClientsAccountant(
+                                        client
+                                    )
+                                )
+                            },
+                            onAccountantEmailSelected = {
+                                viewModel.handleEvent(
+                                    ClientEvent.OnAccountantEmailSelected(
+                                        it
+                                    )
+                                )
+                            }
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                     }
@@ -133,7 +156,7 @@ fun ClientCard(
     onChatClick: (String) -> Unit,
     onFilesClick: (String) -> Unit,
     onAccountantEmailChange: (String) -> Unit,
-    onSaveAccountantEmail: () -> Unit,
+    onSaveNewClientsAccountant: () -> Unit,
     onAccountantEmailSelected: (String) -> Unit
 ) {
     var isEditing by remember { mutableStateOf(false) }
@@ -171,12 +194,12 @@ fun ClientCard(
                         contentDescription = "Expand"
                     )
                 }
-                
+
             }
             if (expanded) {
                 Spacer(modifier = Modifier.height(8.dp))
                 Row {
-                    Column (modifier = Modifier.weight(1f)){
+                    Column(modifier = Modifier.weight(1f)) {
                         Text(
                             text = "Teléfono: ${client.phone}",
                             style = MaterialTheme.typography.bodyMedium
@@ -196,7 +219,7 @@ fun ClientCard(
                                     expanded = expandedDropdown,
                                     onExpandedChange = { expandedDropdown = !expandedDropdown },
                                     items = accountantEmails,
-                                    onItemSelected = {onAccountantEmailSelected(it) }
+                                    onItemSelected = { onAccountantEmailSelected(it) }
                                 )
                             } else {
                                 Text(
@@ -221,13 +244,17 @@ fun ClientCard(
                         IconButton(onClick = { isEditing = !isEditing }) {
                             Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit")
                         }
-                        IconButton(onClick = {
-                            onAccountantEmailChange(selectedAccountantEmail)
-                            onSaveAccountantEmail()
-                            isEditing = false
-                        }) {
-                            Icon(imageVector = Icons.Default.Save, contentDescription = "Save")
+                        if (isEditing) {
+                            IconButton(onClick = {
+                                onAccountantEmailChange(selectedAccountantEmail)
+                                onSaveNewClientsAccountant()
+                                isEditing = false
+                            }) {
+                                Icon(imageVector = Icons.Default.Save, contentDescription = "Save")
+                            }
                         }
+
+
                     }
                 }
 
