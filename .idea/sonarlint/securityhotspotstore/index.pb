@@ -151,7 +151,5 @@ gapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/data/source
 \app/src/main/java/com/example/appproyectofindegradofranciscodasilva/data/model/Accountant.kt,6\b\6bbb09abc296a57fdda3496424354de80b602e9b
 ù
 mapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/data/repositories/AccountantRepository.kt,e\5\e59827ad49d5f9f5365d04b65ab355be1a2f5ad8
-ö
-japp/src/main/java/com/example/appproyectofindegradofranciscodasilva/domain/services/AccountantServicess.kt,f\2\f2bcb6fdd31b1c54bf1fa12a5de71d0ba7207056
 ô
 iapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/domain/services/AccountantServices.kt,6\0\60434f99bf98e33222e4346f2ca52c37a70e7430

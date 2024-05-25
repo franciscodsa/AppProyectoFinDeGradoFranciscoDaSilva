@@ -10,6 +10,8 @@ import com.example.appproyectofindegradofranciscodasilva.data.source.apiservices
 import com.example.appproyectofindegradofranciscodasilva.data.source.apiservices.ClientApiServices
 import com.example.appproyectofindegradofranciscodasilva.data.source.apiservices.CredentialApiServices
 import com.example.appproyectofindegradofranciscodasilva.data.source.apiservices.FileApiServices
+import com.example.appproyectofindegradofranciscodasilva.utils.AuthAuthenticator
+import com.example.appproyectofindegradofranciscodasilva.utils.AuthInterceptor
 import com.example.appproyectofindegradofranciscodasilva.utils.TokenManager
 import com.squareup.moshi.FromJson
 import com.squareup.moshi.Moshi
@@ -75,12 +77,16 @@ object NetworkModule {
     // Proporciona OkHttpClient
     @Singleton
     @Provides
-    fun provideOkHttpClient(): OkHttpClient {
+    fun provideOkHttpClient(
+        authInterceptor: AuthInterceptor,
+        authAuthenticator: AuthAuthenticator
+    ): OkHttpClient {
         val loggingInterceptor = HttpLoggingInterceptor()
         loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
-
         return OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
+            .addInterceptor(authInterceptor)
+            .authenticator(authAuthenticator)
             .build()
     }
 
