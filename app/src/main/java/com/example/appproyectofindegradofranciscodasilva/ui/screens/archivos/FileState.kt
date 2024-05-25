@@ -7,8 +7,8 @@ data class FileState(
     val selectedFile: File? = null,
     val mimeType: String = "",
     val isLoading: Boolean = false,
-    //todo,creo no lo vas a necesitar, pero revisa
-    val fileId: String = "",
+
+    val expandedFileId: Long? = null,
 
     val files: List<FilesInfo> = emptyList(),
     val message: String? = null,

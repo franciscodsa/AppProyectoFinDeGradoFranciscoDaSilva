@@ -100,6 +100,7 @@ fun FilesScreen(
                         items(items = state.value.files, key = { file -> file.id }) { file ->
                             ExpandableFileCard(
                                 file = file,
+                                expanded = state.value.expandedFileId == file.id,
                                 total = state.value.total,
                                 iva = state.value.iva,
                                 onDownloadClick = {
@@ -112,6 +113,9 @@ fun FilesScreen(
                                 },
                                 onTotalChange = { viewModel.handleEvent(FileEvent.OnTotalChange(it)) },
                                 onIvaChange = { viewModel.handleEvent(FileEvent.OnIvaChange(it)) },
+                                onExpandChange = {
+                                    viewModel.handleEvent(FileEvent.OnExpandedFileChange(if (state.value.expandedFileId == file.id) null else file.id))
+                                }
                             )
                             Spacer(modifier = Modifier.height(8.dp))
                         }
@@ -165,21 +169,22 @@ fun FilterButtons(
 @Composable
 fun ExpandableFileCard(
     file: FilesInfo,
+    expanded: Boolean,
     total: String,
     iva: String,
     onDownloadClick: () -> Unit,
     onUpdateClick: (Long, String, String) -> Unit,
     onTotalChange: (String) -> Unit,
     onIvaChange: (String) -> Unit,
+    onExpandChange: () -> Unit
 ) {
-    var expanded by remember { mutableStateOf(false) }
     var isEditing by remember { mutableStateOf(false) }
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .clickable {
-                expanded = !expanded
+                onExpandChange()
             },
         shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation()
@@ -293,7 +298,7 @@ fun ExpandableFileCard(
                 horizontalArrangement = Arrangement.Center
             ) {
                 Icon(
-                    imageVector = if (expanded) Icons.Default.ArrowDropDown else Icons.Default.ArrowDropUp,
+                    imageVector = if (expanded) Icons.Default.ArrowDropUp else Icons.Default.ArrowDropDown,
                     contentDescription = if (expanded) "Collapse" else "Expand"
                 )
             }

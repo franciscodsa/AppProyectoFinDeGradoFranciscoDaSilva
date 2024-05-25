@@ -14,7 +14,7 @@ sealed class FileEvent {
 
     class OnMimeTypeSelected(val mimeType : String): FileEvent()
 
-    class OnFileIdChange(val fileId: String): FileEvent()
+    class OnExpandedFileChange(val fileId: Long?) : FileEvent()
 
     object LoadAllFiles : FileEvent()
     object LoadIncomeFiles : FileEvent()

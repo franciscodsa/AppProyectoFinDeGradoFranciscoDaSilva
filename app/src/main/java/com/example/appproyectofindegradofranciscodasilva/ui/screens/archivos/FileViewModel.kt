@@ -44,12 +44,6 @@ class FileViewModel @Inject constructor(
 
             is FileEvent.DownloadFile -> download(event.context, event.fileId)
 
-            is FileEvent.OnFileIdChange -> _uiState.update {
-                it.copy(
-                    fileId = event.fileId
-                )
-            }
-
             FileEvent.LoadAllFiles -> loadAllFiles()
             FileEvent.LoadIncomeFiles -> loadIncomeFiles()
             FileEvent.LoadExpenseFiles -> loadExpenseFiles()
@@ -85,6 +79,10 @@ class FileViewModel @Inject constructor(
             }
 
             is FileEvent.UpdateFile -> update(event.balanceId, event.total, event.iva)
+
+            is FileEvent.OnExpandedFileChange -> _uiState.update {
+                it.copy(expandedFileId = event.fileId)
+            }
         }
     }
 
@@ -192,56 +190,7 @@ class FileViewModel @Inject constructor(
         }
     }
 
-    /*  private fun upload() {
-          if (_uiState.value.selectedFile == null) {
-              Log.i("f", "file es null")
-          } else {
 
-              Log.i("f", _uiState.value.selectedFile?.name.toString())
-
-              viewModelScope.launch {
-                  fileServices.upload(
-                      _uiState.value.selectedFile!!,
-                      _uiState.value.mimeType,
-                      "test",
-                      "add4@mail.com",
-                      InvoiceType.INCOME
-                  ).catch(action = { cause ->
-                      Log.i("f", "error al catch")
-                      _uiState.update {
-                          it.copy(
-                              isLoading = false
-                          )
-                      }
-                  }).collect { result ->
-                      when (result) {
-                          is NetworkResultt.Error -> {
-                              Log.i("f", "error en when")
-                              _uiState.update {
-                                  it.copy(
-                                      isLoading = false
-                                  )
-                              }
-                          }
-
-                          is NetworkResultt.Loading -> {
-                              Log.i("f", "loading")
-                              _uiState.update { it.copy(isLoading = true) }
-                          }
-
-                          is NetworkResultt.Success -> {
-                              Log.i("f", "subido")
-                              _uiState.update {
-                                  it.copy(
-                                      isLoading = false
-                                  )
-                              }
-                          }
-                      }
-                  }
-              }
-          }
-      }*/
 
     private fun loadAllFiles() {
         viewModelScope.launch {
