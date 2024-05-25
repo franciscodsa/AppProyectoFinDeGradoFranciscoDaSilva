@@ -68,7 +68,8 @@ import java.io.File
 fun ResumenScreen(
     viewModel: ResumeViewModel = hiltViewModel(),
     onClientsClick: () -> Unit,
-    bottomNavigationBar: @Composable () -> Unit = {}
+    bottomNavigationBar: @Composable () -> Unit = {},
+    onAccountansClick: () -> Unit
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -101,7 +102,7 @@ fun ResumenScreen(
                     expanded = isExpanded,
                     onExpandChange = { isExpanded = it },
                     onClientesClick = { onClientsClick() },
-                    onContadoresClick = { /* Acción para Contadores */ }
+                    onContadoresClick = { onAccountansClick() }
                 )
             } else {
                 FloatingActionButton(

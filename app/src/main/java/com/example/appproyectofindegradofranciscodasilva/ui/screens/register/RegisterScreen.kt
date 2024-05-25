@@ -95,7 +95,7 @@ fun RegisterScreen(
             )
             Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.small_size_space)))
 
-            //last name
+            //Last name
             OutlinedTextField(
                 value = state.value.lastNames,
                 onValueChange = {viewModel.handleEvent(RegisterEvent.OnLastNameChange(it))},
@@ -130,7 +130,7 @@ fun RegisterScreen(
             Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.big_size_space)))
 
 
-            //email field
+            //Email field
             OutlinedTextField(
                 value = state.value.email,
                 onValueChange = {viewModel.handleEvent(RegisterEvent.OnEmailTextChange(it))},

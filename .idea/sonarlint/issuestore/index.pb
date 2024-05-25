@@ -153,3 +153,11 @@ gapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/data/source
 mapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/data/repositories/AccountantRepository.kt,e\5\e59827ad49d5f9f5365d04b65ab355be1a2f5ad8
 ô
 iapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/domain/services/AccountantServices.kt,6\0\60434f99bf98e33222e4346f2ca52c37a70e7430
+ù
+mapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/ui/screens/contadores/AccountantScreen.kt,6\e\6ef4295991a3bd8c30f4f9d5a09c4a953c33c2a7
+†
+papp/src/main/java/com/example/appproyectofindegradofranciscodasilva/ui/screens/contadores/AccountantViewModel.kt,1\1\11d53409a7e6e1a774bcef213dbd8d8c1a53d2a0
+ú
+lapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/ui/screens/contadores/AccountantState.kt,9\c\9c11c635a1a67fe471c44fa824bc3912bb17e45c
+ú
+lapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/ui/screens/contadores/AccountantEvent.kt,9\c\9cf2e7f717f90aa28b4f92bd0038151e418a902d
