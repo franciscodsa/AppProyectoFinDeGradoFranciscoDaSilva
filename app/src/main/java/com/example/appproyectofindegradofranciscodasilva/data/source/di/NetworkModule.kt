@@ -10,6 +10,7 @@ import com.example.appproyectofindegradofranciscodasilva.data.source.apiservices
 import com.example.appproyectofindegradofranciscodasilva.data.source.apiservices.ClientApiServices
 import com.example.appproyectofindegradofranciscodasilva.data.source.apiservices.CredentialApiServices
 import com.example.appproyectofindegradofranciscodasilva.data.source.apiservices.FileApiServices
+import com.example.appproyectofindegradofranciscodasilva.data.source.apiservices.UserApiServices
 import com.example.appproyectofindegradofranciscodasilva.utils.AuthAuthenticator
 import com.example.appproyectofindegradofranciscodasilva.utils.AuthInterceptor
 import com.example.appproyectofindegradofranciscodasilva.utils.TokenManager
@@ -140,6 +141,11 @@ object NetworkModule {
     @Provides
     fun provideBalanceService(@Named("InfoServer") retrofit: Retrofit): BalanceApiServices =
         retrofit.create(BalanceApiServices::class.java)
+
+    @Singleton
+    @Provides
+    fun provideUserService(@Named("InfoServer") retrofit: Retrofit): UserApiServices =
+        retrofit.create(UserApiServices::class.java)
 }
 
 class LocalDateTimeAdapter {

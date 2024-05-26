@@ -97,7 +97,8 @@ fun Navigation(
                         navController = navController,
                         screens = screens
                     )
-                }
+                },
+                onLogOutClick = { navController.popBackStack("login", false) }
             )
         }
 

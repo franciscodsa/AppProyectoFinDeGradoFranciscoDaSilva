@@ -4,7 +4,11 @@ sealed class ProfileEvent {
     data class OnFirstNameChanged(val firstName: String) : ProfileEvent()
     data class OnLastNameChanged(val lastName: String) : ProfileEvent()
     data class OnPhoneChanged(val phone: String) : ProfileEvent()
-    data class OnDateOfBirthChanged(val dateOfBirth: String) : ProfileEvent()
+    data class OnYearFieldChange(val year: String) : ProfileEvent()
+    data class OnMonthFieldChange(val month: String) : ProfileEvent()
+    data class OnDayFieldChange(val day: String) : ProfileEvent()
     object SaveChanges : ProfileEvent()
     object Logout : ProfileEvent()
+    object MessageSeen : ProfileEvent()
+    object LoadUserData: ProfileEvent()
 }

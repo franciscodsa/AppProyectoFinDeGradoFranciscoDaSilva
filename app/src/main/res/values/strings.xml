@@ -18,4 +18,7 @@
     <string name="segundo_paso_cambio">Introduce el codigo y la nueva contraseña en los campos indicados. La contraseña debe tener al menos seis caracteres e incluir una combinación de números, letras y caracteres especiales(!$@%).</string>
     <string name="nueva_contrasena">Nueva contraseña</string>
     <string name="auth_code">Código</string>
+    <string name="guardar_cambios">Guardar cambios</string>
+    <string name="mi_perfil">Mi perfil</string>
+    <string name="logout">logout</string>
 </resources>

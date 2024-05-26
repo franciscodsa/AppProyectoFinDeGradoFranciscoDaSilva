@@ -167,3 +167,15 @@ rapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/ui/screens/
 napp/src/main/java/com/example/appproyectofindegradofranciscodasilva/ui/screens/olvideclave/OlvideClaveState.kt,3\c\3ca87b9d217f2fbfc4e64232dc935b58f67eb01b
 ž
 napp/src/main/java/com/example/appproyectofindegradofranciscodasilva/ui/screens/olvideclave/OlvideClaveEvent.kt,5\0\50cfcb06050d348d89a70c94b31267dd460a1f39
+ž
+napp/src/main/java/com/example/appproyectofindegradofranciscodasilva/data/source/apiservices/UserApiServices.kt,e\8\e8dce8edd5d38777f2e7d4b3e4a702a894b41f56
+“
+capp/src/main/java/com/example/appproyectofindegradofranciscodasilva/data/source/apiservices/User.kt,b\4\b413de2b3aa0e57080251bb203c7f26ef51bd320
+†
+Vapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/data/model/User.kt,1\4\143cd4c4cab24227e831ae4320a949036c238c2a
+“
+capp/src/main/java/com/example/appproyectofindegradofranciscodasilva/domain/services/UserServices.kt,9\b\9be0fab8847342655f88416e55b5e776025021b3
+—
+gapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/data/repositories/UserRepository.kt,d\8\d8431d33cf04d7a1cac55c4c3b04283c66847f82
+‘
+aapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/data/source/UserDataSource.kt,a\9\a93efa3e6a92a7f0820210c3369ae809d104ce0a

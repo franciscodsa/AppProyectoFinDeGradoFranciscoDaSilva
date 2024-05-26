@@ -50,7 +50,7 @@ class LoginViewModel @Inject constructor(
 
     private fun login() {
         if (_uiState.value.email.isEmpty() || _uiState.value.password.isEmpty()) {
-            _uiState.update { it.copy(message = Constantes.camposVaciosMessage) }
+            _uiState.update { it.copy(message = Constantes.camposVaciosMessage, isLoading = false) }
         } else {
             viewModelScope.launch {
                 credentialServices.login(

@@ -5,6 +5,9 @@ data class ProfileState(
     val firstName: String = "",
     val lastName: String = "",
     val phone: String = "",
-    val dateOfBirth: String = "",
-    val message: String? = null
+    val year: String = "",
+    val month: String = "",
+    val day: String = "",
+    val message: String? = null,
+    val isLoadin: Boolean = false
 )
