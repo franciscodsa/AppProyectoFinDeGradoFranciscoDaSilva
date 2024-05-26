@@ -2,9 +2,9 @@ package com.example.appproyectofindegradofranciscodasilva.data.source.apiservice
 
 
 import com.example.appproyectofindegradofranciscodasilva.common.Constantes
+import com.example.appproyectofindegradofranciscodasilva.data.model.ApiMessage
 import com.example.appproyectofindegradofranciscodasilva.data.model.CredentialRequest
 import com.example.appproyectofindegradofranciscodasilva.data.model.LoginInfoResponse
-import com.example.appproyectofindegradofranciscodasilva.data.source.di.InfoServer
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -18,6 +18,20 @@ interface CredentialApiServices {
     @POST(Constantes.register)
     suspend fun register(@Body credentials: CredentialRequest): Response<Boolean>
 
+    @POST(Constantes.registerAccountant)
+    suspend fun registerAccountant(@Body credentials: CredentialRequest): Response<Boolean>
+
+
     @GET(Constantes.refreshTokenPath)
     suspend fun refreshAccessToken(@Query(Constantes.refreshToken) refreshToken: String): Response<LoginInfoResponse>
+
+    @GET("authCode")
+    suspend fun getAuthCode(@Query("email") email: String): Response<ApiMessage>
+
+    @POST("updatePassword")
+    suspend fun changePassword(
+        @Query("password") password: String,
+        @Query("passwordConfirmation") passwordConfirmation: String,
+        @Query("authCode") authCode: String
+    ): Response<ApiMessage>
 }

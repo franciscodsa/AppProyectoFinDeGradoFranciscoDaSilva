@@ -1,5 +1,6 @@
 package com.example.appproyectofindegradofranciscodasilva.domain.services
 
+import com.example.appproyectofindegradofranciscodasilva.data.model.ApiMessage
 import com.example.appproyectofindegradofranciscodasilva.data.model.CredentialRequest
 import com.example.appproyectofindegradofranciscodasilva.data.model.LoginInfoResponse
 import com.example.appproyectofindegradofranciscodasilva.data.repositories.CredentialRepository
@@ -16,6 +17,10 @@ class CredentialServices @Inject constructor(
 
     fun register(credentials: CredentialRequest): Flow<NetworkResultt<Boolean>> {
         return credentialRepository.register(credentials)
+    }
+
+    fun registerAccountant(credentials: CredentialRequest): Flow<NetworkResultt<Boolean>> {
+        return credentialRepository.registerAccountant(credentials)
     }
 
     suspend fun login(credentials: CredentialRequest): Flow<NetworkResultt<LoginInfoResponse>> {
@@ -39,5 +44,13 @@ class CredentialServices @Inject constructor(
 
     suspend fun logout(): Unit {
         tokenManager.clearStoredData()
+    }
+
+    fun getAuthCode(email: String): Flow<NetworkResultt<ApiMessage>> {
+        return credentialRepository.getAuthCode(email)
+    }
+
+    fun changePassword(password: String, passwordConfirmation: String, authCode: String): Flow<NetworkResultt<ApiMessage>> {
+        return credentialRepository.changePassword(password, passwordConfirmation, authCode)
     }
 }

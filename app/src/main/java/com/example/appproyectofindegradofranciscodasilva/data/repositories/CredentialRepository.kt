@@ -1,5 +1,6 @@
 package com.example.appproyectofindegradofranciscodasilva.data.repositories
 
+import com.example.appproyectofindegradofranciscodasilva.data.model.ApiMessage
 import com.example.appproyectofindegradofranciscodasilva.data.model.CredentialRequest
 import com.example.appproyectofindegradofranciscodasilva.data.model.LoginInfoResponse
 import com.example.appproyectofindegradofranciscodasilva.data.source.CredentialsDataSource
@@ -25,6 +26,30 @@ class CredentialRepository @Inject constructor(
         return flow {
             emit(NetworkResultt.Loading())
             val result = credentialsDataSource.register(credentials)
+            emit(result)
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun registerAccountant(credentials: CredentialRequest): Flow<NetworkResultt<Boolean>> {
+        return flow {
+            emit(NetworkResultt.Loading())
+            val result = credentialsDataSource.registerAccountant(credentials)
+            emit(result)
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun getAuthCode(email: String): Flow<NetworkResultt<ApiMessage>> {
+        return flow {
+            emit(NetworkResultt.Loading())
+            val result = credentialsDataSource.getAuthCode(email)
+            emit(result)
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun changePassword(password: String, passwordConfirmation: String, authCode: String): Flow<NetworkResultt<ApiMessage>> {
+        return flow {
+            emit(NetworkResultt.Loading())
+            val result = credentialsDataSource.changePassword(password, passwordConfirmation, authCode)
             emit(result)
         }.flowOn(Dispatchers.IO)
     }

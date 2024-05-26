@@ -3,63 +3,68 @@ package com.example.appproyectofindegradofranciscodasilva.ui.screens.olvideclave
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ContentPaste
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.appproyectofindegradofranciscodasilva.R
 
 @Composable
-fun OlvideClaveScreen() {
-    val snackbarHostState = remember {
-        SnackbarHostState()
-    }
+fun OlvideClaveScreen(viewModel: OlvideClaveViewModel = hiltViewModel()) {
+    val state by viewModel.uiState.collectAsState()
+    val snackbarHostState = remember { SnackbarHostState() }
+    val clipboardManager = LocalClipboardManager.current
 
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
-    ) { _ ->
-        /*LaunchedEffect(state.value.message) {
-            state.value.message?.let {
+    ) { innerPadding ->
+        LaunchedEffect(state.message) {
+            state.message?.let {
                 snackbarHostState.showSnackbar(
-                    message = state.value.message.toString(), duration = SnackbarDuration.Short
+                    message = it,
+                    duration = SnackbarDuration.Short
                 )
-                viewModel.handleEvent(LoginEvent.MessageSeen)
+                viewModel.handleEvent(OlvideClaveEvent.MessageSeen)
             }
-        }*/
-
+        }
 
         Column(
             modifier = Modifier
                 .fillMaxWidth()
+                .padding(innerPadding)
                 .padding(dimensionResource(id = R.dimen.big_size_space)),
             verticalArrangement = Arrangement.Center
         ) {
-            Spacer(modifier = Modifier.padding())
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.small_size_space)))
 
             Box(
                 modifier = Modifier
@@ -67,51 +72,69 @@ fun OlvideClaveScreen() {
                     .fillMaxWidth(),
                 contentAlignment = Alignment.Center
             ) {
-                Text(text = stringResource(R.string.cambia_clave), style = MaterialTheme.typography.headlineMedium)
+                Text(
+                    text = stringResource(R.string.cambia_clave),
+                    style = MaterialTheme.typography.headlineMedium
+                )
             }
 
             Column(modifier = Modifier.weight(0.7f)) {
 
                 Text(text = stringResource(R.string.primer_paso_cambio))
 
-                Row(Modifier.height(OutlinedTextFieldDefaults.MinHeight)) {
-                    //Email
-                    OutlinedTextField(
-                        value = "",
-                        onValueChange = { },
-                        modifier = Modifier.weight(0.80F),
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                        singleLine = true,
-                        maxLines = 1,
-                        label = { Text(text = stringResource(R.string.email)) }
-                    )
-
-                    Button(
-                        modifier = Modifier
-                            .weight(0.20F)
-                            .fillMaxHeight()
-                            .padding(
-                                top = dimensionResource(id = R.dimen.medium_size_space)
-                            ),
-                        shape = OutlinedTextFieldDefaults.shape,
-                        onClick = { /*TODO*/ }) {
-
-
-
-                        Icon(imageVector = androidx.compose.material.icons.Icons.Filled.Send, contentDescription = "enviar")
-
+                OutlinedTextField(
+                    value = state.email,
+                    onValueChange = { viewModel.handleEvent(OlvideClaveEvent.OnEmailChange(it)) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = dimensionResource(id = R.dimen.small_size_space)),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                    singleLine = true,
+                    maxLines = 1,
+                    label = { Text(text = stringResource(R.string.email)) },
+                    trailingIcon = {
+                        IconButton(onClick = { viewModel.handleEvent(OlvideClaveEvent.OnSendEmail) }) {
+                            Icon(
+                                imageVector = Icons.Filled.Send,
+                                contentDescription = "enviar",
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+                        }
                     }
-                }
+                )
 
-                Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.small_size_space)))
+                Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.small_size_space)))
 
                 Text(text = stringResource(R.string.segundo_paso_cambio))
 
-                Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.small_size_space)))
+                Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.small_size_space)))
 
                 OutlinedTextField(
-                    value = "",
-                    onValueChange = { },
+                    value = state.authCode,
+                    onValueChange = { viewModel.handleEvent(OlvideClaveEvent.OnAuthCodeChange(it)) },
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true,
+                    maxLines = 1,
+                    label = { Text(text = stringResource(R.string.auth_code)) },
+                    trailingIcon = {
+                        IconButton(onClick = {
+                            val clipboardText = clipboardManager.getText()?.toString() ?: ""
+                            viewModel.handleEvent(OlvideClaveEvent.OnAuthCodeChange(clipboardText))
+                        }) {
+                            Icon(
+                                imageVector = Icons.Filled.ContentPaste,
+                                contentDescription = "pegar",
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+                        }
+                    }
+                )
+
+                Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.small_size_space)))
+
+                OutlinedTextField(
+                    value = state.newPassword,
+                    onValueChange = { viewModel.handleEvent(OlvideClaveEvent.OnNewPasswordChange(it)) },
                     modifier = Modifier.fillMaxWidth(),
                     visualTransformation = PasswordVisualTransformation(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -120,11 +143,17 @@ fun OlvideClaveScreen() {
                     label = { Text(text = stringResource(R.string.nueva_contrasena)) }
                 )
 
-                Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.small_size_space)))
+                Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.small_size_space)))
 
                 OutlinedTextField(
-                    value = "",
-                    onValueChange = { },
+                    value = state.confirmPassword,
+                    onValueChange = {
+                        viewModel.handleEvent(
+                            OlvideClaveEvent.OnConfirmPasswordChange(
+                                it
+                            )
+                        )
+                    },
                     modifier = Modifier.fillMaxWidth(),
                     visualTransformation = PasswordVisualTransformation(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -133,20 +162,16 @@ fun OlvideClaveScreen() {
                     label = { Text(text = stringResource(R.string.confirmar_contrasena)) }
                 )
 
-                Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.medium_size_space)))
-                Button(modifier = Modifier
-                    .fillMaxWidth()
-                    .defaultMinSize(minHeight = OutlinedTextFieldDefaults.MinHeight), onClick = { /*TODO*/ }) {
+                Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.medium_size_space)))
+                Button(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .defaultMinSize(minHeight = OutlinedTextFieldDefaults.MinHeight),
+                    onClick = { viewModel.handleEvent(OlvideClaveEvent.OnChangePassword) }
+                ) {
                     Text(text = "Cambiar contraseña")
-
                 }
-
             }
-
-
-
         }
-
-
     }
 }

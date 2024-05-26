@@ -49,7 +49,8 @@ fun AccountantScreen(
                     IconButton(onClick = onAddClick) {
                         Icon(
                             imageVector = Icons.Default.Add,
-                            contentDescription = "Agregar Contador"
+                            contentDescription = "Agregar Contador",
+                            tint = MaterialTheme.colorScheme.primary
                         )
                     }
                 }

@@ -7,6 +7,7 @@ import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -26,7 +27,7 @@ fun ProfileScreen(
                 title = { Text(text= "Perfil", style = MaterialTheme.typography.headlineMedium) },
                 actions = {
                     IconButton(onClick = { viewModel.handleEvent(ProfileEvent.Logout) }) {
-                        Icon(Icons.Default.ExitToApp, contentDescription = "Logout")
+                        Icon(Icons.Default.ExitToApp, contentDescription = "Logout", tint = Color.Red )
                     }
                 }
 
