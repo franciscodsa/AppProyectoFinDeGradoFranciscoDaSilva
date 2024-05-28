@@ -1,6 +1,7 @@
 package com.example.appproyectofindegradofranciscodasilva.ui.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -107,7 +108,13 @@ fun Navigation(
                         screens = screens
                     )
                 },
-                onLogOutClick = { navController.popBackStack("login", false) }
+                onLogOutClick = {
+                    navController.navigate("login") {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            inclusive = true
+                        }
+                    }
+                }
             )
         }
 
