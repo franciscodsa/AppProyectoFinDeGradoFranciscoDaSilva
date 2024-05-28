@@ -34,20 +34,6 @@ class FileServices @Inject constructor(
     }
 
 
-    //todo: eliminar cuando cambies la pantalla de files a solo descargar, el resumen usa el de arriba
-  /*  fun upload(
-        file: File,
-        mimeType: String,
-        description: String,
-        clientEmail: String,
-        invoiceType: InvoiceType,
-
-    ): Flow<NetworkResultt<ApiMessage>> {
-
-        Log.i("serv", file.name)
-        return fileRepository.upload(file, mimeType, description, clientEmail, invoiceType)
-    }*/
-
     fun download(fileId: Long, context: Context): Flow<NetworkResultt<String>> {
         return fileRepository.download(fileId, context)
     }
@@ -67,6 +53,21 @@ class FileServices @Inject constructor(
         val clientEmail = tokenManager.getCurrentUser().first() ?: ""
         return fileRepository.getIncomeFilesByClient(clientEmail)
     }
+
+    fun getFilesByClient(clientEmail: String): Flow<NetworkResultt<List<FilesInfo>>> {
+        return fileRepository.getFilesByClient(clientEmail)
+    }
+
+    fun getExpensesFilesByClient(clientEmail: String): Flow<NetworkResultt<List<FilesInfo>>> {
+
+        return fileRepository.getExpensesFilesByClient(clientEmail)
+    }
+
+    fun getIncomeFilesByClient(clientEmail: String): Flow<NetworkResultt<List<FilesInfo>>> {
+
+        return fileRepository.getIncomeFilesByClient(clientEmail)
+    }
+
 
     fun deleteFile(fileId: Long): Flow<NetworkResultt<ApiMessage>> {
         return fileRepository.deleteFile(fileId)

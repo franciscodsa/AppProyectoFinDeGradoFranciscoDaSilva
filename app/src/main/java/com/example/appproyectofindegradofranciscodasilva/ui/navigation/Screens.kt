@@ -34,10 +34,10 @@ val screens = listOf(
     ),
 
     Screens(
-        "files",
+        "files/{clientId}",
         Icons.Filled.Folder,
         Icons.Outlined.Folder,
-        "Facturas"
+        "Archivos"
     ),
     Screens(
         "profile",

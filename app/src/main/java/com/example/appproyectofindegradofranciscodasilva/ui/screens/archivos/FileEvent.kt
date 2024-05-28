@@ -16,13 +16,19 @@ sealed class FileEvent {
 
     class OnExpandedFileChange(val fileId: Long?) : FileEvent()
 
+    class LoadAllFilesByClientId(val clientId: String) : FileEvent()
+
+    class LoadIncomeFilesByClientId(val clientId: String) : FileEvent()
+
+    class LoadExpenseFilesByClientId(val clientId: String) : FileEvent()
+
     object LoadAllFiles : FileEvent()
     object LoadIncomeFiles : FileEvent()
     object LoadExpenseFiles : FileEvent()
 
     object MessageSeen : FileEvent()
 
-    class OnFilterChanged(val filter: FileFilter) : FileEvent()
+    class OnFilterChanged(val filter: FileFilter, val clientId: String) : FileEvent()
 
     class OnTotalChange(val total: String): FileEvent()
 

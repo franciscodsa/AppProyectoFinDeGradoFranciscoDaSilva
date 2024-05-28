@@ -54,12 +54,24 @@ class FileViewModel @Inject constructor(
             }
 
             is FileEvent.OnFilterChanged -> {
-                _uiState.update { it.copy(selectedFilter = event.filter) }
-                when (event.filter) {
-                    FileFilter.Todos -> loadAllFiles()
-                    FileFilter.Ingresos -> loadIncomeFiles()
-                    FileFilter.Gastos -> loadExpenseFiles()
+
+                Log.i("ASDASDASDASDAS", event.clientId)
+                if (event.clientId.isEmpty()){
+                    _uiState.update { it.copy(selectedFilter = event.filter) }
+                    when (event.filter) {
+                        FileFilter.Todos -> loadAllFiles()
+                        FileFilter.Ingresos -> loadIncomeFiles()
+                        FileFilter.Gastos -> loadExpenseFiles()
+                    }
+                }else{
+                    _uiState.update { it.copy(selectedFilter = event.filter) }
+                    when (event.filter) {
+                        FileFilter.Todos -> loadAllFiles(event.clientId)
+                        FileFilter.Ingresos -> loadIncomeFiles(event.clientId)
+                        FileFilter.Gastos -> loadExpenseFiles(event.clientId)
+                    }
                 }
+
             }
 
             is FileEvent.OnTotalChange -> {
@@ -83,6 +95,12 @@ class FileViewModel @Inject constructor(
             is FileEvent.OnExpandedFileChange -> _uiState.update {
                 it.copy(expandedFileId = event.fileId)
             }
+
+            is FileEvent.LoadAllFilesByClientId -> loadAllFiles(event.clientId)
+
+            is FileEvent.LoadIncomeFilesByClientId -> loadIncomeFiles(event.clientId)
+
+            is FileEvent.LoadExpenseFilesByClientId -> loadExpenseFiles(event.clientId)
         }
     }
 
@@ -247,6 +265,85 @@ class FileViewModel @Inject constructor(
     private fun loadExpenseFiles() {
         viewModelScope.launch {
             fileServices.getExpensesFilesByClient()
+                .catch { cause ->
+                    _uiState.update { it.copy(message = cause.message, isLoading = false) }
+                }
+                .collect { result ->
+                    when (result) {
+                        is NetworkResultt.Error -> _uiState.update {
+                            it.copy(
+                                message = result.message,
+                                isLoading = false
+                            )
+                        }
+
+                        is NetworkResultt.Loading -> _uiState.update { it.copy(isLoading = true) }
+                        is NetworkResultt.Success -> _uiState.update {
+                            it.copy(
+                                files = result.data ?: emptyList(), isLoading = false
+                            )
+                        }
+                    }
+                }
+        }
+    }
+
+
+    private fun loadAllFiles(clientId: String) {
+        viewModelScope.launch {
+            fileServices.getFilesByClient(clientId)
+                .catch { cause ->
+                    _uiState.update { it.copy(message = cause.message, isLoading = false) }
+                }
+                .collect { result ->
+                    when (result) {
+                        is NetworkResultt.Error -> _uiState.update {
+                            it.copy(
+                                message = result.message,
+                                isLoading = false
+                            )
+                        }
+
+                        is NetworkResultt.Loading -> _uiState.update { it.copy(isLoading = true) }
+                        is NetworkResultt.Success -> _uiState.update {
+                            it.copy(
+                                files = result.data ?: emptyList(), isLoading = false
+                            )
+                        }
+                    }
+                }
+        }
+    }
+
+    private fun loadIncomeFiles(clientId: String) {
+        viewModelScope.launch {
+            fileServices.getIncomeFilesByClient(clientId)
+                .catch { cause ->
+                    _uiState.update { it.copy(message = cause.message, isLoading = false) }
+                }
+                .collect { result ->
+                    when (result) {
+                        is NetworkResultt.Error -> _uiState.update {
+                            it.copy(
+                                message = result.message,
+                                isLoading = false
+                            )
+                        }
+
+                        is NetworkResultt.Loading -> _uiState.update { it.copy(isLoading = true) }
+                        is NetworkResultt.Success -> _uiState.update {
+                            it.copy(
+                                files = result.data ?: emptyList(), isLoading = false
+                            )
+                        }
+                    }
+                }
+        }
+    }
+
+    private fun loadExpenseFiles(clientId: String) {
+        viewModelScope.launch {
+            fileServices.getExpensesFilesByClient(clientId)
                 .catch { cause ->
                     _uiState.update { it.copy(message = cause.message, isLoading = false) }
                 }

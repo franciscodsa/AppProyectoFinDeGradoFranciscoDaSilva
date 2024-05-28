@@ -1,5 +1,6 @@
 package com.example.appproyectofindegradofranciscodasilva.ui.screens.archivos
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -53,12 +54,15 @@ import com.example.appproyectofindegradofranciscodasilva.ui.navigation.FilterBut
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FilesScreen(
+    clientId: String,
     viewModel: FileViewModel = hiltViewModel(),
     bottomNavigationBar: @Composable () -> Unit = {}
 ) {
     val state = viewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
+
+
 
     Scaffold(
         topBar = {
@@ -87,7 +91,7 @@ fun FilesScreen(
         ) {
             FilterButtons(
                 selectedFilter = state.value.selectedFilter,
-                onFilterChange = { viewModel.handleEvent(FileEvent.OnFilterChanged(it)) }
+                onFilterChange = { viewModel.handleEvent(FileEvent.OnFilterChanged(it, clientId)) }
             )
             Spacer(modifier = Modifier.height(16.dp))
             Box(modifier = Modifier.fillMaxSize()) {
@@ -125,9 +129,16 @@ fun FilesScreen(
         }
     }
 
-    LaunchedEffect(Unit) {
-        viewModel.handleEvent(FileEvent.LoadAllFiles)
+    if (clientId.isEmpty()){
+        LaunchedEffect(Unit) {
+            viewModel.handleEvent(FileEvent.LoadAllFiles)
+        }
+    }else{
+        LaunchedEffect(Unit) {
+            viewModel.handleEvent(FileEvent.LoadAllFilesByClientId(clientId))
+        }
     }
+
 }
 
 

@@ -1,9 +1,11 @@
 package com.example.appproyectofindegradofranciscodasilva.ui.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.appproyectofindegradofranciscodasilva.ui.screens.archivos.FilesScreen
 import com.example.appproyectofindegradofranciscodasilva.ui.screens.clients.ClientScreen
 import com.example.appproyectofindegradofranciscodasilva.ui.screens.contadores.AccountantScreen
@@ -76,9 +78,16 @@ fun Navigation(
         }
 
         composable(
-            "files"
+            route="files/{clientId}",
+            arguments = listOf(
+                navArgument(name = "clientId" ){
+                    type = NavType.StringType
+                    defaultValue = ""
+                }
+            )
         ) {
             FilesScreen(
+                clientId = it.arguments?.getString("clientId")?:"",
                 bottomNavigationBar = {
                     BottomBar(
                         navController = navController,
@@ -105,7 +114,12 @@ fun Navigation(
         composable(
             "clients"
         ) {
-            ClientScreen(onChatClick = {}, onFilesClick = {})
+            ClientScreen(
+                onChatClick = {},
+                onFilesClick = {clientId ->
+                    navController.navigate("files/${clientId}")
+                }
+            )
         }
 
         composable(
