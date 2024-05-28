@@ -1,10 +1,12 @@
 package com.example.appproyectofindegradofranciscodasilva.ui.screens.archivos
 
+import android.content.Context
 import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -38,6 +40,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -62,83 +65,104 @@ fun FilesScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
 
-
-
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text(text = "Facturas", style = MaterialTheme.typography.headlineMedium) }
-            )
-        },
-        bottomBar = bottomNavigationBar,
-        snackbarHost = { SnackbarHost(snackbarHostState) },
-    ) { innerPadding ->
-        LaunchedEffect(state.value.message) {
-            state.value.message?.let {
-                snackbarHostState.showSnackbar(
-                    message = it,
-                    duration = SnackbarDuration.Short
-                )
-                viewModel.handleEvent(FileEvent.MessageSeen)
-            }
-        }
-
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .padding(16.dp)
-        ) {
-            FilterButtons(
-                selectedFilter = state.value.selectedFilter,
-                onFilterChange = { viewModel.handleEvent(FileEvent.OnFilterChanged(it, clientId)) }
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            Box(modifier = Modifier.fillMaxSize()) {
-                if (state.value.isLoading) {
-                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-                } else {
-                    LazyColumn(
-                        modifier = Modifier.fillMaxSize()
-                    ) {
-                        items(items = state.value.files, key = { file -> file.id }) { file ->
-                            ExpandableFileCard(
-                                file = file,
-                                expanded = state.value.expandedFileId == file.id,
-                                total = state.value.total,
-                                iva = state.value.iva,
-                                onDownloadClick = {
-                                    viewModel.handleEvent(
-                                        FileEvent.DownloadFile(context, file.id)
-                                    )
-                                },
-                                onUpdateClick = { fileId, total, iva ->
-                                    viewModel.handleEvent(FileEvent.UpdateFile(fileId, total, iva))
-                                },
-                                onTotalChange = { viewModel.handleEvent(FileEvent.OnTotalChange(it)) },
-                                onIvaChange = { viewModel.handleEvent(FileEvent.OnIvaChange(it)) },
-                                onExpandChange = {
-                                    viewModel.handleEvent(FileEvent.OnExpandedFileChange(if (state.value.expandedFileId == file.id) null else file.id))
-                                }
-                            )
-                            Spacer(modifier = Modifier.height(8.dp))
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    if (clientId.isEmpty()){
+    if (!clientId.contains("@")){
         LaunchedEffect(Unit) {
             viewModel.handleEvent(FileEvent.LoadAllFiles)
+        }
+
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = { Text(text = "Facturas", style = MaterialTheme.typography.headlineMedium) }
+                )
+            },
+            bottomBar = bottomNavigationBar,
+            snackbarHost = { SnackbarHost(snackbarHostState) },
+        ) { innerPadding ->
+            FileLazyColum(state, snackbarHostState, viewModel, innerPadding, clientId, context)
         }
     }else{
         LaunchedEffect(Unit) {
             viewModel.handleEvent(FileEvent.LoadAllFilesByClientId(clientId))
         }
+
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = { Text(text = "Facturas", style = MaterialTheme.typography.headlineMedium) }
+                )
+            },
+            snackbarHost = { SnackbarHost(snackbarHostState) },
+        ) { innerPadding ->
+            FileLazyColum(state, snackbarHostState, viewModel, innerPadding, clientId, context)
+        }
     }
 
+}
+
+@Composable
+private fun FileLazyColum(
+    state: State<FileState>,
+    snackbarHostState: SnackbarHostState,
+    viewModel: FileViewModel,
+    innerPadding: PaddingValues,
+    clientId: String,
+    context: Context
+) {
+    LaunchedEffect(state.value.message) {
+        state.value.message?.let {
+            snackbarHostState.showSnackbar(
+                message = it,
+                duration = SnackbarDuration.Short
+            )
+            viewModel.handleEvent(FileEvent.MessageSeen)
+        }
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(innerPadding)
+            .padding(16.dp)
+    ) {
+        FilterButtons(
+            selectedFilter = state.value.selectedFilter,
+            onFilterChange = { viewModel.handleEvent(FileEvent.OnFilterChanged(it, clientId)) }
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Box(modifier = Modifier.fillMaxSize()) {
+            if (state.value.isLoading) {
+                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+            } else {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    items(items = state.value.files, key = { file -> file.id }) { file ->
+                        ExpandableFileCard(
+                            file = file,
+                            expanded = state.value.expandedFileId == file.id,
+                            total = state.value.total,
+                            iva = state.value.iva,
+                            onDownloadClick = {
+                                viewModel.handleEvent(
+                                    FileEvent.DownloadFile(context, file.id)
+                                )
+                            },
+                            onUpdateClick = { fileId, total, iva ->
+                                viewModel.handleEvent(FileEvent.UpdateFile(fileId, total, iva))
+                            },
+                            onTotalChange = { viewModel.handleEvent(FileEvent.OnTotalChange(it)) },
+                            onIvaChange = { viewModel.handleEvent(FileEvent.OnIvaChange(it)) },
+                            onExpandChange = {
+                                viewModel.handleEvent(FileEvent.OnExpandedFileChange(if (state.value.expandedFileId == file.id) null else file.id))
+                            }
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                    }
+                }
+            }
+        }
+    }
 }
 
 
