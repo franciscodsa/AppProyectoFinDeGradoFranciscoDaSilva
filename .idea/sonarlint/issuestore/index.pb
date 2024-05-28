@@ -169,8 +169,6 @@ napp/src/main/java/com/example/appproyectofindegradofranciscodasilva/ui/screens/
 napp/src/main/java/com/example/appproyectofindegradofranciscodasilva/ui/screens/olvideclave/OlvideClaveEvent.kt,5\0\50cfcb06050d348d89a70c94b31267dd460a1f39
 ž
 napp/src/main/java/com/example/appproyectofindegradofranciscodasilva/data/source/apiservices/UserApiServices.kt,e\8\e8dce8edd5d38777f2e7d4b3e4a702a894b41f56
-“
-capp/src/main/java/com/example/appproyectofindegradofranciscodasilva/data/source/apiservices/User.kt,b\4\b413de2b3aa0e57080251bb203c7f26ef51bd320
 †
 Vapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/data/model/User.kt,1\4\143cd4c4cab24227e831ae4320a949036c238c2a
 “

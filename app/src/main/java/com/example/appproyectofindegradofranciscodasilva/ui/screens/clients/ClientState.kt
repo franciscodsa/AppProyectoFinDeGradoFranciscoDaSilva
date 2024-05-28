@@ -11,6 +11,7 @@ data class ClientState(
     val selectedAccountantEmail: String = "",
     val isLoading: Boolean = false,
     val selectedFilter: ClientFilter = ClientFilter.Todos,
+    val userRole: String= "",
 )
 
 enum class ClientFilter {

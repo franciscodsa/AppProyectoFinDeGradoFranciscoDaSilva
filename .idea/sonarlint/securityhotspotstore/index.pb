@@ -161,8 +161,6 @@ papp/src/main/java/com/example/appproyectofindegradofranciscodasilva/ui/screens/
 lapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/ui/screens/contadores/AccountantState.kt,9\c\9c11c635a1a67fe471c44fa824bc3912bb17e45c
 œ
 lapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/ui/screens/contadores/AccountantEvent.kt,9\c\9cf2e7f717f90aa28b4f92bd0038151e418a902d
-‰
-Yapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/utils/StompUtils.java,0\1\017ff8b506c1e0cdec2b66a762fd2ecf087fc9e4
 ¢
 rapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/ui/screens/olvideclave/OlvideClaveViewModel.kt,b\b\bb7518362053df2ea0e3fef43cc641a31cab5c0a
 ž
@@ -171,8 +169,6 @@ napp/src/main/java/com/example/appproyectofindegradofranciscodasilva/ui/screens/
 napp/src/main/java/com/example/appproyectofindegradofranciscodasilva/ui/screens/olvideclave/OlvideClaveEvent.kt,5\0\50cfcb06050d348d89a70c94b31267dd460a1f39
 ž
 napp/src/main/java/com/example/appproyectofindegradofranciscodasilva/data/source/apiservices/UserApiServices.kt,e\8\e8dce8edd5d38777f2e7d4b3e4a702a894b41f56
-“
-capp/src/main/java/com/example/appproyectofindegradofranciscodasilva/data/source/apiservices/User.kt,b\4\b413de2b3aa0e57080251bb203c7f26ef51bd320
 †
 Vapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/data/model/User.kt,1\4\143cd4c4cab24227e831ae4320a949036c238c2a
 “

@@ -46,6 +46,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.appproyectofindegradofranciscodasilva.data.model.Client
 import com.example.appproyectofindegradofranciscodasilva.ui.navigation.FilterButton
 import com.example.appproyectofindegradofranciscodasilva.ui.screens.resumen.CustomDropdown
+import com.example.appproyectofindegradofranciscodasilva.ui.screens.resumen.ResumenEvent
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -56,6 +57,11 @@ fun ClientScreen(
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
+
+    LaunchedEffect(Unit) {
+        viewModel.handleEvent(ClientEvent.SetUserRole)
+    }
+
 
     Scaffold(
         topBar = {
@@ -76,6 +82,17 @@ fun ClientScreen(
             }
         }
 
+        if (state.userRole == "admin"){
+            LaunchedEffect(Unit) {
+                viewModel.handleEvent(ClientEvent.LoadClients)
+            }
+        }else{
+            LaunchedEffect(Unit) {
+                viewModel.handleEvent(ClientEvent.LoadClientsByAccountant)
+            }
+        }
+
+
         LaunchedEffect(Unit) {
             viewModel.handleEvent(ClientEvent.GetAccountantsEmails)
         }
@@ -86,10 +103,13 @@ fun ClientScreen(
                 .padding(16.dp)
                 .fillMaxSize()
         ) {
-            FilterButtons(
-                selectedFilter = state.selectedFilter,
-                onFilterChange = { viewModel.handleEvent(ClientEvent.OnFilterChanged(it)) }
-            )
+
+            if (state.userRole == "admin"){
+                FilterButtons(
+                    selectedFilter = state.selectedFilter,
+                    onFilterChange = { viewModel.handleEvent(ClientEvent.OnFilterChanged(it)) }
+                )
+            }
             Spacer(modifier = Modifier.height(16.dp))
             LazyColumn {
                 items(state.clients) { client ->

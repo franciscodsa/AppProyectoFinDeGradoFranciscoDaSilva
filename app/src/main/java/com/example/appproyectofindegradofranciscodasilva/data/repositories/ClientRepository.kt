@@ -38,6 +38,15 @@ class ClientRepository @Inject constructor(
         }.flowOn(Dispatchers.IO)
     }
 
+    fun getClientsByAccount(email : String): Flow<NetworkResultt<List<Client>>>{
+        return flow {
+            emit(NetworkResultt.Loading())
+            val result= clientDataSource.getClientsByAccount(email)
+            emit(result)
+        }.flowOn(Dispatchers.IO)
+    }
+
+
     fun getClientsWithNoAccountant(): Flow<NetworkResultt<List<Client>>>{
         return flow {
             emit(NetworkResultt.Loading())

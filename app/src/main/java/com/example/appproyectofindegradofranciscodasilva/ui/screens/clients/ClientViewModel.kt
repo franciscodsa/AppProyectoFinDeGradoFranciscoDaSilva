@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.appproyectofindegradofranciscodasilva.data.model.Client
 import com.example.appproyectofindegradofranciscodasilva.domain.services.AccountantServices
 import com.example.appproyectofindegradofranciscodasilva.domain.services.ClientServices
+import com.example.appproyectofindegradofranciscodasilva.domain.services.CredentialServices
 import com.example.appproyectofindegradofranciscodasilva.utils.NetworkResultt
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,15 +19,16 @@ import javax.inject.Inject
 @HiltViewModel
 class ClientViewModel @Inject constructor(
     private val clientService: ClientServices,
-    private val accountantServices: AccountantServices
+    private val accountantServices: AccountantServices,
+    private val credentialServices: CredentialServices,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ClientState())
     val uiState: StateFlow<ClientState> = _uiState.asStateFlow()
 
-    init {
+    /*init {
         loadClients()
-    }
+    }*/
 
     fun handleEvent(event: ClientEvent) {
         when (event) {
@@ -66,6 +68,57 @@ class ClientViewModel @Inject constructor(
             }
 
             ClientEvent.GetAccountantsEmails -> loadAccountantsEmails()
+            ClientEvent.SetUserRole -> setRole()
+            ClientEvent.LoadClientsByAccountant -> loadClientsByAccount()
+        }
+    }
+
+    private fun loadClientsByAccount() {
+        viewModelScope.launch {
+            clientService.getClientsByAccountant()
+                .catch { cause ->
+                    _uiState.update {
+                        it.copy(
+                            message = cause.message,
+                            isLoading = false
+                        )
+                    }
+                }
+                .collect { result ->
+                    when (result) {
+                        is NetworkResultt.Success -> {
+                            _uiState.update {
+                                it.copy(
+                                    clients = result.data ?: emptyList(),
+                                    isLoading = false
+                                )
+                            }
+                        }
+
+                        is NetworkResultt.Error -> {
+                            _uiState.update {
+                                it.copy(message = result.message, isLoading = false)
+                            }
+                        }
+
+                        is NetworkResultt.Loading -> {
+                            _uiState.update { it.copy(isLoading = true) }
+                        }
+                    }
+                }
+        }
+    }
+
+    private fun setRole() {
+        viewModelScope.launch {
+            val role = credentialServices.getRole()
+
+            _uiState.update {
+                it.copy(
+                    userRole = role
+                )
+            }
+
         }
     }
 

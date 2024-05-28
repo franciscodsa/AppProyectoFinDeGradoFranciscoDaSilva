@@ -77,7 +77,6 @@ fun ResumenScreen(
     val scrollState = rememberScrollState()
     val snackbarHostState = remember { SnackbarHostState() }
     var openBottomSheet by remember { mutableStateOf(false) }
-    val isConditionMet by remember { mutableStateOf(true) }
     var isExpanded by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
@@ -97,14 +96,7 @@ fun ResumenScreen(
 
     Scaffold(
         floatingActionButton = {
-            if (state.userRole == "accountant") {
-                ExpandableFloatingActionButton(
-                    expanded = isExpanded,
-                    onExpandChange = { isExpanded = it },
-                    onClientesClick = { onClientsClick() },
-                    onContadoresClick = { onAccountansClick() }
-                )
-            } else {
+            if (state.userRole == "user") {
                 FloatingActionButton(
                     onClick = { openBottomSheet = true },
                     containerColor = MaterialTheme.colorScheme.primary,
@@ -112,6 +104,13 @@ fun ResumenScreen(
                 ) {
                     Icon(imageVector = Icons.Default.Add, contentDescription = "Añadir")
                 }
+            } else {
+                ExpandableFloatingActionButton(
+                    expanded = isExpanded,
+                    onExpandChange = { isExpanded = it },
+                    onClientesClick = { onClientsClick() },
+                    onContadoresClick = { onAccountansClick() }
+                )
             }
         },
         bottomBar = bottomNavigationBar,
