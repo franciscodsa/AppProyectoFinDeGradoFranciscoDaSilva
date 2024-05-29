@@ -12,5 +12,11 @@ data class RegisterState(
     val month: String= "",
     val day: String= "",
     val isLoading: Boolean = false,
-    val message: String? = null
+    val message: String? = null,
+    val userRole: String= "",
+    val selectedUserType: UserType = UserType.Contador
 )
+
+enum class UserType{
+    Cliente, Contador
+}

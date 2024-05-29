@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import androidx.navigation.navigation
 import com.example.appproyectofindegradofranciscodasilva.ui.screens.archivos.FilesScreen
 import com.example.appproyectofindegradofranciscodasilva.ui.screens.clients.ClientScreen
 import com.example.appproyectofindegradofranciscodasilva.ui.screens.contadores.AccountantScreen
@@ -132,7 +133,7 @@ fun Navigation(
         composable(
             "accountants"
         ) {
-            AccountantScreen(onAddClick = {})
+            AccountantScreen(onAddClick = {navController.navigate("registro")})
         }
 
     }

@@ -4,8 +4,10 @@ package com.example.appproyectofindegradofranciscodasilva.ui.screens.register
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.appproyectofindegradofranciscodasilva.common.Constantes
+import com.example.appproyectofindegradofranciscodasilva.data.model.Accountant
 import com.example.appproyectofindegradofranciscodasilva.data.model.Client
 import com.example.appproyectofindegradofranciscodasilva.data.model.CredentialRequest
+import com.example.appproyectofindegradofranciscodasilva.domain.services.AccountantServices
 import com.example.appproyectofindegradofranciscodasilva.domain.services.ClientServices
 import com.example.appproyectofindegradofranciscodasilva.domain.services.CredentialServices
 import com.example.appproyectofindegradofranciscodasilva.utils.NetworkResultt
@@ -26,7 +28,8 @@ import javax.inject.Inject
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
     private val credentialServices: CredentialServices,
-    private val clientServices: ClientServices
+    private val clientServices: ClientServices,
+    private val accountantServices: AccountantServices
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(RegisterState())
@@ -96,8 +99,24 @@ class RegisterViewModel @Inject constructor(
                     year = event.year
                 )
             }
+
+            is RegisterEvent.SetUserRole -> setRole()
+            is RegisterEvent.OnSelectedUserType -> _uiState.update { it.copy(selectedUserType = event.selectedUserType) }
         }
     }
+
+    private fun setRole() {
+        viewModelScope.launch {
+            val role = credentialServices.getRole()
+
+            _uiState.update {
+                it.copy(
+                    userRole = role
+                )
+            }
+        }
+    }
+
 
     @OptIn(ExperimentalCoroutinesApi::class)
     private fun register() {
@@ -116,23 +135,36 @@ class RegisterViewModel @Inject constructor(
                     )
                 ).flatMapConcat { credentialResult ->
                     if (credentialResult is NetworkResultt.Success) {
-                        clientServices.addClient(
-                            Client(
-                                email = uiState.value.email,
-                                phone = uiState.value.phone,
-                                firstName = uiState.value.firstName,
-                                lastName = uiState.value.lastNames,
-                                dateOfBirth = LocalDate.of(
-                                    uiState.value.year.toInt(),
-                                    uiState.value.month.toInt(),
-                                    uiState.value.day.toInt()
-                                ),
-                                accountantEmail = null
-                                /*todo: verifica si mandando a null el client se agrega
-                                ,
-                                accountantEmail = "admin@mail.com",*/
+                        if (_uiState.value.selectedUserType == UserType.Cliente){
+                            clientServices.addClient(
+                                Client(
+                                    email = uiState.value.email,
+                                    phone = uiState.value.phone,
+                                    firstName = uiState.value.firstName,
+                                    lastName = uiState.value.lastNames,
+                                    dateOfBirth = LocalDate.of(
+                                        uiState.value.year.toInt(),
+                                        uiState.value.month.toInt(),
+                                        uiState.value.day.toInt()
+                                    ),
+                                    accountantEmail = null
+                                )
                             )
-                        )
+                        }else{
+                            accountantServices.addAccountant(
+                                Accountant(
+                                    email = uiState.value.email,
+                                    phone = uiState.value.phone,
+                                    firstName = uiState.value.firstName,
+                                    lastName = uiState.value.lastNames,
+                                    dateOfBirth = LocalDate.of(
+                                        uiState.value.year.toInt(),
+                                        uiState.value.month.toInt(),
+                                        uiState.value.day.toInt()
+                                    )
+                                )
+                            )
+                        }
                     } else {
                         // Si la primera llamada no fue exitosa, simplemente propagamos el resultado
                         flowOf(credentialResult)

@@ -34,4 +34,27 @@ class AccountantDataSource @Inject constructor(
             return NetworkResultt.Error(Constantes.unknownError)
         }
     }
+
+
+    suspend fun addAccountant(accountant: Accountant): NetworkResultt<ApiMessage> {
+        try {
+            val response = accountantApiServices.addAccountant(accountant)
+
+            if (!response.isSuccessful) {
+                val errorMessage = response.errorBody()?.string() ?: Constantes.unknownError
+                val adapter = moshi.adapter(ApiMessage::class.java)
+                val apiMessage = adapter.fromJson(errorMessage)
+                return NetworkResultt.Error(apiMessage?.message ?: Constantes.unknownError)
+            } else {
+                val body = response.body()
+
+                body?.let {
+                    return NetworkResultt.Success(it)
+                }
+                error(Constantes.noData)
+            }
+        } catch (e: Exception) {
+            return NetworkResultt.Error(Constantes.unknownError)
+        }
+    }
 }
