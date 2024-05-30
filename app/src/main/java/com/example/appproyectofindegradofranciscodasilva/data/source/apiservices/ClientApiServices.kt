@@ -26,7 +26,4 @@ interface ClientApiServices {
     @GET("clients/byAccountant")
     suspend fun getClientsByAccountant(@Query("accountantEmail") accountantEmail: String): Response<List<Client>>
 
-
-    @GET("clients/{clientEmail}")
-    fun getClientByEmail(@Path("clientEmail") clientEmail: String): Response<Client>
 }

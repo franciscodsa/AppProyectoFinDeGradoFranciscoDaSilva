@@ -177,3 +177,5 @@ capp/src/main/java/com/example/appproyectofindegradofranciscodasilva/domain/serv
 gapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/data/repositories/UserRepository.kt,d\8\d8431d33cf04d7a1cac55c4c3b04283c66847f82
 ‘
 aapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/data/source/UserDataSource.kt,a\9\a93efa3e6a92a7f0820210c3369ae809d104ce0a
+›
+kapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/ui/navigation/SwipeToDeleteContainer.kt,8\4\844b6623bae3f715f25c65f794c4bab6846e96af

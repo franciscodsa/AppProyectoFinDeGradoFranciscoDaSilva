@@ -2,8 +2,8 @@ package com.example.appproyectofindegradofranciscodasilva.ui.screens.contadores
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.appproyectofindegradofranciscodasilva.data.model.Accountant
 import com.example.appproyectofindegradofranciscodasilva.domain.services.AccountantServices
+import com.example.appproyectofindegradofranciscodasilva.domain.services.UserServices
 import com.example.appproyectofindegradofranciscodasilva.utils.NetworkResultt
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,7 +16,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AccountantViewModel @Inject constructor(
-    private val accountantService: AccountantServices
+    private val accountantService: AccountantServices,
+    private val userServices: UserServices
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(AccountantState())
@@ -31,7 +32,38 @@ class AccountantViewModel @Inject constructor(
             is AccountantEvent.OnAccountantExpandChanged -> _uiState.update {
                 it.copy(expandedAccountantId = if (it.expandedAccountantId == event.email) null else event.email)
             }
+
             AccountantEvent.LoadAccountants -> loadAccountants()
+            is AccountantEvent.DeleteAccountant -> deleteAccountant(event.email)
+            AccountantEvent.MessageSeen -> _uiState.update {
+                it.copy(
+                    message = null
+                )
+            }
+        }
+    }
+
+    private fun deleteAccountant(email: String) {
+        viewModelScope.launch {
+            userServices.deleteUser(email)
+                .catch { cause ->
+                    _uiState.update {
+                        it.copy(message = cause.message, isLoading = false)
+                    }
+                }
+                .collect { result ->
+                    when (result) {
+                        is NetworkResultt.Success -> loadAccountants()
+                        is NetworkResultt.Error -> _uiState.update {
+                            it.copy(
+                                message = result.data?.message,
+                                isLoading = false
+                            )
+                        }
+
+                        is NetworkResultt.Loading -> _uiState.update { it.copy(isLoading = true) }
+                    }
+                }
         }
     }
 
@@ -56,11 +88,13 @@ class AccountantViewModel @Inject constructor(
                                 )
                             }
                         }
+
                         is NetworkResultt.Error -> {
                             _uiState.update {
                                 it.copy(message = result.message, isLoading = false)
                             }
                         }
+
                         is NetworkResultt.Loading -> {
                             _uiState.update { it.copy(isLoading = true) }
                         }

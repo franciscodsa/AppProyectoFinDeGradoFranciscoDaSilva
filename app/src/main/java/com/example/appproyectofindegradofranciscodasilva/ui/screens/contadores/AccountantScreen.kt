@@ -22,16 +22,22 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.appproyectofindegradofranciscodasilva.data.model.Accountant
+import com.example.appproyectofindegradofranciscodasilva.ui.navigation.SwipeToDeleteContainer
+import com.example.appproyectofindegradofranciscodasilva.ui.screens.clients.ClientEvent
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -40,6 +46,7 @@ fun AccountantScreen(
     onAddClick: () -> Unit
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val snackbarHostState = remember { SnackbarHostState() }
 
     Scaffold(
         topBar = {
@@ -56,7 +63,17 @@ fun AccountantScreen(
                 }
             )
         }
-    ){ innerPadding ->
+    ) { innerPadding ->
+        LaunchedEffect(state.message) {
+            state.message?.let {
+                snackbarHostState.showSnackbar(
+                    message = it,
+                    duration = SnackbarDuration.Short
+                )
+                viewModel.handleEvent(AccountantEvent.MessageSeen)
+            }
+        }
+
         Column(
             modifier = Modifier
                 .padding(innerPadding)
@@ -65,17 +82,20 @@ fun AccountantScreen(
         ) {
             LazyColumn {
                 items(state.accountants) { accountant ->
-                    AccountantCard(
-                        accountant = accountant,
-                        expanded = state.expandedAccountantId == accountant.email,
-                        onExpandChange = {
-                            viewModel.handleEvent(
-                                AccountantEvent.OnAccountantExpandChanged(
-                                    accountant.email
+                    SwipeToDeleteContainer(
+                        item = accountant,
+                        onDelete = { viewModel.handleEvent(AccountantEvent.DeleteAccountant(it.email)) }
+                    ) { accountant ->
+                        AccountantCard(
+                            accountant = accountant,
+                            expanded = state.expandedAccountantId == accountant.email,
+                            onExpandChange = {
+                                viewModel.handleEvent(
+                                    AccountantEvent.OnAccountantExpandChanged(accountant.email)
                                 )
-                            )
-                        }
-                    )
+                            }
+                        )
+                    }
                     Spacer(modifier = Modifier.height(8.dp))
                 }
             }

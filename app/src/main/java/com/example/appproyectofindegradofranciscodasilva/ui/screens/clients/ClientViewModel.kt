@@ -6,6 +6,7 @@ import com.example.appproyectofindegradofranciscodasilva.data.model.Client
 import com.example.appproyectofindegradofranciscodasilva.domain.services.AccountantServices
 import com.example.appproyectofindegradofranciscodasilva.domain.services.ClientServices
 import com.example.appproyectofindegradofranciscodasilva.domain.services.CredentialServices
+import com.example.appproyectofindegradofranciscodasilva.domain.services.UserServices
 import com.example.appproyectofindegradofranciscodasilva.utils.NetworkResultt
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,6 +22,7 @@ class ClientViewModel @Inject constructor(
     private val clientService: ClientServices,
     private val accountantServices: AccountantServices,
     private val credentialServices: CredentialServices,
+    private val userServices: UserServices
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ClientState())
@@ -70,8 +72,56 @@ class ClientViewModel @Inject constructor(
             ClientEvent.GetAccountantsEmails -> loadAccountantsEmails()
             ClientEvent.SetUserRole -> setRole()
             ClientEvent.LoadClientsByAccountant -> loadClientsByAccount()
+            is ClientEvent.DeleteClient -> deleteClient(event.clientId)
         }
     }
+
+    private fun deleteClient(clientId: String) {
+        viewModelScope.launch {
+            userServices.deleteUser(clientId)
+                .catch { cause ->
+                    _uiState.update {
+                        it.copy(message = cause.message, isLoading = false)
+                    }
+                }
+                .collect { result ->
+                    when (result) {
+                        is NetworkResultt.Success -> {
+
+                            credentialServices.deleteCredentials(clientId)
+                                .catch { cause ->
+                                    _uiState.update {
+                                        it.copy(message = cause.message, isLoading = false)
+                                    }
+                                }
+                                .collect { deleteResult ->
+                                    when (deleteResult) {
+                                        is NetworkResultt.Success -> {
+                                            if (_uiState.value.userRole == "accountant"){
+                                                loadAccountantsEmails()
+                                            }else if (_uiState.value.selectedFilter == ClientFilter.NoAsignados){
+                                                loadClientsWithNoAccountant()
+                                            } else{
+                                                loadClients()
+                                            }
+                                            _uiState.update {
+                                                it.copy(message = deleteResult.data?.message)
+                                            }
+                                        }
+                                        is NetworkResultt.Error -> _uiState.update { it.copy(message = deleteResult.message, isLoading = false) }
+                                        is NetworkResultt.Loading -> _uiState.update { it.copy(isLoading = true) }
+                                    }
+                                }
+
+
+                        }
+                        is NetworkResultt.Error -> _uiState.update { it.copy(message = result.message, isLoading = false) }
+                        is NetworkResultt.Loading -> _uiState.update { it.copy(isLoading = true) }
+                    }
+                }
+        }
+    }
+
 
     private fun loadClientsByAccount() {
         viewModelScope.launch {

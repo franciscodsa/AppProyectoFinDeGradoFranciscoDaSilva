@@ -53,4 +53,8 @@ class CredentialServices @Inject constructor(
     fun changePassword(password: String, passwordConfirmation: String, authCode: String): Flow<NetworkResultt<ApiMessage>> {
         return credentialRepository.changePassword(password, passwordConfirmation, authCode)
     }
+
+    fun deleteCredentials(clientEmail: String): Flow<NetworkResultt<ApiMessage>>{
+        return credentialRepository.deleteCredentials(clientEmail)
+    }
 }

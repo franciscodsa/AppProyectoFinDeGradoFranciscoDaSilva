@@ -1,7 +1,14 @@
 package com.example.appproyectofindegradofranciscodasilva.ui.screens.clients
 
+import androidx.compose.ui.graphics.Color
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,6 +21,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
@@ -22,6 +30,9 @@ import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DismissDirection
+import androidx.compose.material3.DismissState
+import androidx.compose.material3.DismissValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -30,8 +41,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SwipeToDismiss
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberDismissState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -45,8 +58,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.appproyectofindegradofranciscodasilva.data.model.Client
 import com.example.appproyectofindegradofranciscodasilva.ui.navigation.FilterButton
+import com.example.appproyectofindegradofranciscodasilva.ui.navigation.SwipeToDeleteContainer
 import com.example.appproyectofindegradofranciscodasilva.ui.screens.resumen.CustomDropdown
-import com.example.appproyectofindegradofranciscodasilva.ui.screens.resumen.ResumenEvent
+
+import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -62,7 +77,6 @@ fun ClientScreen(
         viewModel.handleEvent(ClientEvent.SetUserRole)
     }
 
-
     Scaffold(
         topBar = {
             TopAppBar(
@@ -71,7 +85,6 @@ fun ClientScreen(
         },
         snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { innerPadding ->
-
         LaunchedEffect(state.message) {
             state.message?.let {
                 snackbarHostState.showSnackbar(
@@ -82,16 +95,15 @@ fun ClientScreen(
             }
         }
 
-        if (state.userRole == "admin"){
+        if (state.userRole == "admin") {
             LaunchedEffect(Unit) {
                 viewModel.handleEvent(ClientEvent.LoadClients)
             }
-        }else{
+        } else {
             LaunchedEffect(Unit) {
                 viewModel.handleEvent(ClientEvent.LoadClientsByAccountant)
             }
         }
-
 
         LaunchedEffect(Unit) {
             viewModel.handleEvent(ClientEvent.GetAccountantsEmails)
@@ -103,8 +115,7 @@ fun ClientScreen(
                 .padding(16.dp)
                 .fillMaxSize()
         ) {
-
-            if (state.userRole == "admin"){
+            if (state.userRole == "admin") {
                 FilterButtons(
                     selectedFilter = state.selectedFilter,
                     onFilterChange = { viewModel.handleEvent(ClientEvent.OnFilterChanged(it)) }
@@ -112,43 +123,40 @@ fun ClientScreen(
             }
             Spacer(modifier = Modifier.height(16.dp))
             LazyColumn {
-                items(state.clients) { client ->
-                    ClientCard(
-                        client = client,
-                        expanded = state.expandedClientId == client.email,
-                        accountantEmails = state.accountantEmails,
-                        selectedAccountantEmail = state.selectedAccountantEmail,
-                        onExpandChange = {
-                            viewModel.handleEvent(
-                                ClientEvent.OnClientExpandChanged(
-                                    client.email
+                items(state.clients, key = { client -> client.email }) { client ->
+                    SwipeToDeleteContainer(
+                        item = client,
+                        onDelete = { viewModel.handleEvent(ClientEvent.DeleteClient(it.email)) }
+                    ) { client ->
+                        ClientCard(
+                            client = client,
+                            expanded = state.expandedClientId == client.email,
+                            accountantEmails = state.accountantEmails,
+                            selectedAccountantEmail = state.selectedAccountantEmail,
+                            onExpandChange = {
+                                viewModel.handleEvent(
+                                    ClientEvent.OnClientExpandChanged(client.email)
                                 )
-                            )
-                        },
-                        onChatClick = onChatClick,
-                        onFilesClick = onFilesClick,
-                        onAccountantEmailChange = {
-                            viewModel.handleEvent(
-                                ClientEvent.OnAccountantEmailChanged(
-                                    it
+                            },
+                            onChatClick = onChatClick,
+                            onFilesClick = onFilesClick,
+                            onAccountantEmailChange = {
+                                viewModel.handleEvent(
+                                    ClientEvent.OnAccountantEmailChanged(it)
                                 )
-                            )
-                        },
-                        onSaveNewClientsAccountant = {
-                            viewModel.handleEvent(
-                                ClientEvent.OnSaveNewClientsAccountant(
-                                    client
+                            },
+                            onSaveNewClientsAccountant = {
+                                viewModel.handleEvent(
+                                    ClientEvent.OnSaveNewClientsAccountant(client)
                                 )
-                            )
-                        },
-                        onAccountantEmailSelected = {
-                            viewModel.handleEvent(
-                                ClientEvent.OnAccountantEmailSelected(
-                                    it
+                            },
+                            onAccountantEmailSelected = {
+                                viewModel.handleEvent(
+                                    ClientEvent.OnAccountantEmailSelected(it)
                                 )
-                            )
-                        }
-                    )
+                            }
+                        )
+                    }
                     Spacer(modifier = Modifier.height(8.dp))
                 }
             }
@@ -199,7 +207,6 @@ fun ClientCard(
     var isEditing by remember { mutableStateOf(false) }
     var expandedDropdown by remember { mutableStateOf(false) }
 
-
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -231,7 +238,6 @@ fun ClientCard(
                         contentDescription = "Expand"
                     )
                 }
-
             }
             if (expanded) {
                 Spacer(modifier = Modifier.height(8.dp))
@@ -263,7 +269,6 @@ fun ClientCard(
                                     text = "Contador: ${client.accountantEmail}",
                                     style = MaterialTheme.typography.bodyMedium
                                 )
-
                             }
                         }
                         Spacer(modifier = Modifier.height(8.dp))
@@ -298,113 +303,9 @@ fun ClientCard(
                                 )
                             }
                         }
-
-
                     }
                 }
-
             }
         }
     }
 }
-
-/*
-@Composable
-fun ClientCard(
-    client: Client,
-    expanded: Boolean,
-    onExpandChange: () -> Unit,
-    onChatClick: (String) -> Unit,
-    onFilesClick: (String) -> Unit,
-    onAccountantEmailChange: (String) -> Unit,
-    onSaveAccountantEmail: () -> Unit
-) {
-    var isEditing by remember { mutableStateOf(false) }
-    var expandedDropdown by remember { mutableStateOf(false) }
-    var accountantEmail by remember { mutableStateOf(client.accountantEmail) }
-
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onExpandChange() },
-        shape = RoundedCornerShape(8.dp),
-        elevation = CardDefaults.cardElevation()
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(imageVector = Icons.Default.Person, contentDescription = "Client")
-                Spacer(modifier = Modifier.width(8.dp))
-                Column {
-                    Text(
-                        text = "${client.firstName} ${client.lastName}",
-                        style = MaterialTheme.typography.titleMedium
-                    )
-                    Text(text = client.email, style = MaterialTheme.typography.bodyMedium)
-                }
-                Spacer(modifier = Modifier.weight(1f))
-                IconButton(onClick = { onExpandChange() }) {
-                    Icon(
-                        imageVector = if (expanded) Icons.Default.ExpandLess else Icons.Default.ExpandMore,
-                        contentDescription = "Expand"
-                    )
-                }
-            }
-            if (expanded) {
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = "Teléfono: ${client.phone}",
-                    style = MaterialTheme.typography.bodyMedium
-                )
-                Text(
-                    text = "Fecha de Nacimiento: ${client.dateOfBirth}",
-                    style = MaterialTheme.typography.bodyMedium
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    if (isEditing) {
-                        CustomDropdown(
-                            modifier = Modifier.weight(1f),
-                            label = "Contador",
-                            selectedText = accountantEmail,
-                            expanded = expandedDropdown,
-                            onExpandedChange = { expandedDropdown = !expandedDropdown },
-                            items = listOf("accountant1@example.com", "accountant2@example.com"),
-                            onItemSelected = { accountantEmail = it }
-                        )
-                        IconButton(onClick = {
-                            onAccountantEmailChange(accountantEmail)
-                            onSaveAccountantEmail()
-                            isEditing = false
-                        }) {
-                            Icon(imageVector = Icons.Default.Done, contentDescription = "Save")
-                        }
-                    } else {
-                        Text(
-                            text = "Contador: ${client.accountantEmail}",
-                            style = MaterialTheme.typography.bodyMedium
-                        )
-                        IconButton(onClick = { isEditing = true }) {
-                            Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit")
-                        }
-                    }
-                }
-                Spacer(modifier = Modifier.height(8.dp))
-                Row {
-                    Button(onClick = { onChatClick(client.email) }) {
-                        Text("Chat")
-                    }
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Button(onClick = { onFilesClick(client.email) }) {
-                        Text("Archivos")
-                    }
-                }
-            }
-        }
-    }
-}*/

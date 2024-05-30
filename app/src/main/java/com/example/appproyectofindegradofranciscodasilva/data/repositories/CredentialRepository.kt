@@ -54,4 +54,12 @@ class CredentialRepository @Inject constructor(
         }.flowOn(Dispatchers.IO)
     }
 
+    fun deleteCredentials(clientEmail: String): Flow<NetworkResultt<ApiMessage>>{
+        return flow {
+            emit(NetworkResultt.Loading())
+            val result = credentialsDataSource.deleteCredentials(clientEmail)
+            emit(result)
+        }.flowOn(Dispatchers.IO)
+    }
+
 }

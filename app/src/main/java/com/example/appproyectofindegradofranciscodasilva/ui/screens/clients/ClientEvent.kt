@@ -15,5 +15,6 @@ sealed class ClientEvent {
     object MessageSeen :ClientEvent()
     object GetAccountantsEmails : ClientEvent()
     object SetUserRole: ClientEvent()
+    class DeleteClient(val clientId: String) : ClientEvent()
 }
 
