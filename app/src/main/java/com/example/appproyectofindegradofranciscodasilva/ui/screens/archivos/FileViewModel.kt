@@ -55,8 +55,7 @@ class FileViewModel @Inject constructor(
 
             is FileEvent.OnFilterChanged -> {
 
-                Log.i("ASDASDASDASDAS", event.clientId)
-                if (event.clientId.isEmpty()){
+                if (!event.clientId.contains("@")){
                     _uiState.update { it.copy(selectedFilter = event.filter) }
                     when (event.filter) {
                         FileFilter.Todos -> loadAllFiles()

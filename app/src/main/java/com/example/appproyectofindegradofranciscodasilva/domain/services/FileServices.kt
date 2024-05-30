@@ -29,7 +29,7 @@ class FileServices @Inject constructor(
     ): Flow<NetworkResultt<ApiMessage>> {
         val clientEmail = tokenManager.getCurrentUser().first() ?: ""
 
-        Log.i("serv", file.name)
+        Log.i("AAAAAAAAAaaa",tokenManager.getCurrentUser().first().toString()+ "upload")
         return fileRepository.upload(file, mimeType, description, clientEmail, invoiceType, balance)
     }
 
@@ -41,11 +41,14 @@ class FileServices @Inject constructor(
 
     suspend fun getFilesByClient(): Flow<NetworkResultt<List<FilesInfo>>> {
         val clientEmail = tokenManager.getCurrentUser().first() ?: ""
+        Log.i("AAAAAAAAAaaa",tokenManager.getCurrentUser().first().toString()+ "clients")
         return fileRepository.getFilesByClient(clientEmail)
     }
 
     suspend fun getExpensesFilesByClient(): Flow<NetworkResultt<List<FilesInfo>>> {
         val clientEmail = tokenManager.getCurrentUser().first() ?: ""
+        Log.i("AAAAAAAAAaaa",tokenManager.getCurrentUser().first().toString()+ "expenses")
+
         return fileRepository.getExpensesFilesByClient(clientEmail)
     }
 
