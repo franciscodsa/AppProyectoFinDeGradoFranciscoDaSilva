@@ -6,7 +6,7 @@ import java.io.File
 
 sealed class FileEvent {
 
-    class UpdateFile (val balanceId: Long, val total: String, val iva: String ): FileEvent()
+    class UpdateFile (val balanceId: Long, val total: String, val iva: String, val clientId: String ): FileEvent()
 
     class DownloadFile (val context: Context, val fileId: Long): FileEvent()
 

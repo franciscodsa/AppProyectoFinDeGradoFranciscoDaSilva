@@ -89,7 +89,7 @@ class FileViewModel @Inject constructor(
                 }
             }
 
-            is FileEvent.UpdateFile -> update(event.balanceId, event.total, event.iva)
+            is FileEvent.UpdateFile -> update(event.balanceId, event.total, event.iva, event.clientId)
 
             is FileEvent.OnExpandedFileChange -> _uiState.update {
                 it.copy(expandedFileId = event.fileId)
@@ -105,7 +105,7 @@ class FileViewModel @Inject constructor(
 
 
 
-    private fun update(balanceId: Long, total: String, iva: String) {
+    private fun update(balanceId: Long, total: String, iva: String, clientId: String) {
         if ((_uiState.value.iva.isEmpty() || _uiState.value.iva.toDoubleOrNull() == null) || (_uiState.value.total.isEmpty() || _uiState.value.total.toDoubleOrNull() == null)) {
             _uiState.update {
                 it.copy(
@@ -153,10 +153,18 @@ class FileViewModel @Inject constructor(
                                     )
                                 }
 
-                                when(_uiState.value.selectedFilter){
-                                    FileFilter.Todos -> loadAllFiles()
-                                    FileFilter.Ingresos -> loadIncomeFiles()
-                                    FileFilter.Gastos -> loadExpenseFiles()
+                                if (!clientId.contains("@")){
+                                    when (_uiState.value.selectedFilter) {
+                                        FileFilter.Todos -> loadAllFiles()
+                                        FileFilter.Ingresos -> loadIncomeFiles()
+                                        FileFilter.Gastos -> loadExpenseFiles()
+                                    }
+                                }else{
+                                    when (_uiState.value.selectedFilter) {
+                                        FileFilter.Todos -> loadAllFiles(clientId)
+                                        FileFilter.Ingresos -> loadIncomeFiles(clientId)
+                                        FileFilter.Gastos -> loadExpenseFiles(clientId)
+                                    }
                                 }
                             }
                         }

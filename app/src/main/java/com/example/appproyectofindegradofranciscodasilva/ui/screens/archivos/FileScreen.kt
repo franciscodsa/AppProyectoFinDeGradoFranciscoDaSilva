@@ -149,7 +149,7 @@ private fun FileLazyColum(
                                 )
                             },
                             onUpdateClick = { fileId, total, iva ->
-                                viewModel.handleEvent(FileEvent.UpdateFile(fileId, total, iva))
+                                viewModel.handleEvent(FileEvent.UpdateFile(fileId, total, iva, clientId))
                             },
                             onTotalChange = { viewModel.handleEvent(FileEvent.OnTotalChange(it)) },
                             onIvaChange = { viewModel.handleEvent(FileEvent.OnIvaChange(it)) },
