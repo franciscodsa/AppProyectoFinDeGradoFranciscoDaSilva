@@ -127,13 +127,23 @@ class RegisterViewModel @Inject constructor(
         } else {
 
             viewModelScope.launch {
-                credentialServices.register(
-                    CredentialRequest(
-                        _uiState.value.email,
-                        _uiState.value.password,
-                        _uiState.value.confirmPassword
+                if (_uiState.value.selectedUserType == UserType.Cliente){
+                    credentialServices.register(
+                        CredentialRequest(
+                            _uiState.value.email,
+                            _uiState.value.password,
+                            _uiState.value.confirmPassword
+                        )
                     )
-                ).flatMapConcat { credentialResult ->
+                }else{
+                    credentialServices.registerAccountant(
+                        CredentialRequest(
+                            _uiState.value.email,
+                            _uiState.value.password,
+                            _uiState.value.confirmPassword
+                        )
+                    )
+                }.flatMapConcat { credentialResult ->
                     if (credentialResult is NetworkResultt.Success) {
                         if (_uiState.value.selectedUserType == UserType.Cliente){
                             clientServices.addClient(
