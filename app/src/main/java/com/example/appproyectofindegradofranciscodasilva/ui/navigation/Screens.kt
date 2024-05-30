@@ -13,6 +13,29 @@ import androidx.compose.ui.graphics.vector.ImageVector
 
 val screens = listOf(
     Screens(
+        "resumen",
+        Icons.Filled.Home,
+        Icons.Outlined.Home,
+        "Resumen"
+    ),
+
+    Screens(
+        "files/{clientId}",
+        Icons.Filled.Folder,
+        Icons.Outlined.Folder,
+        "Archivos"
+    ),
+    Screens(
+        "profile",
+        Icons.Filled.Person,
+        Icons.Outlined.Person,
+        "Perfil"
+    )
+)
+
+/*
+val screens = listOf(
+    Screens(
         "registro",
         Icons.Filled.Apps,
         Icons.Outlined.Apps,
@@ -46,6 +69,7 @@ val screens = listOf(
         "Perfil"
     )
 )
+*/
 
 data class Screens(
     val route: String,

@@ -1,5 +1,6 @@
 package com.example.appproyectofindegradofranciscodasilva.ui.screens.clients
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.appproyectofindegradofranciscodasilva.data.model.Client
@@ -97,7 +98,7 @@ class ClientViewModel @Inject constructor(
                                     when (deleteResult) {
                                         is NetworkResultt.Success -> {
                                             if (_uiState.value.userRole == "accountant"){
-                                                loadAccountantsEmails()
+                                                loadClientsByAccount()
                                             }else if (_uiState.value.selectedFilter == ClientFilter.NoAsignados){
                                                 loadClientsWithNoAccountant()
                                             } else{
@@ -185,6 +186,7 @@ class ClientViewModel @Inject constructor(
                 .collect { result ->
                     when (result) {
                         is NetworkResultt.Success -> {
+
                             _uiState.update {
                                 it.copy(
                                     accountantEmails = result.data?.map { accountant -> accountant.email }
@@ -224,6 +226,18 @@ class ClientViewModel @Inject constructor(
                 .collect { result ->
                     when (result) {
                         is NetworkResultt.Success -> {
+
+                            if (_uiState.value.userRole == "accountant"){
+                                Log.i("asdasd", "acc")
+                                loadClientsByAccount()
+                            }else if (_uiState.value.selectedFilter == ClientFilter.NoAsignados){
+                                Log.i("asdasd", "no asig")
+                                loadClientsWithNoAccountant()
+                            } else{
+                                Log.i("asdasd", "all")
+                                loadClients()
+                            }
+
                             _uiState.update {
                                 it.copy(
                                     message = result.data?.message,
@@ -232,10 +246,7 @@ class ClientViewModel @Inject constructor(
                                 )
                             }
 
-                            when(_uiState.value.selectedFilter) {
-                                ClientFilter.Todos -> loadClients()
-                                ClientFilter.NoAsignados -> loadClientsWithNoAccountant()
-                            }
+                            Log.i("asdasd", "updt succe")
                         }
 
                         is NetworkResultt.Error -> {

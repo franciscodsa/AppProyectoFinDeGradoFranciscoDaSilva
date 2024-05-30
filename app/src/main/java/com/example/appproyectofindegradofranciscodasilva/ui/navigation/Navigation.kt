@@ -41,13 +41,13 @@ fun Navigation(
                 },
                 toClaveOlvidadaScreen = {
                     navController.navigate("olvide")
-                },
+                }/*,
                 bottomNavigationBar = {
                     BottomBar(
                         navController = navController,
                         screens = screens
                     )
-                }
+                }*/
             )
         }
         composable(

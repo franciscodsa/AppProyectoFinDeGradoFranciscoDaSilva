@@ -29,7 +29,7 @@ fun LoginScreen(
     onLogin: () -> Unit,
     toRegistroScreen: () -> Unit,
     toClaveOlvidadaScreen: () -> Unit,
-    bottomNavigationBar: @Composable () -> Unit = {}
+    /*bottomNavigationBar: @Composable () -> Unit = {}*/
 ) {
     val state = viewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -37,7 +37,7 @@ fun LoginScreen(
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         modifier = Modifier.fillMaxSize(),
-        bottomBar = bottomNavigationBar
+    /*    bottomBar = bottomNavigationBar*/
     ) { paddingValues ->
         Box(modifier = Modifier.fillMaxSize().padding(paddingValues)) {
             if (state.value.isLoading) {
