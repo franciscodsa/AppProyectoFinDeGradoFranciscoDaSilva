@@ -87,7 +87,6 @@ class ClientViewModel @Inject constructor(
                 .collect { result ->
                     when (result) {
                         is NetworkResultt.Success -> {
-
                             credentialServices.deleteCredentials(clientId)
                                 .catch { cause ->
                                     _uiState.update {
