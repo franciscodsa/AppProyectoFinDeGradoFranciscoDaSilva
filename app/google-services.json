@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1070116845391",
+    "project_id": "contaeasychat",
+    "storage_bucket": "contaeasychat.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1070116845391:android:0f7907619356b9a0d6b73a",
+        "android_client_info": {
+          "package_name": "com.example.appproyectofindegradofranciscodasilva"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWAhhYpq6WGqu5Zqp9KOxutkcncCFQ7II"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

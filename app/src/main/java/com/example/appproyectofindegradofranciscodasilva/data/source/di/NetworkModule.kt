@@ -14,6 +14,8 @@ import com.example.appproyectofindegradofranciscodasilva.data.source.apiservices
 import com.example.appproyectofindegradofranciscodasilva.utils.AuthAuthenticator
 import com.example.appproyectofindegradofranciscodasilva.utils.AuthInterceptor
 import com.example.appproyectofindegradofranciscodasilva.utils.TokenManager
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.squareup.moshi.FromJson
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.ToJson
@@ -36,14 +38,6 @@ import javax.inject.Singleton
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = Constantes.dataStore)
 
-@Qualifier
-@Retention(AnnotationRetention.BINARY)
-annotation class CredentialServer
-
-@Qualifier
-@Retention(AnnotationRetention.BINARY)
-annotation class InfoServer
-
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
@@ -52,6 +46,21 @@ object NetworkModule {
     @Provides
     fun provideTokenManager(@ApplicationContext context: Context): TokenManager =
         TokenManager(context)
+
+
+    // Proporciona FirebaseAuth
+    @Singleton
+    @Provides
+    fun provideFirebaseAuth(): FirebaseAuth {
+        return FirebaseAuth.getInstance()
+    }
+
+    // Proporciona FirebaseFirestore
+    @Singleton
+    @Provides
+    fun provideFirebaseFirestore(): FirebaseFirestore {
+        return FirebaseFirestore.getInstance()
+    }
 
     //Proporciona Moshi
     @Provides

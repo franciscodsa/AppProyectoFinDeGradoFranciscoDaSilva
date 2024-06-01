@@ -13,16 +13,12 @@ import com.example.appproyectofindegradofranciscodasilva.data.model.Balance
 import com.example.appproyectofindegradofranciscodasilva.data.model.FilesInfo
 import com.example.appproyectofindegradofranciscodasilva.data.model.InvoiceType
 import com.example.appproyectofindegradofranciscodasilva.data.source.apiservices.FileApiServices
-import com.example.appproyectofindegradofranciscodasilva.data.source.di.InfoServer
 import com.example.appproyectofindegradofranciscodasilva.utils.NetworkResultt
 import com.squareup.moshi.Moshi
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
-import okhttp3.ResponseBody
-import retrofit2.Response
-import retrofit2.Retrofit
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream

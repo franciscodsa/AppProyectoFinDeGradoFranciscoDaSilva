@@ -3,6 +3,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.dagger.hilt.android")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -98,5 +99,12 @@ dependencies {
     implementation("androidx.datastore:datastore-core:1.0.0")
 
     implementation("androidx.core:core-splashscreen:1.0.1")
-    
+
+    //Firebase
+    implementation("com.google.firebase:firebase-auth:23.0.0")
+    implementation("com.google.firebase:firebase-auth-ktx:23.0.0")
+
+    implementation("com.google.firebase:firebase-firestore:25.0.0")
+    implementation("com.google.firebase:firebase-firestore-ktx:25.0.0")
+
 }

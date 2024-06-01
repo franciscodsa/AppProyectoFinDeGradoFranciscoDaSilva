@@ -14,7 +14,7 @@ data class RegisterState(
     val isLoading: Boolean = false,
     val message: String? = null,
     val userRole: String= "",
-    val selectedUserType: UserType = UserType.Contador
+    val selectedUserType: UserType = UserType.Cliente
 )
 
 enum class UserType{
