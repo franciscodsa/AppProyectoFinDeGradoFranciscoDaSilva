@@ -195,3 +195,7 @@ A
 fapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/domain/services/FirebaseService.kt,7\9\793540d4ee8a6b4763c0042ea923a8a5c7e668cd
 ›
 kapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/data/repositories/FirebaseRepository.kt,d\3\d3e1e5a0a245aeb4c564ae53aed268b234d36632
+’
+bapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/domain/services/ChatService.kt,a\4\a4c87b50169af2c8e484d6a91dbcd01b6133a408
+—
+gapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/data/repositories/ChatRepository.kt,0\7\073d29e1105eac5699d3afd90ba545737d45a6aa

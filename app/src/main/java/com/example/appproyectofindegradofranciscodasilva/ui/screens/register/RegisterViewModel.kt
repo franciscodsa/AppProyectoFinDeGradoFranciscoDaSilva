@@ -8,10 +8,12 @@ import com.example.appproyectofindegradofranciscodasilva.data.model.Accountant
 import com.example.appproyectofindegradofranciscodasilva.data.model.Client
 import com.example.appproyectofindegradofranciscodasilva.data.model.CredentialRequest
 import com.example.appproyectofindegradofranciscodasilva.domain.services.AccountantServices
+import com.example.appproyectofindegradofranciscodasilva.domain.services.ChatService
 import com.example.appproyectofindegradofranciscodasilva.domain.services.ClientServices
 import com.example.appproyectofindegradofranciscodasilva.domain.services.CredentialServices
 import com.example.appproyectofindegradofranciscodasilva.domain.services.FirebaseService
 import com.example.appproyectofindegradofranciscodasilva.utils.NetworkResultt
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -32,7 +34,8 @@ class RegisterViewModel @Inject constructor(
     private val credentialServices: CredentialServices,
     private val clientServices: ClientServices,
     private val accountantServices: AccountantServices,
-    private val firebaseService: FirebaseService
+    private val firebaseService: FirebaseService,
+    private val chatService: ChatService,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(RegisterState())
@@ -198,6 +201,8 @@ class RegisterViewModel @Inject constructor(
                                         isLoading = false
                                     )
                                 }
+
+                                chatService.createChatDocument(credentialRequest.email)
                             }
                             is NetworkResultt.Error -> {
                                 _uiState.update { it.copy(message = result.message, isLoading = false) }
@@ -210,6 +215,8 @@ class RegisterViewModel @Inject constructor(
             }
         }
     }
+
+
 
 
     /*@OptIn(ExperimentalCoroutinesApi::class)
