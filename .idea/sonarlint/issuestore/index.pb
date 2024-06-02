@@ -199,3 +199,5 @@ kapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/data/reposi
 bapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/domain/services/ChatService.kt,a\4\a4c87b50169af2c8e484d6a91dbcd01b6133a408
 ‰
 Yapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/data/model/Message.kt,9\f\9f5861a7d8b9f17d57ebb27b83f7caceab2a6017
+—
+gapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/data/repositories/ChatRepository.kt,0\7\073d29e1105eac5699d3afd90ba545737d45a6aa

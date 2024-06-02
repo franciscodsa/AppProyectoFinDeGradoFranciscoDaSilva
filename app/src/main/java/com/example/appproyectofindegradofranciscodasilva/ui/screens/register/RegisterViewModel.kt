@@ -13,14 +13,12 @@ import com.example.appproyectofindegradofranciscodasilva.domain.services.ClientS
 import com.example.appproyectofindegradofranciscodasilva.domain.services.CredentialServices
 import com.example.appproyectofindegradofranciscodasilva.domain.services.FirebaseService
 import com.example.appproyectofindegradofranciscodasilva.utils.NetworkResultt
-import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.update
@@ -136,50 +134,55 @@ class RegisterViewModel @Inject constructor(
                     _uiState.value.confirmPassword
                 )
 
-                credentialServices.register(credentialRequest)
-                    .flatMapConcat { credentialResult ->
-                        if (credentialResult is NetworkResultt.Success) {
-                            firebaseService.registerUser(credentialRequest)
-                        } else {
-                            flowOf(credentialResult)
-                        }
+                if (_uiState.value.selectedUserType == UserType.Cliente) {
+                    credentialServices.register(credentialRequest)
+                } else {
+                    credentialServices.registerAccountant(credentialRequest)
+                }.flatMapConcat { credentialResult ->
+                    if (credentialResult is NetworkResultt.Success) {
+                        firebaseService.registerUser(credentialRequest)
+                    } else {
+                        flowOf(credentialResult)
                     }
-                    .flatMapConcat { firestoreResult ->
-                        if (firestoreResult is NetworkResultt.Success) {
-                            if (_uiState.value.selectedUserType == UserType.Cliente) {
-                                clientServices.addClient(
-                                    Client(
-                                        email = uiState.value.email,
-                                        phone = uiState.value.phone,
-                                        firstName = uiState.value.firstName,
-                                        lastName = uiState.value.lastNames,
-                                        dateOfBirth = LocalDate.of(
-                                            uiState.value.year.toInt(),
-                                            uiState.value.month.toInt(),
-                                            uiState.value.day.toInt()
-                                        ),
-                                        accountantEmail = null
+                }.flatMapConcat { firestoreResult ->
+                    if (firestoreResult is NetworkResultt.Success) {
+
+                        chatService.createChatDocument(credentialRequest.email)
+
+                        if (_uiState.value.selectedUserType == UserType.Cliente) {
+                            clientServices.addClient(
+                                Client(
+                                    email = uiState.value.email,
+                                    phone = uiState.value.phone,
+                                    firstName = uiState.value.firstName,
+                                    lastName = uiState.value.lastNames,
+                                    dateOfBirth = LocalDate.of(
+                                        uiState.value.year.toInt(),
+                                        uiState.value.month.toInt(),
+                                        uiState.value.day.toInt()
+                                    ),
+                                    accountantEmail = null
+                                )
+                            )
+                        } else {
+                            accountantServices.addAccountant(
+                                Accountant(
+                                    email = uiState.value.email,
+                                    phone = uiState.value.phone,
+                                    firstName = uiState.value.firstName,
+                                    lastName = uiState.value.lastNames,
+                                    dateOfBirth = LocalDate.of(
+                                        uiState.value.year.toInt(),
+                                        uiState.value.month.toInt(),
+                                        uiState.value.day.toInt()
                                     )
                                 )
-                            } else {
-                                accountantServices.addAccountant(
-                                    Accountant(
-                                        email = uiState.value.email,
-                                        phone = uiState.value.phone,
-                                        firstName = uiState.value.firstName,
-                                        lastName = uiState.value.lastNames,
-                                        dateOfBirth = LocalDate.of(
-                                            uiState.value.year.toInt(),
-                                            uiState.value.month.toInt(),
-                                            uiState.value.day.toInt()
-                                        )
-                                    )
-                                )
-                            }
-                        } else {
-                            flowOf(firestoreResult)
+                            )
                         }
+                    } else {
+                        flowOf(firestoreResult)
                     }
+                }
                     .catch { cause ->
                         _uiState.update { it.copy(message = cause.message, isLoading = false) }
                     }
@@ -201,12 +204,17 @@ class RegisterViewModel @Inject constructor(
                                         isLoading = false
                                     )
                                 }
+                            }
 
-                                chatService.createChatDocument(credentialRequest.email)
-                            }
                             is NetworkResultt.Error -> {
-                                _uiState.update { it.copy(message = result.message, isLoading = false) }
+                                _uiState.update {
+                                    it.copy(
+                                        message = result.message,
+                                        isLoading = false
+                                    )
+                                }
                             }
+
                             is NetworkResultt.Loading -> {
                                 _uiState.update { it.copy(isLoading = true) }
                             }
@@ -215,8 +223,6 @@ class RegisterViewModel @Inject constructor(
             }
         }
     }
-
-
 
 
     /*@OptIn(ExperimentalCoroutinesApi::class)

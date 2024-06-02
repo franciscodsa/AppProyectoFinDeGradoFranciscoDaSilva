@@ -45,6 +45,10 @@ class CredentialServices @Inject constructor(
         return tokenManager.getRole().first()?:""
     }
 
+    suspend fun getCurrentUser(): String{
+        return tokenManager.getCurrentUser().first()?:""
+    }
+
     suspend fun logout() {
         tokenManager.clearStoredData()
     }
