@@ -6,6 +6,7 @@ import com.example.appproyectofindegradofranciscodasilva.utils.NetworkResultt
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
+//todo borrar si al final no resulta necesario
 class FirebaseService @Inject constructor(
     private val firebaseRepository: FirebaseRepository
 ) {

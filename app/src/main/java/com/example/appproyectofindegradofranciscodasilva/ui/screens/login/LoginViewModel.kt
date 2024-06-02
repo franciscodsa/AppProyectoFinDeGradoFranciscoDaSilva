@@ -64,16 +64,7 @@ class LoginViewModel @Inject constructor(
                         _uiState.value.email,
                         _uiState.value.password
                     )
-                ).flatMapConcat { credentialResult ->
-                    if (credentialResult is NetworkResultt.Success) {
-                        firebaseService.loginUser(
-                            _uiState.value.email,
-                            _uiState.value.password
-                        )
-                    } else {
-                        flowOf(credentialResult)
-                    }
-                }.catch { cause ->
+                ).catch { cause ->
                     _uiState.update {
                         it.copy(
                             message = cause.message,
