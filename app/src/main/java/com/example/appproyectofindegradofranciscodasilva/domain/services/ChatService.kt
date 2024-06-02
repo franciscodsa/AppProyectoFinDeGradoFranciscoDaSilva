@@ -15,10 +15,10 @@ class ChatService @Inject constructor(
 
         val result = chatRef.set(chatData)
 
-        if (result.isSuccessful) {
-            return "Creado"
+        return if (result.isSuccessful) {
+            "Creado"
         } else {
-            return "Error creando chat"
+            "Error creando chat"
         }
     }
 }

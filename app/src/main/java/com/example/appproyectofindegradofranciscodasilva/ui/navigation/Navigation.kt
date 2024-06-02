@@ -9,6 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.example.appproyectofindegradofranciscodasilva.ui.screens.archivos.FilesScreen
+import com.example.appproyectofindegradofranciscodasilva.ui.screens.chat.ChatScreen
 import com.example.appproyectofindegradofranciscodasilva.ui.screens.clients.ClientScreen
 import com.example.appproyectofindegradofranciscodasilva.ui.screens.contadores.AccountantScreen
 import com.example.appproyectofindegradofranciscodasilva.ui.screens.login.LoginScreen
@@ -134,6 +135,12 @@ fun Navigation(
             "accountants"
         ) {
             AccountantScreen(onAddClick = {navController.navigate("registro")})
+        }
+
+        composable(
+            "chat"
+        ){
+            ChatScreen()
         }
 
     }
