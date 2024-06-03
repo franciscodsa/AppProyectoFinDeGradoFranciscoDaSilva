@@ -21,7 +21,7 @@ class ChatRepository @Inject constructor(
 
     fun getMessages(clientEmail: String, onMessagesLoaded: (List<Message>) -> Unit, onFailure: (Exception) -> Unit): ListenerRegistration {
         return db.collection("chats").document(clientEmail).collection("messages")
-            .orderBy("timestamp", Query.Direction.ASCENDING)
+            .orderBy("timestamp", Query.Direction.DESCENDING)
             .addSnapshotListener { snapshots, e ->
                 if (e != null) {
                     onFailure(e)

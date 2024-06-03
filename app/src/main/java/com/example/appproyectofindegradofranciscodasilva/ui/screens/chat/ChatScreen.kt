@@ -30,12 +30,6 @@ fun ChatScreen(viewModel: ChatViewModel = hiltViewModel()) {
     val state by viewModel.uiState.collectAsState()
     val listState = rememberLazyListState()
 
-    // Scroll to the bottom when a new message is added
-    LaunchedEffect(state.messages.size) {
-        if (state.messages.isNotEmpty()) {
-            listState.scrollToItem(state.messages.size - 1)
-        }
-    }
 
     Column(modifier = Modifier.fillMaxHeight()) {
         TextField(
