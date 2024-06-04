@@ -3,6 +3,7 @@ package com.example.appproyectofindegradofranciscodasilva.ui.screens.contacts
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.appproyectofindegradofranciscodasilva.data.model.Accountant
 import com.example.appproyectofindegradofranciscodasilva.domain.services.AccountantServices
 import com.example.appproyectofindegradofranciscodasilva.domain.services.ClientServices
 import com.example.appproyectofindegradofranciscodasilva.domain.services.CredentialServices
@@ -13,6 +14,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
@@ -26,14 +28,12 @@ class ContactsViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(ContactsState())
     val uiState: StateFlow<ContactsState> = _uiState.asStateFlow()
 
-    init {
-        setRole()
-        loadCurrentUser()
-    }
 
     fun handleEvent(event: ContactsEvent) {
         when (event) {
             is ContactsEvent.LoadContacts -> loadContacts()
+            ContactsEvent.LoadCurrentUser -> loadCurrentUser()
+            ContactsEvent.SetUserRole -> setRole()
         }
     }
 
@@ -70,7 +70,13 @@ class ContactsViewModel @Inject constructor(
                         is NetworkResultt.Loading -> _uiState.update { it.copy(isLoading = true) }
 
                         is NetworkResultt.Success -> _uiState.update {
-                            it.copy(accountant = result.data, isLoading = false)
+                            it.copy(accountant = result.data?: Accountant(
+                                "contador@contaeasy",
+                                "",
+                                "Contador",
+                                "",
+                                LocalDate.now()
+                            ), isLoading = false)
                         }
                     }
 

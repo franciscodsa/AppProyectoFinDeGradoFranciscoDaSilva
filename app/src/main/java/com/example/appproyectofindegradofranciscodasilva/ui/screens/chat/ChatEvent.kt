@@ -5,4 +5,6 @@ sealed class ChatEvent {
     data class OnClientEmailChange(val email: String) : ChatEvent()
     object SendMessage : ChatEvent()
     object LoadMessages : ChatEvent()
+    object LoadCurrentUser : ChatEvent()
+    object MessageSeen : ChatEvent()
 }

@@ -19,6 +19,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
@@ -26,11 +28,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.appproyectofindegradofranciscodasilva.ui.screens.login.LoginEvent
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -38,14 +42,16 @@ import java.util.Locale
 @Composable
 fun ChatScreen(
     clientId: String,
-    viewModel: ChatViewModel = hiltViewModel()
+    viewModel: ChatViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectAsState()
+    val snackbarHostState = remember { SnackbarHostState() }
 
     // Load messages when entering the screen
     LaunchedEffect(Unit) {
         viewModel.handleEvent(ChatEvent.OnClientEmailChange(clientId))
         viewModel.handleEvent(ChatEvent.LoadMessages)
+        viewModel.handleEvent(ChatEvent.LoadCurrentUser)
     }
 
     Scaffold(
@@ -69,7 +75,7 @@ fun ChatScreen(
             ) {
                 items(state.messages) { message ->
                     val isCurrentUser =
-                        message.senderEmail == clientId // state.currentUser
+                        message.senderEmail == state.currentUser
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = if (isCurrentUser) Arrangement.End else Arrangement.Start
@@ -134,10 +140,16 @@ fun ChatScreen(
                     .padding(8.dp)
             )
 
-
-            state.errorMessage?.let {
-                Text(it, color = Color.Red, modifier = Modifier.padding(8.dp))
+            LaunchedEffect(state.errorMessage) {
+                state.errorMessage?.let {
+                    snackbarHostState.showSnackbar(
+                        message = it,
+                        duration = SnackbarDuration.Short
+                    )
+                    viewModel.handleEvent(ChatEvent.MessageSeen)
+                }
             }
+
             if (state.isLoading) {
                 CircularProgressIndicator(modifier = Modifier.padding(8.dp))
             }

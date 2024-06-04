@@ -35,6 +35,19 @@ class ChatViewModel @Inject constructor(
             is ChatEvent.OnClientEmailChange -> _uiState.update { it.copy(clientEmail = event.email) }
             ChatEvent.SendMessage -> sendMessage()
             ChatEvent.LoadMessages -> loadMessages()
+            ChatEvent.LoadCurrentUser -> loadCurrentUser()
+            ChatEvent.MessageSeen -> _uiState.update {
+                it.copy(
+                    errorMessage = null
+                )
+            }
+        }
+    }
+
+    private fun loadCurrentUser() {
+        viewModelScope.launch {
+            val currentUser = credentialServices.getCurrentUser()
+            _uiState.update { it.copy(currentUser = currentUser) }
         }
     }
 
@@ -45,7 +58,7 @@ class ChatViewModel @Inject constructor(
             if (senderEmail.isEmpty() || clientEmail.isEmpty()) {
                 _uiState.update {
                     it.copy(
-                        errorMessage = "User not logged in or client email not set",
+                        errorMessage = "Usuario no ingresado",
                         isLoading = false
                     )
                 }
@@ -55,7 +68,7 @@ class ChatViewModel @Inject constructor(
             if (_uiState.value.message.isEmpty()) {
                 _uiState.update {
                     it.copy(
-                        errorMessage = "Message cannot be empty",
+                        errorMessage = "Mensaje no puede estar vacio",
                         isLoading = false
                     )
                 }
@@ -67,7 +80,7 @@ class ChatViewModel @Inject constructor(
             }, { e ->
                 _uiState.update {
                     it.copy(
-                        errorMessage = "Error sending message: ${e.message}",
+                        errorMessage = "Error enviando mensaje: ${e.message}",
                         isLoading = false
                     )
                 }
@@ -79,7 +92,12 @@ class ChatViewModel @Inject constructor(
         val clientEmail = _uiState.value.clientEmail
 
         if (clientEmail.isEmpty()) {
-            _uiState.update { it.copy(errorMessage = "Client email not set", isLoading = false) }
+            _uiState.update {
+                it.copy(
+                    errorMessage = "Email del cliente no establecido",
+                    isLoading = false
+                )
+            }
             return
         }
 
@@ -91,7 +109,7 @@ class ChatViewModel @Inject constructor(
         }, { e ->
             _uiState.update {
                 it.copy(
-                    errorMessage = "Listen failed: ${e.message}",
+                    errorMessage = "Error desconocido",
                     isLoading = false
                 )
             }

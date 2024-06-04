@@ -38,12 +38,15 @@ import com.example.appproyectofindegradofranciscodasilva.data.model.Client
 @Composable
 fun ContactsScreen(
     viewModel: ContactsViewModel = hiltViewModel(),
-    onChatClick: (String) -> Unit
+    onChatClick: (String) -> Unit,
+    bottomNavigationBar: @Composable () -> Unit = {}
 ) {
     val state by viewModel.uiState.collectAsState()
 
 
     LaunchedEffect(Unit) {
+        viewModel.handleEvent(ContactsEvent.SetUserRole)
+        viewModel.handleEvent(ContactsEvent.LoadCurrentUser)
         viewModel.handleEvent(ContactsEvent.LoadContacts)
     }
 
@@ -56,9 +59,10 @@ fun ContactsScreen(
         Scaffold(
             topBar = {
                 TopAppBar(
-                    title = { Text(text = "Contacts") }
+                    title = { Text(text = "Contactos") }
                 )
-            }
+            },
+            bottomBar = bottomNavigationBar
         ) { innerPadding ->
 
             Column(
@@ -67,13 +71,11 @@ fun ContactsScreen(
                     .padding(innerPadding)
             ) {
                 if (state.userRole == "user") {
-                    state.accountant?.let {
-                        AccountantCard(
-                            accountant = it,
-                            currentUser = state.currentUser,
-                            onChatClick = onChatClick
-                        )
-                    }
+                    AccountantCard(
+                        accountant = state.accountant,
+                        currentUser = state.currentUser,
+                        onChatClick = onChatClick
+                    )
                 } else {
                     LazyColumn(
                         modifier = Modifier
@@ -122,7 +124,11 @@ fun ClientCard(
                 Text(text = client.email, style = MaterialTheme.typography.bodyMedium)
             }
             IconButton(onClick = { onChatClick(client.email) }) {
-                Icon(imageVector = Icons.Default.Chat, contentDescription = "Chat")
+                Icon(
+                    imageVector = Icons.Default.Chat,
+                    contentDescription = "Chat",
+                    tint = MaterialTheme.colorScheme.primary
+                )
             }
         }
     }
@@ -157,7 +163,11 @@ fun AccountantCard(
                 Text(text = accountant.email, style = MaterialTheme.typography.bodyMedium)
             }
             IconButton(onClick = { onChatClick(currentUser) }) {
-                Icon(imageVector = Icons.Default.Chat, contentDescription = "Chat")
+                Icon(
+                    imageVector = Icons.Default.Chat,
+                    contentDescription = "Chat",
+                    tint = MaterialTheme.colorScheme.primary
+                )
             }
         }
     }

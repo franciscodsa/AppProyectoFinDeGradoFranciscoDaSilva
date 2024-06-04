@@ -140,8 +140,6 @@ fun Navigation(
             "clients"
         ) {
             ClientScreen(
-                //todo eliminar oncahtclick de aqui
-                onChatClick = {},
                 onFilesClick = {clientId ->
                     navController.navigate("files/${clientId}")
                 }
@@ -162,6 +160,12 @@ fun Navigation(
             ContactsScreen(
                 onChatClick = {clientId ->
                     navController.navigate("chat/${clientId}")
+                },
+                bottomNavigationBar = {
+                    BottomBar(
+                        navController = navController,
+                        screens = screens
+                    )
                 }
             )
         }

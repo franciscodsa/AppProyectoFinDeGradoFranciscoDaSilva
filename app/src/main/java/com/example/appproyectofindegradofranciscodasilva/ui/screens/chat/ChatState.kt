@@ -6,6 +6,7 @@ data class ChatState(
     val clientEmail: String = "",
     val message: String = "",
     val messages: List<Message> = emptyList(),
+    val currentUser: String = "",
     val isLoading: Boolean = false,
     val errorMessage: String? = null
 )

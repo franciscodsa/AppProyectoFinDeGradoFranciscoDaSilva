@@ -25,8 +25,10 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
+import androidx.compose.material.icons.filled.Folder
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Save
+import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -67,7 +69,6 @@ import kotlinx.coroutines.delay
 @Composable
 fun ClientScreen(
     viewModel: ClientViewModel = hiltViewModel(),
-    onChatClick: (String) -> Unit,
     onFilesClick: (String) -> Unit
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -138,7 +139,6 @@ fun ClientScreen(
                                     ClientEvent.OnClientExpandChanged(client.email)
                                 )
                             },
-                            onChatClick = onChatClick,
                             onFilesClick = onFilesClick,
                             onAccountantEmailChange = {
                                 viewModel.handleEvent(
@@ -198,7 +198,6 @@ fun ClientCard(
     accountantEmails: List<String>,
     selectedAccountantEmail: String,
     onExpandChange: () -> Unit,
-    onChatClick: (String) -> Unit,
     onFilesClick: (String) -> Unit,
     onAccountantEmailChange: (String) -> Unit,
     onSaveNewClientsAccountant: () -> Unit,
@@ -273,13 +272,10 @@ fun ClientCard(
                         }
                         Spacer(modifier = Modifier.height(8.dp))
                         Row {
-                            Button(onClick = { onChatClick(client.email) }) {
-                                Text("Chat")
-                            }
-                            Spacer(modifier = Modifier.width(8.dp))
                             Button(onClick = { onFilesClick(client.email) }) {
-                                Text("Archivos")
+                                Text(text = "Archivos")
                             }
+
                         }
                     }
                     Column {
