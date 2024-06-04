@@ -201,3 +201,11 @@ bapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/domain/serv
 Yapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/data/model/Message.kt,9\f\9f5861a7d8b9f17d57ebb27b83f7caceab2a6017
 —
 gapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/data/repositories/ChatRepository.kt,0\7\073d29e1105eac5699d3afd90ba545737d45a6aa
+™
+iapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/ui/screens/contacts/ContactsScreen.kt,3\f\3fe1e73fbd557b77d6819cd189491a02e9d286ec
+œ
+lapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/ui/screens/contacts/ContactsViewModel.kt,5\f\5f4961c9f35ccdaf846d84e6e4edc82332e349d9
+˜
+happ/src/main/java/com/example/appproyectofindegradofranciscodasilva/ui/screens/contacts/ContactsState.kt,7\e\7ecfba8783b9556ec5d95ff6d5a3227e13094221
+˜
+happ/src/main/java/com/example/appproyectofindegradofranciscodasilva/ui/screens/contacts/ContactsEvent.kt,5\f\5feb074cd51a8057afb4d54710e3866194b4e16f

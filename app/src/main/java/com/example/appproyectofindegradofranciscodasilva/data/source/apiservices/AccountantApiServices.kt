@@ -6,6 +6,7 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Query
 
 interface AccountantApiServices {
 
@@ -14,4 +15,7 @@ interface AccountantApiServices {
 
     @POST("accountant")
     suspend fun addAccountant(@Body accountant: Accountant) : Response<ApiMessage>
+
+    @GET("accountant/byClientEmail")
+    suspend fun getByClientEmail(@Query("clientEmail") clientEmail: String): Response<Accountant>
 }

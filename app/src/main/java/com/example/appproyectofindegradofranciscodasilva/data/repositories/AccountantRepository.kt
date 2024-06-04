@@ -22,6 +22,14 @@ class AccountantRepository @Inject constructor(
         }.flowOn(Dispatchers.IO)
     }
 
+    fun getByClientEmail(clientEmail: String): Flow<NetworkResultt<Accountant>> {
+        return flow {
+            emit(NetworkResultt.Loading())
+            val result = accountantDataSource.getByClientEmail(clientEmail)
+            emit(result)
+        }.flowOn(Dispatchers.IO)
+    }
+
 
     fun addAccountant(accountant: Accountant): Flow<NetworkResultt<ApiMessage>> {
         return flow {

@@ -29,7 +29,7 @@ val screens = listOf(
         "Archivos"
     ),
     Screens(
-        "chat",
+        "contacts",
         Icons.Filled.ChatBubble,
         Icons.Outlined.ChatBubbleOutline,
         "Chat"

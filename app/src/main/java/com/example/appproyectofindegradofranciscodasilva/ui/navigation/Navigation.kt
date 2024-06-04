@@ -11,6 +11,7 @@ import androidx.navigation.navigation
 import com.example.appproyectofindegradofranciscodasilva.ui.screens.archivos.FilesScreen
 import com.example.appproyectofindegradofranciscodasilva.ui.screens.chat.ChatScreen
 import com.example.appproyectofindegradofranciscodasilva.ui.screens.clients.ClientScreen
+import com.example.appproyectofindegradofranciscodasilva.ui.screens.contacts.ContactsScreen
 import com.example.appproyectofindegradofranciscodasilva.ui.screens.contadores.AccountantScreen
 import com.example.appproyectofindegradofranciscodasilva.ui.screens.login.LoginScreen
 import com.example.appproyectofindegradofranciscodasilva.ui.screens.olvideclave.OlvideClaveScreen
@@ -101,6 +102,21 @@ fun Navigation(
         }
 
         composable(
+            route="chat/{clientId}",
+            arguments = listOf(
+                navArgument(name = "clientId"){
+                    type = NavType.StringType
+                    defaultValue = ""
+                }
+            )
+        ){
+            ChatScreen(
+                clientId = it.arguments?.getString("clientId")?:""
+            )
+        }
+
+
+        composable(
             "profile"
         ) {
             ProfileScreen(
@@ -124,6 +140,7 @@ fun Navigation(
             "clients"
         ) {
             ClientScreen(
+                //todo eliminar oncahtclick de aqui
                 onChatClick = {},
                 onFilesClick = {clientId ->
                     navController.navigate("files/${clientId}")
@@ -137,11 +154,16 @@ fun Navigation(
             AccountantScreen(onAddClick = {navController.navigate("registro")})
         }
 
-        composable(
-            "chat"
-        ){
-            ChatScreen()
-        }
 
+
+        composable(
+            "contacts"
+        ){
+            ContactsScreen(
+                onChatClick = {clientId ->
+                    navController.navigate("chat/${clientId}")
+                }
+            )
+        }
     }
 }

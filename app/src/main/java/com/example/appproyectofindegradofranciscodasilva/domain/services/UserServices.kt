@@ -20,8 +20,9 @@ class UserServices @Inject constructor(
     }
 
     suspend fun getUserByEmail(): Flow<NetworkResultt<User>> {
-        return userRepository.getUserById(tokenManager.getCurrentUser().first()?:"")
+        return userRepository.getUserById(tokenManager.getCurrentUser().first() ?: "")
     }
+
 
     fun deleteUser(email: String): Flow<NetworkResultt<ApiMessage>> {
         return userRepository.deleteUser(email)
