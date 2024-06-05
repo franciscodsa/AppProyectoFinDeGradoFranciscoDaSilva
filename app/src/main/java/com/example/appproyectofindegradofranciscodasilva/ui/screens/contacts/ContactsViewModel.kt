@@ -34,6 +34,11 @@ class ContactsViewModel @Inject constructor(
             is ContactsEvent.LoadContacts -> loadContacts()
             ContactsEvent.LoadCurrentUser -> loadCurrentUser()
             ContactsEvent.SetUserRole -> setRole()
+            ContactsEvent.MessageSeen ->  _uiState.update {
+                it.copy(
+                    message = null
+                )
+            }
         }
     }
 

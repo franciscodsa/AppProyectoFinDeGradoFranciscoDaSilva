@@ -87,15 +87,6 @@ fun ResumenScreen(
         viewModel.handleEvent(ResumenEvent.SetUserRole)
     }
 
-    LaunchedEffect(state.message) {
-        state.message?.let {
-            snackbarHostState.showSnackbar(
-                message = it,
-                duration = SnackbarDuration.Short
-            )
-            viewModel.handleEvent(ResumenEvent.MessageSeen)
-        }
-    }
 
 
     Scaffold(
@@ -121,6 +112,16 @@ fun ResumenScreen(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
+
+        LaunchedEffect(state.message) {
+            state.message?.let {
+                snackbarHostState.showSnackbar(
+                    message = it,
+                    duration = SnackbarDuration.Short
+                )
+                viewModel.handleEvent(ResumenEvent.MessageSeen)
+            }
+        }
 
         if (state.userRole == "user"){
             Column(
@@ -158,6 +159,10 @@ fun ResumenScreen(
                     painter = painterResource(id = R.drawable.ic_contaeasy),
                     contentDescription = "Logo",
                     modifier = Modifier.size(100.dp)
+                )
+                Text(
+                    text = "Bienvenido",
+                    style = MaterialTheme.typography.headlineMedium
                 )
             }
         }

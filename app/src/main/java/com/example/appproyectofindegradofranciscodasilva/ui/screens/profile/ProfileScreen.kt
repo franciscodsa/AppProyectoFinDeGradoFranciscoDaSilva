@@ -3,7 +3,6 @@ package com.example.appproyectofindegradofranciscodasilva.ui.screens.profile
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,6 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -56,7 +56,12 @@ fun ProfileScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = {  Text(text = stringResource(R.string.mi_perfil), style = MaterialTheme.typography.headlineMedium) },
+                title = {
+                    Text(
+                        text = stringResource(R.string.mi_perfil),
+                        style = MaterialTheme.typography.headlineMedium
+                    )
+                },
                 actions = {
                     IconButton(onClick = {
                         viewModel.handleEvent(ProfileEvent.Logout)
@@ -82,75 +87,82 @@ fun ProfileScreen(
                 viewModel.handleEvent(ProfileEvent.MessageSeen)
             }
         }
-
-
-        LaunchedEffect(Unit){
+        LaunchedEffect(Unit) {
             viewModel.handleEvent(ProfileEvent.LoadUserData)
         }
 
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(scrollState)
-                .padding(innerPadding),
-            verticalArrangement = Arrangement.Center
-        ) {
-            Spacer(modifier = Modifier.padding())
+        if (state.value.isLoading) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator()
+            }
+        } else {
 
-            //First name
-            OutlinedTextField(
-                value = state.value.firstName,
-                onValueChange = { viewModel.handleEvent(ProfileEvent.OnFirstNameChanged(it)) },
-                modifier = Modifier.fillMaxWidth(),
-                singleLine = true,
-                maxLines = 1,
-                label = { Text(text = stringResource(R.string.nombre)) }
-            )
-            Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.small_size_space)))
-
-            //Last name
-            OutlinedTextField(
-                value = state.value.lastName,
-                onValueChange = { viewModel.handleEvent(ProfileEvent.OnLastNameChanged(it)) },
-                modifier = Modifier.fillMaxWidth(),
-                singleLine = true,
-                maxLines = 1,
-                label = { Text(text = stringResource(R.string.apellidos)) }
-            )
-            Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.small_size_space)))
-
-            //Phone field
-            OutlinedTextField(
-                value = state.value.phone,
-                onValueChange = { viewModel.handleEvent(ProfileEvent.OnPhoneChanged(it)) },
-                modifier = Modifier.fillMaxWidth(),
-                singleLine = true,
-                maxLines = 1,
-                label = { Text(text = stringResource(R.string.telefono)) }
-            )
-            Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.small_size_space)))
-
-            //Date of birth
-            CustomDateField(
-                year = state.value.year,
-                month = state.value.month,
-                day = state.value.day,
-                onYearFieldChange = { viewModel.handleEvent(ProfileEvent.OnYearFieldChange(it)) },
-                onMonthFieldChange = { viewModel.handleEvent(ProfileEvent.OnMonthFieldChange(it)) },
-                onDayFieldChange = { viewModel.handleEvent(ProfileEvent.OnDayFieldChange(it)) }
-            )
-            Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.big_size_space)))
-
-            Button(
-                onClick = { viewModel.handleEvent(ProfileEvent.SaveChanges) },
-                modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(
-                    contentColor = Color.White, disabledContentColor = Color.White
-                ),
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(scrollState)
+                    .padding(innerPadding),
+                verticalArrangement = Arrangement.Center
             ) {
-                Text(text = stringResource(R.string.guardar_cambios))
+                Spacer(modifier = Modifier.padding())
+
+                //First name
+                OutlinedTextField(
+                    value = state.value.firstName,
+                    onValueChange = { viewModel.handleEvent(ProfileEvent.OnFirstNameChanged(it)) },
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true,
+                    maxLines = 1,
+                    label = { Text(text = stringResource(R.string.nombre)) }
+                )
+                Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.small_size_space)))
+
+                //Last name
+                OutlinedTextField(
+                    value = state.value.lastName,
+                    onValueChange = { viewModel.handleEvent(ProfileEvent.OnLastNameChanged(it)) },
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true,
+                    maxLines = 1,
+                    label = { Text(text = stringResource(R.string.apellidos)) }
+                )
+                Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.small_size_space)))
+
+                //Phone field
+                OutlinedTextField(
+                    value = state.value.phone,
+                    onValueChange = { viewModel.handleEvent(ProfileEvent.OnPhoneChanged(it)) },
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true,
+                    maxLines = 1,
+                    label = { Text(text = stringResource(R.string.telefono)) }
+                )
+                Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.small_size_space)))
+
+                //Date of birth
+                CustomDateField(
+                    year = state.value.year,
+                    month = state.value.month,
+                    day = state.value.day,
+                    onYearFieldChange = { viewModel.handleEvent(ProfileEvent.OnYearFieldChange(it)) },
+                    onMonthFieldChange = { viewModel.handleEvent(ProfileEvent.OnMonthFieldChange(it)) },
+                    onDayFieldChange = { viewModel.handleEvent(ProfileEvent.OnDayFieldChange(it)) }
+                )
+                Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.big_size_space)))
+
+                Button(
+                    onClick = { viewModel.handleEvent(ProfileEvent.SaveChanges) },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(
+                        contentColor = Color.White, disabledContentColor = Color.White
+                    ),
+                ) {
+                    Text(text = stringResource(R.string.guardar_cambios))
+                }
             }
         }
+
+
     }
 }
 

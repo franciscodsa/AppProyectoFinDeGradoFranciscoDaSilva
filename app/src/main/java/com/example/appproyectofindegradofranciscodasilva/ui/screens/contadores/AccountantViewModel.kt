@@ -38,6 +38,7 @@ class AccountantViewModel @Inject constructor(
 
             AccountantEvent.LoadAccountants -> loadAccountants()
             is AccountantEvent.DeleteAccountant -> deleteAccountant(event.email)
+
             AccountantEvent.MessageSeen -> _uiState.update {
                 it.copy(
                     message = null

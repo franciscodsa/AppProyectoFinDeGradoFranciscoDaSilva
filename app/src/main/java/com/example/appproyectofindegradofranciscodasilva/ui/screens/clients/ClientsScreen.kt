@@ -1,11 +1,5 @@
 package com.example.appproyectofindegradofranciscodasilva.ui.screens.clients
 
-import androidx.compose.ui.graphics.Color
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkVertically
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,20 +15,15 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
-import androidx.compose.material.icons.filled.Folder
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Save
-import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.DismissDirection
-import androidx.compose.material3.DismissState
-import androidx.compose.material3.DismissValue
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -43,10 +32,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.SwipeToDismiss
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.rememberDismissState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -62,8 +49,6 @@ import com.example.appproyectofindegradofranciscodasilva.data.model.Client
 import com.example.appproyectofindegradofranciscodasilva.ui.navigation.FilterButton
 import com.example.appproyectofindegradofranciscodasilva.ui.navigation.SwipeToDeleteContainer
 import com.example.appproyectofindegradofranciscodasilva.ui.screens.resumen.CustomDropdown
-
-import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -96,71 +81,79 @@ fun ClientScreen(
             }
         }
 
-        if (state.userRole == "admin") {
-            LaunchedEffect(Unit) {
-                viewModel.handleEvent(ClientEvent.LoadClients)
+        if (state.isLoading) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator()
             }
         } else {
-            LaunchedEffect(Unit) {
-                viewModel.handleEvent(ClientEvent.LoadClientsByAccountant)
-            }
-        }
-
-        LaunchedEffect(Unit) {
-            viewModel.handleEvent(ClientEvent.GetAccountantsEmails)
-        }
-
-        Column(
-            modifier = Modifier
-                .padding(innerPadding)
-                .padding(16.dp)
-                .fillMaxSize()
-        ) {
             if (state.userRole == "admin") {
-                FilterButtons(
-                    selectedFilter = state.selectedFilter,
-                    onFilterChange = { viewModel.handleEvent(ClientEvent.OnFilterChanged(it)) }
-                )
+                LaunchedEffect(Unit) {
+                    viewModel.handleEvent(ClientEvent.LoadClients)
+                }
+            } else {
+                LaunchedEffect(Unit) {
+                    viewModel.handleEvent(ClientEvent.LoadClientsByAccountant)
+                }
             }
-            Spacer(modifier = Modifier.height(16.dp))
-            LazyColumn {
-                items(state.clients, key = { client -> client.email }) { client ->
-                    SwipeToDeleteContainer(
-                        item = client,
-                        onDelete = { viewModel.handleEvent(ClientEvent.DeleteClient(it.email)) }
-                    ) { client ->
-                        ClientCard(
-                            client = client,
-                            expanded = state.expandedClientId == client.email,
-                            accountantEmails = state.accountantEmails,
-                            selectedAccountantEmail = state.selectedAccountantEmail,
-                            onExpandChange = {
-                                viewModel.handleEvent(
-                                    ClientEvent.OnClientExpandChanged(client.email)
-                                )
-                            },
-                            onFilesClick = onFilesClick,
-                            onAccountantEmailChange = {
-                                viewModel.handleEvent(
-                                    ClientEvent.OnAccountantEmailChanged(it)
-                                )
-                            },
-                            onSaveNewClientsAccountant = {
-                                viewModel.handleEvent(
-                                    ClientEvent.OnSaveNewClientsAccountant(client)
-                                )
-                            },
-                            onAccountantEmailSelected = {
-                                viewModel.handleEvent(
-                                    ClientEvent.OnAccountantEmailSelected(it)
-                                )
-                            }
-                        )
+
+            LaunchedEffect(Unit) {
+                viewModel.handleEvent(ClientEvent.GetAccountantsEmails)
+            }
+
+            Column(
+                modifier = Modifier
+                    .padding(innerPadding)
+                    .padding(16.dp)
+                    .fillMaxSize()
+            ) {
+                if (state.userRole == "admin") {
+                    FilterButtons(
+                        selectedFilter = state.selectedFilter,
+                        onFilterChange = { viewModel.handleEvent(ClientEvent.OnFilterChanged(it)) }
+                    )
+                }
+                Spacer(modifier = Modifier.height(16.dp))
+                LazyColumn {
+                    items(state.clients, key = { client -> client.email }) { client ->
+                        SwipeToDeleteContainer(
+                            item = client,
+                            onDelete = { viewModel.handleEvent(ClientEvent.DeleteClient(it.email)) }
+                        ) { client ->
+                            ClientCard(
+                                client = client,
+                                expanded = state.expandedClientId == client.email,
+                                accountantEmails = state.accountantEmails,
+                                selectedAccountantEmail = state.selectedAccountantEmail,
+                                onExpandChange = {
+                                    viewModel.handleEvent(
+                                        ClientEvent.OnClientExpandChanged(client.email)
+                                    )
+                                },
+                                onFilesClick = onFilesClick,
+                                onAccountantEmailChange = {
+                                    viewModel.handleEvent(
+                                        ClientEvent.OnAccountantEmailChanged(it)
+                                    )
+                                },
+                                onSaveNewClientsAccountant = {
+                                    viewModel.handleEvent(
+                                        ClientEvent.OnSaveNewClientsAccountant(client)
+                                    )
+                                },
+                                onAccountantEmailSelected = {
+                                    viewModel.handleEvent(
+                                        ClientEvent.OnAccountantEmailSelected(it)
+                                    )
+                                }
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(8.dp))
                     }
-                    Spacer(modifier = Modifier.height(8.dp))
                 }
             }
         }
+
+
     }
 }
 

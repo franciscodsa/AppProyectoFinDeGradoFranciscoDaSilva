@@ -42,6 +42,7 @@ class OlvideClaveViewModel @Inject constructor(
 
             OlvideClaveEvent.OnSendEmail -> sendEmail()
             OlvideClaveEvent.OnChangePassword -> changePassword()
+
             OlvideClaveEvent.MessageSeen -> _uiState.update {
                 it.copy(message = null)
             }

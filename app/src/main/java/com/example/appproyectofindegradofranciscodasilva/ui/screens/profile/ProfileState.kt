@@ -9,5 +9,5 @@ data class ProfileState(
     val month: String = "",
     val day: String = "",
     val message: String? = null,
-    val isLoadin: Boolean = false
+    val isLoading: Boolean = false
 )

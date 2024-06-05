@@ -6,7 +6,6 @@ import com.example.appproyectofindegradofranciscodasilva.data.model.User
 import com.example.appproyectofindegradofranciscodasilva.domain.services.CredentialServices
 import com.example.appproyectofindegradofranciscodasilva.domain.services.UserServices
 import com.example.appproyectofindegradofranciscodasilva.utils.NetworkResultt
-import com.example.appproyectofindegradofranciscodasilva.utils.TokenManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -61,11 +60,11 @@ class ProfileViewModel @Inject constructor(
                                 year = dateOfBirth[0],
                                 month = dateOfBirth[1],
                                 day = dateOfBirth[2],
-                                isLoadin = false
+                                isLoading = false
                             )
                         }
                         is NetworkResultt.Error -> _uiState.update { it.copy(message = result.message) }
-                        is NetworkResultt.Loading -> _uiState.update { it.copy(isLoadin = true) }
+                        is NetworkResultt.Loading -> _uiState.update { it.copy(isLoading = true) }
                     }
                 }
         }
@@ -84,13 +83,13 @@ class ProfileViewModel @Inject constructor(
             }
             userService.updateUser(updatedUser)
                 .catch { cause ->
-                    _uiState.update { it.copy(message = cause.message, isLoadin = false) }
+                    _uiState.update { it.copy(message = cause.message, isLoading = false) }
                 }
                 .collect { result ->
                     when (result) {
-                        is NetworkResultt.Success -> _uiState.update { it.copy(message = result.data?.message, isLoadin = false) }
-                        is NetworkResultt.Error -> _uiState.update { it.copy(message = result.message, isLoadin = false) }
-                        is NetworkResultt.Loading -> _uiState.update { it.copy( isLoadin = true) }
+                        is NetworkResultt.Success -> _uiState.update { it.copy(message = result.data?.message, isLoading = false) }
+                        is NetworkResultt.Error -> _uiState.update { it.copy(message = result.message, isLoading = false) }
+                        is NetworkResultt.Loading -> _uiState.update { it.copy( isLoading = true) }
                     }
                 }
         }

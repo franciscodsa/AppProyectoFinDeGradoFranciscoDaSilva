@@ -1,6 +1,7 @@
 package com.example.appproyectofindegradofranciscodasilva.ui.screens.contadores
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -17,6 +18,7 @@ import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -80,29 +82,35 @@ fun AccountantScreen(
             }
         }
 
-        Column(
-            modifier = Modifier
-                .padding(innerPadding)
-                .padding(16.dp)
-                .fillMaxSize()
-        ) {
-            LazyColumn {
-                items(state.accountants) { accountant ->
-                    SwipeToDeleteContainer(
-                        item = accountant,
-                        onDelete = { viewModel.handleEvent(AccountantEvent.DeleteAccountant(it.email)) }
-                    ) { accountant ->
-                        AccountantCard(
-                            accountant = accountant,
-                            expanded = state.expandedAccountantId == accountant.email,
-                            onExpandChange = {
-                                viewModel.handleEvent(
-                                    AccountantEvent.OnAccountantExpandChanged(accountant.email)
-                                )
-                            }
-                        )
+        if (state.isLoading) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator()
+            }
+        } else {
+            Column(
+                modifier = Modifier
+                    .padding(innerPadding)
+                    .padding(16.dp)
+                    .fillMaxSize()
+            ) {
+                LazyColumn {
+                    items(state.accountants) { accountant ->
+                        SwipeToDeleteContainer(
+                            item = accountant,
+                            onDelete = { viewModel.handleEvent(AccountantEvent.DeleteAccountant(it.email)) }
+                        ) { accountant ->
+                            AccountantCard(
+                                accountant = accountant,
+                                expanded = state.expandedAccountantId == accountant.email,
+                                onExpandChange = {
+                                    viewModel.handleEvent(
+                                        AccountantEvent.OnAccountantExpandChanged(accountant.email)
+                                    )
+                                }
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(8.dp))
                     }
-                    Spacer(modifier = Modifier.height(8.dp))
                 }
             }
         }

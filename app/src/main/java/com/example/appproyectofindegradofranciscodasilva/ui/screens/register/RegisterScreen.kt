@@ -15,6 +15,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -188,17 +189,23 @@ fun RegisterScreen(
                 label = { Text(text = stringResource(R.string.confirmar_contrasena)) }
             )
             Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.big_size_space)))
-
-            Button(
-                onClick = {viewModel.handleEvent(RegisterEvent.Register)},
-                modifier = Modifier
-                    .fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(
-                    contentColor = Color.White, disabledContentColor = Color.White
-                ),
-            ) {
-                Text(text = stringResource(R.string.registrarse))
+            if (state.value.isLoading) {
+                Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator()
+                }
+            } else {
+                Button(
+                    onClick = {viewModel.handleEvent(RegisterEvent.Register)},
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(
+                        contentColor = Color.White, disabledContentColor = Color.White
+                    ),
+                ) {
+                    Text(text = stringResource(R.string.registrarse))
+                }
             }
+
         }
 
 

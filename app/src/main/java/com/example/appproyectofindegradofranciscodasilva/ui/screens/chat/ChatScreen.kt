@@ -1,10 +1,12 @@
 package com.example.appproyectofindegradofranciscodasilva.ui.screens.chat
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -31,10 +33,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.appproyectofindegradofranciscodasilva.ui.screens.login.LoginEvent
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -61,97 +61,101 @@ fun ChatScreen(
             )
         }
     ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxHeight()
-                .padding(innerPadding)
-        ) {
-            LazyColumn(
+
+        LaunchedEffect(state.errorMessage) {
+            state.errorMessage?.let {
+                snackbarHostState.showSnackbar(
+                    message = it,
+                    duration = SnackbarDuration.Short
+                )
+                viewModel.handleEvent(ChatEvent.MessageSeen)
+            }
+        }
+
+        if (state.isLoading) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator()
+            }
+        } else {
+            Column(
                 modifier = Modifier
-                    .weight(1f)
-                    .fillMaxWidth()
-                    .padding(8.dp),
-                reverseLayout = true
+                    .fillMaxHeight()
+                    .padding(innerPadding)
             ) {
-                items(state.messages) { message ->
-                    val isCurrentUser =
-                        message.senderEmail == state.currentUser
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = if (isCurrentUser) Arrangement.End else Arrangement.Start
-                    ) {
-                        if (isCurrentUser) Spacer(modifier = Modifier.weight(0.2f))
-                        Card(
-                            modifier = Modifier
-                                .padding(4.dp)
-                                .weight(0.8f),
-                            shape = MaterialTheme.shapes.medium
+                LazyColumn(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    reverseLayout = true
+                ) {
+                    items(state.messages) { message ->
+                        val isCurrentUser =
+                            message.senderEmail == state.currentUser
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = if (isCurrentUser) Arrangement.End else Arrangement.Start
                         ) {
-                            Column(
+                            if (isCurrentUser) Spacer(modifier = Modifier.weight(0.2f))
+                            Card(
                                 modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(8.dp)
+                                    .padding(4.dp)
+                                    .weight(0.8f),
+                                shape = MaterialTheme.shapes.medium
                             ) {
-                                Text(
-                                    text = message.senderEmail,
-                                    style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.primary
-                                )
-                                Spacer(modifier = Modifier.height(4.dp))
-                                Text(
-                                    text = message.content,
-                                    style = MaterialTheme.typography.bodyMedium
-                                )
-                                Spacer(modifier = Modifier.height(4.dp))
-                                Text(
-                                    text = SimpleDateFormat(
-                                        "yyyy-MM-dd HH:mm:ss",
-                                        Locale.getDefault()
-                                    ).format(message.timestamp),
-                                    style = MaterialTheme.typography.bodySmall,
-                                    modifier = Modifier.align(Alignment.End)
-                                )
+                                Column(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(8.dp)
+                                ) {
+                                    Text(
+                                        text = message.senderEmail,
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.primary
+                                    )
+                                    Spacer(modifier = Modifier.height(4.dp))
+                                    Text(
+                                        text = message.content,
+                                        style = MaterialTheme.typography.bodyMedium
+                                    )
+                                    Spacer(modifier = Modifier.height(4.dp))
+                                    Text(
+                                        text = SimpleDateFormat(
+                                            "yyyy-MM-dd HH:mm:ss",
+                                            Locale.getDefault()
+                                        ).format(message.timestamp),
+                                        style = MaterialTheme.typography.bodySmall,
+                                        modifier = Modifier.align(Alignment.End)
+                                    )
+                                }
                             }
+                            if (!isCurrentUser) Spacer(modifier = Modifier.weight(0.2f))
                         }
-                        if (!isCurrentUser) Spacer(modifier = Modifier.weight(0.2f))
                     }
                 }
-            }
 
-            TextField(
-                value = state.message,
-                placeholder = { Text(text = "Escribe aquí") },
-                trailingIcon = {
-                    IconButton(
-                        onClick = { viewModel.handleEvent(ChatEvent.SendMessage) },
-                        enabled = !state.isLoading,
-                        modifier = Modifier.padding(8.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Send,
-                            contentDescription = "Send",
-                            tint = MaterialTheme.colorScheme.primary
-                        )
-                    }
-                },
-                onValueChange = { viewModel.handleEvent(ChatEvent.OnMessageTextChange(it)) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp)
-            )
+                TextField(
+                    value = state.message,
+                    placeholder = { Text(text = "Escribe aquí") },
+                    trailingIcon = {
+                        IconButton(
+                            onClick = { viewModel.handleEvent(ChatEvent.SendMessage) },
+                            enabled = !state.isLoading,
+                            modifier = Modifier.padding(8.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Send,
+                                contentDescription = "Send",
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+                        }
+                    },
+                    onValueChange = { viewModel.handleEvent(ChatEvent.OnMessageTextChange(it)) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp)
+                )
 
-            LaunchedEffect(state.errorMessage) {
-                state.errorMessage?.let {
-                    snackbarHostState.showSnackbar(
-                        message = it,
-                        duration = SnackbarDuration.Short
-                    )
-                    viewModel.handleEvent(ChatEvent.MessageSeen)
-                }
-            }
-
-            if (state.isLoading) {
-                CircularProgressIndicator(modifier = Modifier.padding(8.dp))
             }
         }
     }

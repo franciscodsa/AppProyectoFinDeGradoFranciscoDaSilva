@@ -31,7 +31,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         lifecycleObserver = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_STOP || event == Lifecycle.Event.ON_DESTROY) {
+            if (event == Lifecycle.Event.ON_DESTROY) {
                 CoroutineScope(Dispatchers.IO).launch {
                     tokenManager.clearStoredData()
                 }
@@ -54,6 +54,8 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
+
 
 }
 

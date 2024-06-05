@@ -20,18 +20,22 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.appproyectofindegradofranciscodasilva.data.model.Accountant
 import com.example.appproyectofindegradofranciscodasilva.data.model.Client
+import com.example.appproyectofindegradofranciscodasilva.ui.screens.clients.ClientEvent
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -42,6 +46,7 @@ fun ContactsScreen(
     bottomNavigationBar: @Composable () -> Unit = {}
 ) {
     val state by viewModel.uiState.collectAsState()
+    val snackbarHostState = remember { SnackbarHostState() }
 
 
     LaunchedEffect(Unit) {
@@ -50,21 +55,30 @@ fun ContactsScreen(
         viewModel.handleEvent(ContactsEvent.LoadContacts)
     }
 
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(text = "Contactos") }
+            )
+        },
+        bottomBar = bottomNavigationBar
+    ) { innerPadding ->
 
-    if (state.isLoading) {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            CircularProgressIndicator()
-        }
-    } else {
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = { Text(text = "Contactos") }
+        LaunchedEffect(state.message) {
+            state.message?.let {
+                snackbarHostState.showSnackbar(
+                    message = it,
+                    duration = SnackbarDuration.Short
                 )
-            },
-            bottomBar = bottomNavigationBar
-        ) { innerPadding ->
+                viewModel.handleEvent(ContactsEvent.MessageSeen)
+            }
+        }
 
+        if (state.isLoading) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator()
+            }
+        } else {
             Column(
                 modifier = Modifier
                     .fillMaxHeight()
@@ -96,6 +110,7 @@ fun ContactsScreen(
         }
     }
 }
+
 
 @Composable
 fun ClientCard(
