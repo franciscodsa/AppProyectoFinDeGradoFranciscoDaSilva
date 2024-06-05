@@ -155,15 +155,23 @@ fun ResumenScreen(
             }
         }else{
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
-                Image(
-                    painter = painterResource(id = R.drawable.ic_contaeasy),
-                    contentDescription = "Logo",
-                    modifier = Modifier.size(100.dp)
-                )
-                Text(
-                    text = "Bienvenido",
-                    style = MaterialTheme.typography.headlineMedium
-                )
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_contaeasy),
+                        contentDescription = "Logo",
+                        modifier = Modifier.size(100.dp)
+                    )
+                    Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.bigger_size_space)))
+
+                    Text(
+                        text = "Bienvenido",
+                        style = MaterialTheme.typography.headlineMedium
+                    )
+                }
             }
         }
 

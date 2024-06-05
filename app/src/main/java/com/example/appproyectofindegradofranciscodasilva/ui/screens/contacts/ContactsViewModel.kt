@@ -55,10 +55,16 @@ class ContactsViewModel @Inject constructor(
             val role = _uiState.value.userRole
 
             Log.i("ASDASDASDASDASDASDA", role)
-            if (role == "user") {
-                loadAccountant()
-            } else {
-                loadClients()
+            when (role) {
+                "user" -> {
+                    loadAccountant()
+                }
+                "accountant" -> {
+                    loadClientsByAccountant()
+                }
+                else -> {
+                    loadClients()
+                }
             }
         }
     }
@@ -89,9 +95,28 @@ class ContactsViewModel @Inject constructor(
         }
     }
 
-    private fun loadClients() {
+    private fun loadClientsByAccountant() {
         viewModelScope.launch {
             clientServices.getClientsByAccountant()
+                .collect { result ->
+                    when (result) {
+                        is NetworkResultt.Success -> _uiState.update {
+                            it.copy(clients = result.data ?: emptyList(), isLoading = false)
+                        }
+
+                        is NetworkResultt.Error -> _uiState.update {
+                            it.copy(message = result.message, isLoading = false)
+                        }
+
+                        is NetworkResultt.Loading -> _uiState.update { it.copy(isLoading = true) }
+                    }
+                }
+        }
+    }
+
+    private fun loadClients() {
+        viewModelScope.launch {
+            clientServices.getClients()
                 .collect { result ->
                     when (result) {
                         is NetworkResultt.Success -> _uiState.update {

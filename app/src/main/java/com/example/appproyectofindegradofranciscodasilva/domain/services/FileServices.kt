@@ -29,6 +29,7 @@ class FileServices @Inject constructor(
     ): Flow<NetworkResultt<ApiMessage>> {
         val clientEmail = tokenManager.getCurrentUser().first() ?: ""
 
+        //todo quitar todos los log
         Log.i("AAAAAAAAAaaa",tokenManager.getCurrentUser().first().toString()+ "upload")
         return fileRepository.upload(file, mimeType, description, clientEmail, invoiceType, balance)
     }
