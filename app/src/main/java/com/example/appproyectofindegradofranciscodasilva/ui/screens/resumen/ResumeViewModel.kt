@@ -227,7 +227,7 @@ class ResumeViewModel @Inject constructor(
     }
 
 
-    private fun addBalance(balance: Balance) {
+   /* private fun addBalance(balance: Balance) {
         viewModelScope.launch {
             balanceServices.updateBalance(balance).catch { cause ->
                 _uiState.update {
@@ -268,7 +268,7 @@ class ResumeViewModel @Inject constructor(
             }
         }
     }
-
+*/
 
 
     private fun getBalance() {

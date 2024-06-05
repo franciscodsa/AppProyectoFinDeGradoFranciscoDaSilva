@@ -4,6 +4,7 @@ import android.net.Uri
 import android.provider.OpenableColumns
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -56,12 +58,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.appproyectofindegradofranciscodasilva.R
 import com.example.appproyectofindegradofranciscodasilva.ui.navigation.FilterButton
+import com.example.appproyectofindegradofranciscodasilva.ui.screens.login.AppLogo
 import java.io.File
 
 @Composable
@@ -117,35 +121,48 @@ fun ResumenScreen(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .verticalScroll(scrollState)
-                .padding(innerPadding)
-                .padding(dimensionResource(id = R.dimen.big_size_space))
-        ) {
-            TopSection(state, viewModel)
-            ContentSection(state)
-            if (openBottomSheet) {
-                BottomSheetContent(
-                    state,
-                    onClose = { openBottomSheet = false },
-                    onFileSelected = { viewModel.handleEvent(ResumenEvent.OnFileSelected(it)) },
-                    onMimeTypeSelected = { viewModel.handleEvent(ResumenEvent.OnMimeTypeSelected(it)) },
-                    onInvoiceTypeChange = { viewModel.handleEvent(ResumenEvent.OnInvoiceTypeSelected) },
-                    onTotalChange = { viewModel.handleEvent(ResumenEvent.OnNewInvoiceTotal(it)) },
-                    onIvaChange = { viewModel.handleEvent(ResumenEvent.OnNewInvoiceIva(it)) },
-                    onDescriptionChange = {
-                        viewModel.handleEvent(
-                            ResumenEvent.OnNewInvoiceDescription(
-                                it
+
+        if (state.userRole == "user"){
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .verticalScroll(scrollState)
+                    .padding(innerPadding)
+                    .padding(dimensionResource(id = R.dimen.big_size_space))
+            ) {
+                TopSection(state, viewModel)
+                ContentSection(state)
+                if (openBottomSheet) {
+                    BottomSheetContent(
+                        state,
+                        onClose = { openBottomSheet = false },
+                        onFileSelected = { viewModel.handleEvent(ResumenEvent.OnFileSelected(it)) },
+                        onMimeTypeSelected = { viewModel.handleEvent(ResumenEvent.OnMimeTypeSelected(it)) },
+                        onInvoiceTypeChange = { viewModel.handleEvent(ResumenEvent.OnInvoiceTypeSelected) },
+                        onTotalChange = { viewModel.handleEvent(ResumenEvent.OnNewInvoiceTotal(it)) },
+                        onIvaChange = { viewModel.handleEvent(ResumenEvent.OnNewInvoiceIva(it)) },
+                        onDescriptionChange = {
+                            viewModel.handleEvent(
+                                ResumenEvent.OnNewInvoiceDescription(
+                                    it
+                                )
                             )
-                        )
-                    },
-                    onSubmit = { viewModel.handleEvent(ResumenEvent.UploadFile) }
+                        },
+                        onSubmit = { viewModel.handleEvent(ResumenEvent.UploadFile) }
+                    )
+                }
+            }
+        }else{
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
+                Image(
+                    painter = painterResource(id = R.drawable.ic_contaeasy),
+                    contentDescription = "Logo",
+                    modifier = Modifier.size(100.dp)
                 )
             }
         }
+
+
     }
 }
 

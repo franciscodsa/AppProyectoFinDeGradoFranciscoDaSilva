@@ -43,6 +43,23 @@ class AccountantViewModel @Inject constructor(
                     message = null
                 )
             }
+
+            AccountantEvent.SetUserRole -> setRole()
+        }
+    }
+
+
+
+    private fun setRole() {
+        viewModelScope.launch {
+            val role = credentialServices.getRole()
+
+            _uiState.update {
+                it.copy(
+                    userRole = role
+                )
+            }
+
         }
     }
 

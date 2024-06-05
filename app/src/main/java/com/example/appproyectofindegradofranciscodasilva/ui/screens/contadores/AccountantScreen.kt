@@ -37,7 +37,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.appproyectofindegradofranciscodasilva.data.model.Accountant
 import com.example.appproyectofindegradofranciscodasilva.ui.navigation.SwipeToDeleteContainer
-import com.example.appproyectofindegradofranciscodasilva.ui.screens.clients.ClientEvent
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -48,17 +47,24 @@ fun AccountantScreen(
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
 
+    LaunchedEffect(Unit) {
+        viewModel.handleEvent(AccountantEvent.SetUserRole)
+    }
+
+
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text("Contadores") },
                 actions = {
-                    IconButton(onClick = onAddClick) {
-                        Icon(
-                            imageVector = Icons.Default.Add,
-                            contentDescription = "Agregar Contador",
-                            tint = MaterialTheme.colorScheme.primary
-                        )
+                    if (state.userRole == "admin") {
+                        IconButton(onClick = onAddClick) {
+                            Icon(
+                                imageVector = Icons.Default.Add,
+                                contentDescription = "Agregar Contador",
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+                        }
                     }
                 }
             )
