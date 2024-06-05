@@ -19,7 +19,7 @@ val screens = listOf(
         "resumen",
         Icons.Filled.Home,
         Icons.Outlined.Home,
-        "Resumen"
+        "Inicio"
     ),
 
     Screens(
@@ -42,43 +42,6 @@ val screens = listOf(
     )
 )
 
-/*
-val screens = listOf(
-    Screens(
-        "registro",
-        Icons.Filled.Apps,
-        Icons.Outlined.Apps,
-        "Registro"
-    ),
-
-    Screens(
-        "login",
-        Icons.Filled.Apps,
-        Icons.Outlined.Apps,
-        "Log-in"
-    ),
-
-    Screens(
-        "resumen",
-        Icons.Filled.Home,
-        Icons.Outlined.Home,
-        "Resumen"
-    ),
-
-    Screens(
-        "files/{clientId}",
-        Icons.Filled.Folder,
-        Icons.Outlined.Folder,
-        "Archivos"
-    ),
-    Screens(
-        "profile",
-        Icons.Filled.Person,
-        Icons.Outlined.Person,
-        "Perfil"
-    )
-)
-*/
 
 data class Screens(
     val route: String,
