@@ -82,7 +82,7 @@ class ContactsViewModel @Inject constructor(
 
                         is NetworkResultt.Success -> _uiState.update {
                             it.copy(accountant = result.data?: Accountant(
-                                "contador@contaeasy",
+                                "contador@contaeasy.com",
                                 "",
                                 "Contador",
                                 "",
