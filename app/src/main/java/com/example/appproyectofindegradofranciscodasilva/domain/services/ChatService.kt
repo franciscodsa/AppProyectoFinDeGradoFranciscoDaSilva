@@ -7,7 +7,6 @@ import com.google.firebase.firestore.ListenerRegistration
 import javax.inject.Inject
 
 class ChatService @Inject constructor(
-    private val firebaseFirestore: FirebaseFirestore,
     private val chatRepository: ChatRepository
 ) {
 

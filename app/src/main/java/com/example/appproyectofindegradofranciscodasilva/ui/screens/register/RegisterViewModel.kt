@@ -11,7 +11,6 @@ import com.example.appproyectofindegradofranciscodasilva.domain.services.Account
 import com.example.appproyectofindegradofranciscodasilva.domain.services.ChatService
 import com.example.appproyectofindegradofranciscodasilva.domain.services.ClientServices
 import com.example.appproyectofindegradofranciscodasilva.domain.services.CredentialServices
-import com.example.appproyectofindegradofranciscodasilva.domain.services.FirebaseService
 import com.example.appproyectofindegradofranciscodasilva.utils.NetworkResultt
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -32,7 +31,6 @@ class RegisterViewModel @Inject constructor(
     private val credentialServices: CredentialServices,
     private val clientServices: ClientServices,
     private val accountantServices: AccountantServices,
-    private val firebaseService: FirebaseService,
     private val chatService: ChatService,
 ) : ViewModel() {
 

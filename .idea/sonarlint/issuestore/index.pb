@@ -191,10 +191,6 @@ aapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/ui/screens/
 `app/src/main/java/com/example/appproyectofindegradofranciscodasilva/ui/screens/chat/ChatEvent.kt,9\2\92f9d178138690f6c1b15781a2f80089680d1179
 A
 gradle.properties,2\a\2afbb999f001938c88fa43fc2ef52abf0f8213e4
-–
-fapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/domain/services/FirebaseService.kt,7\9\793540d4ee8a6b4763c0042ea923a8a5c7e668cd
-›
-kapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/data/repositories/FirebaseRepository.kt,d\3\d3e1e5a0a245aeb4c564ae53aed268b234d36632
 ’
 bapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/domain/services/ChatService.kt,a\4\a4c87b50169af2c8e484d6a91dbcd01b6133a408
 ‰

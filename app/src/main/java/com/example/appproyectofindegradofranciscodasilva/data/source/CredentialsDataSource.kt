@@ -1,5 +1,6 @@
 package com.example.appproyectofindegradofranciscodasilva.data.source
 
+import android.util.Log
 import com.example.appproyectofindegradofranciscodasilva.common.Constantes
 import com.example.appproyectofindegradofranciscodasilva.data.model.ApiMessage
 import com.example.appproyectofindegradofranciscodasilva.data.model.CredentialRequest
@@ -35,6 +36,7 @@ class CredentialsDataSource @Inject constructor(
                 error(Constantes.noData)
             }
         } catch (e: Exception) {
+            Log.e("AAAEEE", e.message.toString())
             return NetworkResultt.Error(Constantes.unknownError)
         }
     }
