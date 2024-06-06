@@ -1,6 +1,7 @@
 package com.example.appproyectofindegradofranciscodasilva.ui.screens.archivos
 
 import android.content.Context
+import com.example.appproyectofindegradofranciscodasilva.ui.screens.clients.ClientEvent
 import com.example.appproyectofindegradofranciscodasilva.ui.screens.register.RegisterEvent
 import java.io.File
 
@@ -23,7 +24,9 @@ sealed class FileEvent {
     class LoadExpenseFilesByClientId(val clientId: String) : FileEvent()
 
     object LoadAllFiles : FileEvent()
+
     object LoadIncomeFiles : FileEvent()
+
     object LoadExpenseFiles : FileEvent()
 
     object MessageSeen : FileEvent()
@@ -33,5 +36,7 @@ sealed class FileEvent {
     class OnTotalChange(val total: String): FileEvent()
 
     class OnIvaChange (val iva: String): FileEvent()
+
+    class DeleteFile(val fileId: Long, val clientId: String) : FileEvent()
 
 }

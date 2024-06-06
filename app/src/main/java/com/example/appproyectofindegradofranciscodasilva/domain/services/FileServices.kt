@@ -63,7 +63,6 @@ class FileServices @Inject constructor(
     }
 
     fun getExpensesFilesByClient(clientEmail: String): Flow<NetworkResultt<List<FilesInfo>>> {
-
         return fileRepository.getExpensesFilesByClient(clientEmail)
     }
 
@@ -71,7 +70,6 @@ class FileServices @Inject constructor(
 
         return fileRepository.getIncomeFilesByClient(clientEmail)
     }
-
 
     fun deleteFile(fileId: Long): Flow<NetworkResultt<ApiMessage>> {
         return fileRepository.deleteFile(fileId)

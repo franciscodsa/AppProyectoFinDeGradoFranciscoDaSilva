@@ -53,6 +53,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.appproyectofindegradofranciscodasilva.data.model.FilesInfo
 import com.example.appproyectofindegradofranciscodasilva.ui.navigation.FilterButton
+import com.example.appproyectofindegradofranciscodasilva.ui.navigation.SwipeToDeleteContainer
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -138,25 +139,31 @@ private fun FileLazyColum(
                     modifier = Modifier.fillMaxSize()
                 ) {
                     items(items = state.value.files, key = { file -> file.id }) { file ->
-                        ExpandableFileCard(
-                            file = file,
-                            expanded = state.value.expandedFileId == file.id,
-                            total = state.value.total,
-                            iva = state.value.iva,
-                            onDownloadClick = {
-                                viewModel.handleEvent(
-                                    FileEvent.DownloadFile(context, file.id)
-                                )
-                            },
-                            onUpdateClick = { fileId, total, iva ->
-                                viewModel.handleEvent(FileEvent.UpdateFile(fileId, total, iva, clientId))
-                            },
-                            onTotalChange = { viewModel.handleEvent(FileEvent.OnTotalChange(it)) },
-                            onIvaChange = { viewModel.handleEvent(FileEvent.OnIvaChange(it)) },
-                            onExpandChange = {
-                                viewModel.handleEvent(FileEvent.OnExpandedFileChange(if (state.value.expandedFileId == file.id) null else file.id))
-                            }
-                        )
+                        SwipeToDeleteContainer(
+                            item = file,
+                            onDelete = {viewModel.handleEvent(FileEvent.DeleteFile(it.id, clientId))}
+                        ) {
+                            file ->
+                            ExpandableFileCard(
+                                file = file,
+                                expanded = state.value.expandedFileId == file.id,
+                                total = state.value.total,
+                                iva = state.value.iva,
+                                onDownloadClick = {
+                                    viewModel.handleEvent(
+                                        FileEvent.DownloadFile(context, file.id)
+                                    )
+                                },
+                                onUpdateClick = { fileId, total, iva ->
+                                    viewModel.handleEvent(FileEvent.UpdateFile(fileId, total, iva, clientId))
+                                },
+                                onTotalChange = { viewModel.handleEvent(FileEvent.OnTotalChange(it)) },
+                                onIvaChange = { viewModel.handleEvent(FileEvent.OnIvaChange(it)) },
+                                onExpandChange = {
+                                    viewModel.handleEvent(FileEvent.OnExpandedFileChange(if (state.value.expandedFileId == file.id) null else file.id))
+                                }
+                            )
+                        }
                         Spacer(modifier = Modifier.height(8.dp))
                     }
                 }

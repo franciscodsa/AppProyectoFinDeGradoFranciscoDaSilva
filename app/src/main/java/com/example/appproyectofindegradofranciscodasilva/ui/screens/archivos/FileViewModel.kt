@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.appproyectofindegradofranciscodasilva.data.model.Balance
 import com.example.appproyectofindegradofranciscodasilva.domain.services.BalanceServices
 import com.example.appproyectofindegradofranciscodasilva.domain.services.FileServices
+import com.example.appproyectofindegradofranciscodasilva.ui.screens.clients.ClientFilter
 import com.example.appproyectofindegradofranciscodasilva.utils.NetworkResultt
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -34,7 +35,6 @@ class FileViewModel @Inject constructor(
                     selectedFile = event.file
                 )
             }
-
 
             is FileEvent.OnMimeTypeSelected -> _uiState.update {
                 it.copy(
@@ -100,9 +100,46 @@ class FileViewModel @Inject constructor(
             is FileEvent.LoadIncomeFilesByClientId -> loadIncomeFiles(event.clientId)
 
             is FileEvent.LoadExpenseFilesByClientId -> loadExpenseFiles(event.clientId)
+            is FileEvent.DeleteFile -> deleteFile(event.fileId, event.clientId)
         }
     }
 
+    private fun deleteFile(fileId: Long, clientId: String) {
+        viewModelScope.launch {
+            fileServices.deleteFile(fileId)
+                .catch { cause ->
+                    _uiState.update {
+                        it.copy(message = cause.message, isLoading = false)
+                    }
+                }
+                .collect { result ->
+                    when (result) {
+                        is NetworkResultt.Success -> {
+                            _uiState.update {
+                                it.copy(message = result.data?.message)
+                            }
+
+                            if (!clientId.contains("@")){
+                                when (_uiState.value.selectedFilter) {
+                                    FileFilter.Todos -> loadAllFiles()
+                                    FileFilter.Ingresos -> loadIncomeFiles()
+                                    FileFilter.Gastos -> loadExpenseFiles()
+                                }
+                            }else{
+                                when (_uiState.value.selectedFilter) {
+                                    FileFilter.Todos -> loadAllFiles(clientId)
+                                    FileFilter.Ingresos -> loadIncomeFiles(clientId)
+                                    FileFilter.Gastos -> loadExpenseFiles(clientId)
+                                }
+                            }
+
+                        }
+                        is NetworkResultt.Error -> _uiState.update { it.copy(message = result.message, isLoading = false) }
+                        is NetworkResultt.Loading -> _uiState.update { it.copy(isLoading = true) }
+                    }
+                }
+        }
+    }
 
 
     private fun update(balanceId: Long, total: String, iva: String, clientId: String) {

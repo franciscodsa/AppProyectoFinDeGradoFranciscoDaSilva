@@ -112,8 +112,6 @@ class ClientViewModel @Inject constructor(
                                         is NetworkResultt.Loading -> _uiState.update { it.copy(isLoading = true) }
                                     }
                                 }
-
-
                         }
                         is NetworkResultt.Error -> _uiState.update { it.copy(message = result.message, isLoading = false) }
                         is NetworkResultt.Loading -> _uiState.update { it.copy(isLoading = true) }
