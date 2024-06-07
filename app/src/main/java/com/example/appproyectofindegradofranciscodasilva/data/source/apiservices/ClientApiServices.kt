@@ -11,7 +11,7 @@ import retrofit2.http.Query
 
 
 interface ClientApiServices {
-    @POST("clients")
+    @POST("clients/add")
     suspend fun addClient(@Body client: Client): Response<ApiMessage>
 
     @POST("clients/update")

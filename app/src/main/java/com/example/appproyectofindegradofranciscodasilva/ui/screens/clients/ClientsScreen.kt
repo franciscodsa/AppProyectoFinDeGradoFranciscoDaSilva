@@ -2,7 +2,6 @@ package com.example.appproyectofindegradofranciscodasilva.ui.screens.clients
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -23,7 +22,6 @@ import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -81,81 +79,77 @@ fun ClientScreen(
             }
         }
 
-        if (state.isLoading) {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
+
+        if (state.userRole == "admin") {
+            LaunchedEffect(Unit) {
+                viewModel.handleEvent(ClientEvent.LoadClients)
             }
         } else {
-            if (state.userRole == "admin") {
-                LaunchedEffect(Unit) {
-                    viewModel.handleEvent(ClientEvent.LoadClients)
-                }
-            } else {
-                LaunchedEffect(Unit) {
-                    viewModel.handleEvent(ClientEvent.LoadClientsByAccountant)
-                }
-            }
-
             LaunchedEffect(Unit) {
-                viewModel.handleEvent(ClientEvent.GetAccountantsEmails)
-            }
-
-            Column(
-                modifier = Modifier
-                    .padding(innerPadding)
-                    .padding(16.dp)
-                    .fillMaxSize()
-            ) {
-                if (state.userRole == "admin") {
-                    FilterButtons(
-                        selectedFilter = state.selectedFilter,
-                        onFilterChange = { viewModel.handleEvent(ClientEvent.OnFilterChanged(it)) }
-                    )
-                }
-                Spacer(modifier = Modifier.height(16.dp))
-                LazyColumn {
-                    items(state.clients, key = { client -> client.email }) { client ->
-                        SwipeToDeleteContainer(
-                            item = client,
-                            onDelete = { viewModel.handleEvent(ClientEvent.DeleteClient(it.email)) }
-                        ) { client ->
-                            ClientCard(
-                                client = client,
-                                expanded = state.expandedClientId == client.email,
-                                accountantEmails = state.accountantEmails,
-                                selectedAccountantEmail = state.selectedAccountantEmail,
-                                onExpandChange = {
-                                    viewModel.handleEvent(
-                                        ClientEvent.OnClientExpandChanged(client.email)
-                                    )
-                                },
-                                onFilesClick = onFilesClick,
-                                onAccountantEmailChange = {
-                                    viewModel.handleEvent(
-                                        ClientEvent.OnAccountantEmailChanged(it)
-                                    )
-                                },
-                                onSaveNewClientsAccountant = {
-                                    viewModel.handleEvent(
-                                        ClientEvent.OnSaveNewClientsAccountant(client)
-                                    )
-                                },
-                                onAccountantEmailSelected = {
-                                    viewModel.handleEvent(
-                                        ClientEvent.OnAccountantEmailSelected(it)
-                                    )
-                                }
-                            )
-                        }
-                        Spacer(modifier = Modifier.height(8.dp))
-                    }
-                }
+                viewModel.handleEvent(ClientEvent.LoadClientsByAccountant)
             }
         }
 
+        LaunchedEffect(Unit) {
+            viewModel.handleEvent(ClientEvent.GetAccountantsEmails)
+        }
 
+        Column(
+            modifier = Modifier
+                .padding(innerPadding)
+                .padding(16.dp)
+                .fillMaxSize()
+        ) {
+            if (state.userRole == "admin") {
+                FilterButtons(
+                    selectedFilter = state.selectedFilter,
+                    onFilterChange = { viewModel.handleEvent(ClientEvent.OnFilterChanged(it)) }
+                )
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            LazyColumn {
+                items(state.clients, key = { client -> client.email }) { client ->
+                    SwipeToDeleteContainer(
+                        item = client,
+                        onDelete = { viewModel.handleEvent(ClientEvent.DeleteClient(it.email)) }
+                    ) { client ->
+                        ClientCard(
+                            client = client,
+                            expanded = state.expandedClientId == client.email,
+                            accountantEmails = state.accountantEmails,
+                            selectedAccountantEmail = state.selectedAccountantEmail,
+                            onExpandChange = {
+                                viewModel.handleEvent(
+                                    ClientEvent.OnClientExpandChanged(client.email)
+                                )
+                            },
+                            onFilesClick = onFilesClick,
+                            onAccountantEmailChange = {
+                                viewModel.handleEvent(
+                                    ClientEvent.OnAccountantEmailChanged(it)
+                                )
+                            },
+                            onSaveNewClientsAccountant = {
+                                viewModel.handleEvent(
+                                    ClientEvent.OnSaveNewClientsAccountant(client)
+                                )
+                            },
+                            onAccountantEmailSelected = {
+                                viewModel.handleEvent(
+                                    ClientEvent.OnAccountantEmailSelected(it)
+                                )
+                            }
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
+            }
+        }
     }
+
+
 }
+
 
 @Composable
 fun FilterButtons(

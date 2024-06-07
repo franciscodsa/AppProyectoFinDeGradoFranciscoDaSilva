@@ -184,11 +184,11 @@ class ClientViewModel @Inject constructor(
                 .collect { result ->
                     when (result) {
                         is NetworkResultt.Success -> {
-
+                            val emails = result.data?.map { accountant -> accountant.email }
+                                ?: emptyList()
                             _uiState.update {
                                 it.copy(
-                                    accountantEmails = result.data?.map { accountant -> accountant.email }
-                                        ?: emptyList(),
+                                    accountantEmails = emails,
                                     isLoading = false
                                 )
                             }

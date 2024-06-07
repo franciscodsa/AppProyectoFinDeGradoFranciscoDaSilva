@@ -13,7 +13,7 @@ interface AccountantApiServices {
     @GET("accountant")
     suspend fun getAllAccountants() : Response<List<Accountant>>
 
-    @POST("accountant")
+    @POST("accountant/add")
     suspend fun addAccountant(@Body accountant: Accountant) : Response<ApiMessage>
 
     @GET("accountant/byClientEmail")
