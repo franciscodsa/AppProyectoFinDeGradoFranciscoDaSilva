@@ -4,7 +4,7 @@ import android.content.Context
 import android.util.Log
 import com.example.appproyectofindegradofranciscodasilva.data.model.ApiMessage
 import com.example.appproyectofindegradofranciscodasilva.data.model.Balance
-import com.example.appproyectofindegradofranciscodasilva.data.model.FilesInfo
+import com.example.appproyectofindegradofranciscodasilva.data.model.FileInfo
 import com.example.appproyectofindegradofranciscodasilva.data.model.InvoiceType
 import com.example.appproyectofindegradofranciscodasilva.data.repositories.FileRepository
 import com.example.appproyectofindegradofranciscodasilva.utils.NetworkResultt
@@ -40,33 +40,33 @@ class FileServices @Inject constructor(
     }
 
 
-    suspend fun getFilesByClient(): Flow<NetworkResultt<List<FilesInfo>>> {
+    suspend fun getFilesByClient(): Flow<NetworkResultt<List<FileInfo>>> {
         val clientEmail = tokenManager.getCurrentUser().first() ?: ""
         Log.i("AAAAAAAAAaaa",tokenManager.getCurrentUser().first().toString()+ "clients")
         return fileRepository.getFilesByClient(clientEmail)
     }
 
-    suspend fun getExpensesFilesByClient(): Flow<NetworkResultt<List<FilesInfo>>> {
+    suspend fun getExpensesFilesByClient(): Flow<NetworkResultt<List<FileInfo>>> {
         val clientEmail = tokenManager.getCurrentUser().first() ?: ""
         Log.i("AAAAAAAAAaaa",tokenManager.getCurrentUser().first().toString()+ "expenses")
 
         return fileRepository.getExpensesFilesByClient(clientEmail)
     }
 
-    suspend fun getIncomeFilesByClient(): Flow<NetworkResultt<List<FilesInfo>>> {
+    suspend fun getIncomeFilesByClient(): Flow<NetworkResultt<List<FileInfo>>> {
         val clientEmail = tokenManager.getCurrentUser().first() ?: ""
         return fileRepository.getIncomeFilesByClient(clientEmail)
     }
 
-    fun getFilesByClient(clientEmail: String): Flow<NetworkResultt<List<FilesInfo>>> {
+    fun getFilesByClient(clientEmail: String): Flow<NetworkResultt<List<FileInfo>>> {
         return fileRepository.getFilesByClient(clientEmail)
     }
 
-    fun getExpensesFilesByClient(clientEmail: String): Flow<NetworkResultt<List<FilesInfo>>> {
+    fun getExpensesFilesByClient(clientEmail: String): Flow<NetworkResultt<List<FileInfo>>> {
         return fileRepository.getExpensesFilesByClient(clientEmail)
     }
 
-    fun getIncomeFilesByClient(clientEmail: String): Flow<NetworkResultt<List<FilesInfo>>> {
+    fun getIncomeFilesByClient(clientEmail: String): Flow<NetworkResultt<List<FileInfo>>> {
 
         return fileRepository.getIncomeFilesByClient(clientEmail)
     }

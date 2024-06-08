@@ -10,7 +10,7 @@ import android.webkit.MimeTypeMap
 import com.example.appproyectofindegradofranciscodasilva.common.Constantes
 import com.example.appproyectofindegradofranciscodasilva.data.model.ApiMessage
 import com.example.appproyectofindegradofranciscodasilva.data.model.Balance
-import com.example.appproyectofindegradofranciscodasilva.data.model.FilesInfo
+import com.example.appproyectofindegradofranciscodasilva.data.model.FileInfo
 import com.example.appproyectofindegradofranciscodasilva.data.model.InvoiceType
 import com.example.appproyectofindegradofranciscodasilva.data.source.apiservices.FileApiServices
 import com.example.appproyectofindegradofranciscodasilva.utils.NetworkResultt
@@ -110,7 +110,7 @@ class FileDataSource @Inject constructor(
         }
     }
 
-    suspend fun getFilesByClient(clientEmail: String): NetworkResultt<List<FilesInfo>> {
+    suspend fun getFilesByClient(clientEmail: String): NetworkResultt<List<FileInfo>> {
         return try {
             val response = fileApiServices.getFilesByClient(clientEmail)
             if (response.isSuccessful) {
@@ -125,7 +125,7 @@ class FileDataSource @Inject constructor(
         }
     }
 
-    suspend fun getExpensesFilesByClient(clientEmail: String): NetworkResultt<List<FilesInfo>> {
+    suspend fun getExpensesFilesByClient(clientEmail: String): NetworkResultt<List<FileInfo>> {
         return try {
             val response = fileApiServices.getExpensesFilesByClient(clientEmail)
             if (response.isSuccessful) {
@@ -140,7 +140,7 @@ class FileDataSource @Inject constructor(
         }
     }
 
-    suspend fun getIncomeFilesByClient(clientEmail: String): NetworkResultt<List<FilesInfo>> {
+    suspend fun getIncomeFilesByClient(clientEmail: String): NetworkResultt<List<FileInfo>> {
         return try {
             val response = fileApiServices.getIncomeFilesByClient(clientEmail)
             if (response.isSuccessful) {

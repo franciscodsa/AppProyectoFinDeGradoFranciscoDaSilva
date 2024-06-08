@@ -1,7 +1,7 @@
 package com.example.appproyectofindegradofranciscodasilva.data.source.apiservices
 
 import com.example.appproyectofindegradofranciscodasilva.data.model.ApiMessage
-import com.example.appproyectofindegradofranciscodasilva.data.model.FilesInfo
+import com.example.appproyectofindegradofranciscodasilva.data.model.FileInfo
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
@@ -34,13 +34,13 @@ interface FileApiServices {
     ): Response<ResponseBody>
 
     @GET("files/info")
-    suspend fun getFilesByClient(@Query("clientEmail") clientEmail: String): Response<List<FilesInfo>>
+    suspend fun getFilesByClient(@Query("clientEmail") clientEmail: String): Response<List<FileInfo>>
 
     @GET("files/expensesInfo")
-    suspend fun getExpensesFilesByClient(@Query("clientEmail") clientEmail: String): Response<List<FilesInfo>>
+    suspend fun getExpensesFilesByClient(@Query("clientEmail") clientEmail: String): Response<List<FileInfo>>
 
     @GET("files/incomeInfo")
-    suspend fun getIncomeFilesByClient(@Query("clientEmail") clientEmail: String): Response<List<FilesInfo>>
+    suspend fun getIncomeFilesByClient(@Query("clientEmail") clientEmail: String): Response<List<FileInfo>>
 
     @DELETE("files/delete/{fileId}")
     suspend fun deleteFile(@Path("fileId") fileId: Long): Response<ApiMessage>

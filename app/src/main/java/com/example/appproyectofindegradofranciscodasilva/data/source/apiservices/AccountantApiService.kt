@@ -8,7 +8,7 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
 
-interface AccountantApiServices {
+interface AccountantApiService {
 
     @GET("accountant")
     suspend fun getAllAccountants() : Response<List<Accountant>>

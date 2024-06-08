@@ -1,6 +1,6 @@
 package com.example.appproyectofindegradofranciscodasilva.ui.screens.archivos
 
-import com.example.appproyectofindegradofranciscodasilva.data.model.FilesInfo
+import com.example.appproyectofindegradofranciscodasilva.data.model.FileInfo
 import java.io.File
 
 data class FileState(
@@ -10,7 +10,7 @@ data class FileState(
 
     val expandedFileId: Long? = null,
 
-    val files: List<FilesInfo> = emptyList(),
+    val files: List<FileInfo> = emptyList(),
     val message: String? = null,
     val selectedFilter: FileFilter = FileFilter.Todos,
 

@@ -4,7 +4,7 @@ import android.content.Context
 import android.util.Log
 import com.example.appproyectofindegradofranciscodasilva.data.model.ApiMessage
 import com.example.appproyectofindegradofranciscodasilva.data.model.Balance
-import com.example.appproyectofindegradofranciscodasilva.data.model.FilesInfo
+import com.example.appproyectofindegradofranciscodasilva.data.model.FileInfo
 import com.example.appproyectofindegradofranciscodasilva.data.model.InvoiceType
 import com.example.appproyectofindegradofranciscodasilva.data.source.FileDataSource
 import com.example.appproyectofindegradofranciscodasilva.utils.NetworkResultt
@@ -13,8 +13,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 
-import okhttp3.ResponseBody
-import retrofit2.Response
 import java.io.File
 import javax.inject.Inject
 
@@ -39,7 +37,7 @@ class FileRepository @Inject constructor(
             emit(result)
         }.flowOn(Dispatchers.IO)
     }
-    fun getFilesByClient(clientEmail: String): Flow<NetworkResultt<List<FilesInfo>>> {
+    fun getFilesByClient(clientEmail: String): Flow<NetworkResultt<List<FileInfo>>> {
         return flow {
             emit(NetworkResultt.Loading())
             val result = fileDataSource.getFilesByClient(clientEmail)
@@ -47,7 +45,7 @@ class FileRepository @Inject constructor(
         }.flowOn(Dispatchers.IO)
     }
 
-    fun getExpensesFilesByClient(clientEmail: String): Flow<NetworkResultt<List<FilesInfo>>> {
+    fun getExpensesFilesByClient(clientEmail: String): Flow<NetworkResultt<List<FileInfo>>> {
         return flow {
             emit(NetworkResultt.Loading())
             val result = fileDataSource.getExpensesFilesByClient(clientEmail)
@@ -55,7 +53,7 @@ class FileRepository @Inject constructor(
         }.flowOn(Dispatchers.IO)
     }
 
-    fun getIncomeFilesByClient(clientEmail: String): Flow<NetworkResultt<List<FilesInfo>>> {
+    fun getIncomeFilesByClient(clientEmail: String): Flow<NetworkResultt<List<FileInfo>>> {
         return flow {
             emit(NetworkResultt.Loading())
             val result = fileDataSource.getIncomeFilesByClient(clientEmail)

@@ -5,7 +5,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import com.example.appproyectofindegradofranciscodasilva.common.Constantes
-import com.example.appproyectofindegradofranciscodasilva.data.source.apiservices.AccountantApiServices
+import com.example.appproyectofindegradofranciscodasilva.data.source.apiservices.AccountantApiService
 import com.example.appproyectofindegradofranciscodasilva.data.source.apiservices.BalanceApiServices
 import com.example.appproyectofindegradofranciscodasilva.data.source.apiservices.ClientApiServices
 import com.example.appproyectofindegradofranciscodasilva.data.source.apiservices.CredentialApiServices
@@ -31,9 +31,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import javax.inject.Inject
 import javax.inject.Named
-import javax.inject.Qualifier
 import javax.inject.Singleton
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = Constantes.dataStore)
@@ -138,8 +136,8 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideAccountantService(@Named("InfoServer") retrofit: Retrofit): AccountantApiServices =
-        retrofit.create(AccountantApiServices::class.java)
+    fun provideAccountantService(@Named("InfoServer") retrofit: Retrofit): AccountantApiService =
+        retrofit.create(AccountantApiService::class.java)
 
     @Singleton
     @Provides

@@ -1,7 +1,6 @@
 package com.example.appproyectofindegradofranciscodasilva.ui.screens.archivos
 
 import android.content.Context
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -51,7 +50,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.appproyectofindegradofranciscodasilva.data.model.FilesInfo
+import com.example.appproyectofindegradofranciscodasilva.data.model.FileInfo
 import com.example.appproyectofindegradofranciscodasilva.ui.navigation.FilterButton
 import com.example.appproyectofindegradofranciscodasilva.ui.navigation.SwipeToDeleteContainer
 
@@ -210,7 +209,7 @@ fun FilterButtons(
 
 @Composable
 fun ExpandableFileCard(
-    file: FilesInfo,
+    file: FileInfo,
     expanded: Boolean,
     total: String,
     iva: String,

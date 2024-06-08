@@ -3,18 +3,18 @@ package com.example.appproyectofindegradofranciscodasilva.data.source
 import com.example.appproyectofindegradofranciscodasilva.common.Constantes
 import com.example.appproyectofindegradofranciscodasilva.data.model.Accountant
 import com.example.appproyectofindegradofranciscodasilva.data.model.ApiMessage
-import com.example.appproyectofindegradofranciscodasilva.data.source.apiservices.AccountantApiServices
+import com.example.appproyectofindegradofranciscodasilva.data.source.apiservices.AccountantApiService
 import com.example.appproyectofindegradofranciscodasilva.utils.NetworkResultt
 import com.squareup.moshi.Moshi
 import javax.inject.Inject
 
 class AccountantDataSource @Inject constructor(
-    private val accountantApiServices: AccountantApiServices,
+    private val accountantApiService: AccountantApiService,
     private val moshi: Moshi
 ) {
     suspend fun getAccountants(): NetworkResultt<List<Accountant>> {
         try {
-            val response = accountantApiServices.getAllAccountants()
+            val response = accountantApiService.getAllAccountants()
 
             if (!response.isSuccessful) {
                 val errorMessage = response.errorBody()?.string() ?: Constantes.unknownError
@@ -36,7 +36,7 @@ class AccountantDataSource @Inject constructor(
 
     suspend fun getByClientEmail(clientEmail: String): NetworkResultt<Accountant> {
         try {
-            val response = accountantApiServices.getByClientEmail(clientEmail)
+            val response = accountantApiService.getByClientEmail(clientEmail)
 
             if (!response.isSuccessful) {
                 val errorMessage = response.errorBody()?.string() ?: Constantes.unknownError
@@ -59,7 +59,7 @@ class AccountantDataSource @Inject constructor(
 
     suspend fun addAccountant(accountant: Accountant): NetworkResultt<ApiMessage> {
         try {
-            val response = accountantApiServices.addAccountant(accountant)
+            val response = accountantApiService.addAccountant(accountant)
 
             if (!response.isSuccessful) {
                 val errorMessage = response.errorBody()?.string() ?: Constantes.unknownError
