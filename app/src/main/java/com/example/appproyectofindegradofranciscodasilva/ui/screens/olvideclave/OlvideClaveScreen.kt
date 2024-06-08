@@ -9,7 +9,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ContentPaste
 import androidx.compose.material.icons.filled.Send
@@ -45,6 +47,7 @@ fun OlvideClaveScreen(viewModel: OlvideClaveViewModel = hiltViewModel()) {
     val state by viewModel.uiState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
     val clipboardManager = LocalClipboardManager.current
+    val scrollState = rememberScrollState()
 
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
@@ -70,6 +73,7 @@ fun OlvideClaveScreen(viewModel: OlvideClaveViewModel = hiltViewModel()) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(innerPadding)
+                    .verticalScroll(scrollState)
                     .padding(dimensionResource(id = R.dimen.big_size_space)),
                 verticalArrangement = Arrangement.Center
             ) {
