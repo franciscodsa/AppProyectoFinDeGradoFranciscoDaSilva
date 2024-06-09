@@ -2,10 +2,9 @@ package com.example.appproyectofindegradofranciscodasilva.ui.screens.contadores
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.appproyectofindegradofranciscodasilva.domain.services.AccountantServices
-import com.example.appproyectofindegradofranciscodasilva.domain.services.CredentialServices
-import com.example.appproyectofindegradofranciscodasilva.domain.services.UserServices
-import com.example.appproyectofindegradofranciscodasilva.ui.screens.clients.ClientFilter
+import com.example.appproyectofindegradofranciscodasilva.domain.services.AccountantService
+import com.example.appproyectofindegradofranciscodasilva.domain.services.CredentialService
+import com.example.appproyectofindegradofranciscodasilva.domain.services.UserService
 import com.example.appproyectofindegradofranciscodasilva.utils.NetworkResultt
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,9 +17,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AccountantViewModel @Inject constructor(
-    private val accountantService: AccountantServices,
-    private val userServices: UserServices,
-    private val credentialServices: CredentialServices
+    private val accountantService: AccountantService,
+    private val userService: UserService,
+    private val credentialService: CredentialService
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(AccountantState())
@@ -53,7 +52,7 @@ class AccountantViewModel @Inject constructor(
 
     private fun setRole() {
         viewModelScope.launch {
-            val role = credentialServices.getRole()
+            val role = credentialService.getRole()
 
             _uiState.update {
                 it.copy(
@@ -66,7 +65,7 @@ class AccountantViewModel @Inject constructor(
 
     private fun deleteAccountant(email: String) {
         viewModelScope.launch {
-            userServices.deleteUser(email)
+            userService.deleteUser(email)
                 .catch { cause ->
                     _uiState.update {
                         it.copy(message = cause.message, isLoading = false)
@@ -76,7 +75,7 @@ class AccountantViewModel @Inject constructor(
                     when (result) {
                         is NetworkResultt.Success -> {
 
-                            credentialServices.deleteCredentials(email)
+                            credentialService.deleteCredentials(email)
                                 .catch { cause ->
                                     _uiState.update {
                                         it.copy(message = cause.message, isLoading = false)

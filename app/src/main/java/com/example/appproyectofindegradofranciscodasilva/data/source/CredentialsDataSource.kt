@@ -5,7 +5,7 @@ import com.example.appproyectofindegradofranciscodasilva.common.Constantes
 import com.example.appproyectofindegradofranciscodasilva.data.model.ApiMessage
 import com.example.appproyectofindegradofranciscodasilva.data.model.CredentialRequest
 import com.example.appproyectofindegradofranciscodasilva.data.model.LoginInfoResponse
-import com.example.appproyectofindegradofranciscodasilva.data.source.apiservices.CredentialApiServices
+import com.example.appproyectofindegradofranciscodasilva.data.source.apiservices.CredentialApiService
 
 
 import com.example.appproyectofindegradofranciscodasilva.utils.NetworkResultt
@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 
 class CredentialsDataSource @Inject constructor(
-    private val credentialApiService: CredentialApiServices,
+    private val credentialApiService: CredentialApiService,
     private val moshi: Moshi
 ) {
 

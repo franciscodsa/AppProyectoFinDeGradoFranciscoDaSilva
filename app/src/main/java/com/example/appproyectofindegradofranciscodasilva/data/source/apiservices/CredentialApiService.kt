@@ -13,7 +13,7 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface CredentialApiServices {
+interface CredentialApiService {
     @POST(Constantes.login)
     suspend fun login(@Body request: CredentialRequest): Response<LoginInfoResponse>
 

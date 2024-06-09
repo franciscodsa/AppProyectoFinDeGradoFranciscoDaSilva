@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.first
 import java.io.File
 import javax.inject.Inject
 
-class FileServices @Inject constructor(
+class FileService @Inject constructor(
     private val fileRepository: FileRepository,
     private val tokenManager: TokenManager
 ) {

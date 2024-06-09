@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
-class CredentialServices @Inject constructor(
+class CredentialService @Inject constructor(
     private val tokenManager: TokenManager,
     private val credentialRepository: CredentialRepository
 ) {

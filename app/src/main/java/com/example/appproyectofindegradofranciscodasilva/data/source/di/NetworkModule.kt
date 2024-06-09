@@ -6,11 +6,11 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import com.example.appproyectofindegradofranciscodasilva.common.Constantes
 import com.example.appproyectofindegradofranciscodasilva.data.source.apiservices.AccountantApiService
-import com.example.appproyectofindegradofranciscodasilva.data.source.apiservices.BalanceApiServices
-import com.example.appproyectofindegradofranciscodasilva.data.source.apiservices.ClientApiServices
-import com.example.appproyectofindegradofranciscodasilva.data.source.apiservices.CredentialApiServices
-import com.example.appproyectofindegradofranciscodasilva.data.source.apiservices.FileApiServices
-import com.example.appproyectofindegradofranciscodasilva.data.source.apiservices.UserApiServices
+import com.example.appproyectofindegradofranciscodasilva.data.source.apiservices.BalanceApiService
+import com.example.appproyectofindegradofranciscodasilva.data.source.apiservices.ClientApiService
+import com.example.appproyectofindegradofranciscodasilva.data.source.apiservices.CredentialApiService
+import com.example.appproyectofindegradofranciscodasilva.data.source.apiservices.FileApiService
+import com.example.appproyectofindegradofranciscodasilva.data.source.apiservices.UserApiService
 import com.example.appproyectofindegradofranciscodasilva.utils.AuthAuthenticator
 import com.example.appproyectofindegradofranciscodasilva.utils.AuthInterceptor
 import com.example.appproyectofindegradofranciscodasilva.utils.TokenManager
@@ -98,7 +98,7 @@ object NetworkModule {
             .build()
     }
 
-    // Proporciona una instancia de Retrofit para CredentialApiServices
+    // Proporciona una instancia de Retrofit para CredentialApiService
     @Named("CredentialServer")
     @Singleton
     @Provides
@@ -122,17 +122,17 @@ object NetworkModule {
             .build()
     }
 
-    // Proporciona CredentialApiServices utilizando la instancia de Retrofit correspondiente
+    // Proporciona CredentialApiService utilizando la instancia de Retrofit correspondiente
     @Singleton
     @Provides
-    fun provideCredentialService(@Named("CredentialServer") retrofit: Retrofit): CredentialApiServices =
-        retrofit.create(CredentialApiServices::class.java)
+    fun provideCredentialService(@Named("CredentialServer") retrofit: Retrofit): CredentialApiService =
+        retrofit.create(CredentialApiService::class.java)
 
-    // Proporciona ClientApiServices utilizando la instancia de Retrofit correspondiente
+    // Proporciona ClientApiService utilizando la instancia de Retrofit correspondiente
     @Singleton
     @Provides
-    fun provideClientService(@Named("InfoServer") retrofit: Retrofit): ClientApiServices =
-        retrofit.create(ClientApiServices::class.java)
+    fun provideClientService(@Named("InfoServer") retrofit: Retrofit): ClientApiService =
+        retrofit.create(ClientApiService::class.java)
 
     @Singleton
     @Provides
@@ -141,18 +141,18 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideFileService(@Named("InfoServer") retrofit: Retrofit): FileApiServices =
-        retrofit.create(FileApiServices::class.java)
+    fun provideFileService(@Named("InfoServer") retrofit: Retrofit): FileApiService =
+        retrofit.create(FileApiService::class.java)
 
     @Singleton
     @Provides
-    fun provideBalanceService(@Named("InfoServer") retrofit: Retrofit): BalanceApiServices =
-        retrofit.create(BalanceApiServices::class.java)
+    fun provideBalanceService(@Named("InfoServer") retrofit: Retrofit): BalanceApiService =
+        retrofit.create(BalanceApiService::class.java)
 
     @Singleton
     @Provides
-    fun provideUserService(@Named("InfoServer") retrofit: Retrofit): UserApiServices =
-        retrofit.create(UserApiServices::class.java)
+    fun provideUserService(@Named("InfoServer") retrofit: Retrofit): UserApiService =
+        retrofit.create(UserApiService::class.java)
 }
 
 class LocalDateTimeAdapter {

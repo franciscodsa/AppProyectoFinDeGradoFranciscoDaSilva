@@ -4,9 +4,9 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.appproyectofindegradofranciscodasilva.data.model.Accountant
-import com.example.appproyectofindegradofranciscodasilva.domain.services.AccountantServices
-import com.example.appproyectofindegradofranciscodasilva.domain.services.ClientServices
-import com.example.appproyectofindegradofranciscodasilva.domain.services.CredentialServices
+import com.example.appproyectofindegradofranciscodasilva.domain.services.AccountantService
+import com.example.appproyectofindegradofranciscodasilva.domain.services.ClientService
+import com.example.appproyectofindegradofranciscodasilva.domain.services.CredentialService
 import com.example.appproyectofindegradofranciscodasilva.utils.NetworkResultt
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,9 +19,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ContactsViewModel @Inject constructor(
-    private val accountantServices: AccountantServices,
-    private val clientServices: ClientServices,
-    private val credentialServices: CredentialServices
+    private val accountantService: AccountantService,
+    private val clientService: ClientService,
+    private val credentialService: CredentialService
 ) : ViewModel() {
 
 
@@ -44,7 +44,7 @@ class ContactsViewModel @Inject constructor(
 
     private fun setRole() {
         viewModelScope.launch {
-            val role = credentialServices.getRole()
+            val role = credentialService.getRole()
             _uiState.update { it.copy(userRole = role) }
         }
     }
@@ -71,7 +71,7 @@ class ContactsViewModel @Inject constructor(
 
     private fun loadAccountant() {
         viewModelScope.launch {
-            accountantServices.getByClientEmail()
+            accountantService.getByClientEmail()
                 .collect { result ->
                     when (result) {
                         is NetworkResultt.Error -> _uiState.update {
@@ -97,7 +97,7 @@ class ContactsViewModel @Inject constructor(
 
     private fun loadClientsByAccountant() {
         viewModelScope.launch {
-            clientServices.getClientsByAccountant()
+            clientService.getClientsByAccountant()
                 .collect { result ->
                     when (result) {
                         is NetworkResultt.Success -> _uiState.update {
@@ -116,7 +116,7 @@ class ContactsViewModel @Inject constructor(
 
     private fun loadClients() {
         viewModelScope.launch {
-            clientServices.getClients()
+            clientService.getClients()
                 .collect { result ->
                     when (result) {
                         is NetworkResultt.Success -> _uiState.update {
@@ -135,7 +135,7 @@ class ContactsViewModel @Inject constructor(
 
     private fun loadCurrentUser() {
         viewModelScope.launch {
-            val currentUser = credentialServices.getCurrentUser()
+            val currentUser = credentialService.getCurrentUser()
             _uiState.update { it.copy(currentUser = currentUser) }
         }
     }

@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.first
 
 import javax.inject.Inject
 
-class BalanceServices @Inject constructor(
+class BalanceService @Inject constructor(
     private val balanceRepository: BalanceRepository,
     private val tokenManager: TokenManager
 ) {

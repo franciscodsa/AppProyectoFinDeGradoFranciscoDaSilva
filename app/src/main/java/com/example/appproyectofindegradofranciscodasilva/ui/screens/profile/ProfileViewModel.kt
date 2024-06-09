@@ -3,8 +3,8 @@ package com.example.appproyectofindegradofranciscodasilva.ui.screens.profile
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.appproyectofindegradofranciscodasilva.data.model.User
-import com.example.appproyectofindegradofranciscodasilva.domain.services.CredentialServices
-import com.example.appproyectofindegradofranciscodasilva.domain.services.UserServices
+import com.example.appproyectofindegradofranciscodasilva.domain.services.CredentialService
+import com.example.appproyectofindegradofranciscodasilva.domain.services.UserService
 import com.example.appproyectofindegradofranciscodasilva.utils.NetworkResultt
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,8 +18,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    private val userService: UserServices,
-    private val credentialServices: CredentialServices
+    private val userService: UserService,
+    private val credentialService: CredentialService
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ProfileState())
@@ -97,7 +97,7 @@ class ProfileViewModel @Inject constructor(
 
     private fun logout() {
         viewModelScope.launch {
-            credentialServices.logout()
+            credentialService.logout()
         }
     }
 }

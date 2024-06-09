@@ -3,13 +3,13 @@ package com.example.appproyectofindegradofranciscodasilva.data.source
 import com.example.appproyectofindegradofranciscodasilva.common.Constantes
 import com.example.appproyectofindegradofranciscodasilva.data.model.ApiMessage
 import com.example.appproyectofindegradofranciscodasilva.data.model.User
-import com.example.appproyectofindegradofranciscodasilva.data.source.apiservices.UserApiServices
+import com.example.appproyectofindegradofranciscodasilva.data.source.apiservices.UserApiService
 import com.example.appproyectofindegradofranciscodasilva.utils.NetworkResultt
 import com.squareup.moshi.Moshi
 import javax.inject.Inject
 
 class UserDataSource @Inject constructor(
-    private val userApiServices: UserApiServices,
+    private val userApiService: UserApiService,
     private val moshi: Moshi
 ) {
 
@@ -17,7 +17,7 @@ class UserDataSource @Inject constructor(
 
     suspend fun updateUser(user: User): NetworkResultt<ApiMessage> {
         try {
-            val response = userApiServices.updateUser(user)
+            val response = userApiService.updateUser(user)
 
             if (!response.isSuccessful) {
                 val errorMessage = response.errorBody()?.string() ?: Constantes.unknownError
@@ -39,7 +39,7 @@ class UserDataSource @Inject constructor(
 
     suspend fun getUserById(email: String): NetworkResultt<User> {
         try {
-            val response = userApiServices.getUserById(email)
+            val response = userApiService.getUserById(email)
 
             if (!response.isSuccessful) {
                 val errorMessage = response.errorBody()?.string() ?: Constantes.unknownError
@@ -61,7 +61,7 @@ class UserDataSource @Inject constructor(
 
     suspend fun deleteUser(email: String): NetworkResultt<ApiMessage> {
         try {
-            val response = userApiServices.deleteUser(email)
+            val response = userApiService.deleteUser(email)
 
             if (!response.isSuccessful) {
                 val errorMessage = response.errorBody()?.string() ?: Constantes.unknownError

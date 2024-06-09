@@ -4,14 +4,13 @@ import android.util.Log
 import com.example.appproyectofindegradofranciscodasilva.common.Constantes
 import com.example.appproyectofindegradofranciscodasilva.data.model.ApiMessage
 import com.example.appproyectofindegradofranciscodasilva.data.model.Client
-import com.example.appproyectofindegradofranciscodasilva.data.source.apiservices.ClientApiServices
+import com.example.appproyectofindegradofranciscodasilva.data.source.apiservices.ClientApiService
 import com.example.appproyectofindegradofranciscodasilva.utils.NetworkResultt
 import com.squareup.moshi.Moshi
-import retrofit2.Retrofit
 import javax.inject.Inject
 
 class ClientDataSource @Inject constructor(
-    private val clientApiServices: ClientApiServices,
+    private val clientApiService: ClientApiService,
     private val moshi: Moshi
 ) {
 
@@ -19,7 +18,7 @@ class ClientDataSource @Inject constructor(
         try {
             Log.i("asdasd", "AAAAAAAAAAAAAAAAAAAAAAA")
 
-            val response = clientApiServices.addClient(client)
+            val response = clientApiService.addClient(client)
 
             if (!response.isSuccessful) {
                 val errorMessage = response.errorBody()?.string() ?: Constantes.unknownError
@@ -43,7 +42,7 @@ class ClientDataSource @Inject constructor(
         try {
             Log.i("asdasd", "AAAAAAAAAAAAAAAAAAAAAAA")
 
-            val response = clientApiServices.updateClient(client)
+            val response = clientApiService.updateClient(client)
 
             if (!response.isSuccessful) {
                 val errorMessage = response.errorBody()?.string() ?: Constantes.unknownError
@@ -65,7 +64,7 @@ class ClientDataSource @Inject constructor(
 
     suspend fun getClients(): NetworkResultt<List<Client>> {
         try {
-            val response = clientApiServices.getAllClients()
+            val response = clientApiService.getAllClients()
 
             if (!response.isSuccessful) {
                 val errorMessage = response.errorBody()?.string() ?: Constantes.unknownError
@@ -87,7 +86,7 @@ class ClientDataSource @Inject constructor(
 
     suspend fun getClientsWithNoAccountant(): NetworkResultt<List<Client>> {
         try {
-            val response = clientApiServices.getClientsWithNoAccountant()
+            val response = clientApiService.getClientsWithNoAccountant()
 
             if (!response.isSuccessful) {
                 val errorMessage = response.errorBody()?.string() ?: Constantes.unknownError
@@ -109,7 +108,7 @@ class ClientDataSource @Inject constructor(
 
     suspend fun getClientsByAccount(email: String): NetworkResultt<List<Client>> {
         try {
-            val response = clientApiServices.getClientsByAccountant(email)
+            val response = clientApiService.getClientsByAccountant(email)
 
             if (!response.isSuccessful) {
                 val errorMessage = response.errorBody()?.string() ?: Constantes.unknownError

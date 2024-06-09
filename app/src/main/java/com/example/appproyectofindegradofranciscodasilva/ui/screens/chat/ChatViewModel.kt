@@ -3,7 +3,7 @@ package com.example.appproyectofindegradofranciscodasilva.ui.screens.chat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.appproyectofindegradofranciscodasilva.domain.services.ChatService
-import com.example.appproyectofindegradofranciscodasilva.domain.services.CredentialServices
+import com.example.appproyectofindegradofranciscodasilva.domain.services.CredentialService
 import com.google.firebase.firestore.ListenerRegistration
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,7 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ChatViewModel @Inject constructor(
     private val chatService: ChatService,
-    private val credentialServices: CredentialServices
+    private val credentialService: CredentialService
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ChatState())
@@ -46,7 +46,7 @@ class ChatViewModel @Inject constructor(
 
     private fun loadCurrentUser() {
         viewModelScope.launch {
-            val currentUser = credentialServices.getCurrentUser()
+            val currentUser = credentialService.getCurrentUser()
             _uiState.update { it.copy(currentUser = currentUser) }
         }
     }
@@ -54,7 +54,7 @@ class ChatViewModel @Inject constructor(
     private fun sendMessage() {
         val clientEmail = _uiState.value.clientEmail
         viewModelScope.launch {
-            val senderEmail = credentialServices.getCurrentUser()
+            val senderEmail = credentialService.getCurrentUser()
             if (senderEmail.isEmpty() || clientEmail.isEmpty()) {
                 _uiState.update {
                     it.copy(

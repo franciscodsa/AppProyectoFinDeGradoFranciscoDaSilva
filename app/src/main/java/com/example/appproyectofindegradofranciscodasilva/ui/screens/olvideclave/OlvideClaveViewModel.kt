@@ -3,7 +3,7 @@ package com.example.appproyectofindegradofranciscodasilva.ui.screens.olvideclave
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.appproyectofindegradofranciscodasilva.common.Constantes
-import com.example.appproyectofindegradofranciscodasilva.domain.services.CredentialServices
+import com.example.appproyectofindegradofranciscodasilva.domain.services.CredentialService
 import com.example.appproyectofindegradofranciscodasilva.utils.NetworkResultt
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class OlvideClaveViewModel @Inject constructor(
-    private val credentialServices: CredentialServices
+    private val credentialService: CredentialService
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(OlvideClaveState())
@@ -61,7 +61,7 @@ class OlvideClaveViewModel @Inject constructor(
             _uiState.update { it.copy(message = "Email inválido") }
         } else {
             viewModelScope.launch {
-                credentialServices.getAuthCode(email)
+                credentialService.getAuthCode(email)
                     .catch { cause ->
                         _uiState.update {
                             it.copy(
@@ -99,7 +99,7 @@ class OlvideClaveViewModel @Inject constructor(
             _uiState.update { it.copy(message = Constantes.camposVaciosMessage) }
         }else {
             viewModelScope.launch {
-                credentialServices.changePassword(
+                credentialService.changePassword(
                     state.newPassword,
                     state.confirmPassword,
                     state.authCode

@@ -5,9 +5,8 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.appproyectofindegradofranciscodasilva.data.model.Balance
-import com.example.appproyectofindegradofranciscodasilva.domain.services.BalanceServices
-import com.example.appproyectofindegradofranciscodasilva.domain.services.FileServices
-import com.example.appproyectofindegradofranciscodasilva.ui.screens.clients.ClientFilter
+import com.example.appproyectofindegradofranciscodasilva.domain.services.BalanceService
+import com.example.appproyectofindegradofranciscodasilva.domain.services.FileService
 import com.example.appproyectofindegradofranciscodasilva.utils.NetworkResultt
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,8 +19,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FileViewModel @Inject constructor(
-    private val fileServices: FileServices,
-    private val balanceServices: BalanceServices
+    private val fileService: FileService,
+    private val balanceService: BalanceService
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(FileState())
@@ -106,7 +105,7 @@ class FileViewModel @Inject constructor(
 
     private fun deleteFile(fileId: Long, clientId: String) {
         viewModelScope.launch {
-            fileServices.deleteFile(fileId)
+            fileService.deleteFile(fileId)
                 .catch { cause ->
                     _uiState.update {
                         it.copy(message = cause.message, isLoading = false)
@@ -158,7 +157,7 @@ class FileViewModel @Inject constructor(
                 }
 
             viewModelScope.launch {
-                balanceServices.updateBalance(balance)
+                balanceService.updateBalance(balance)
                     .catch(action = { cause ->
                         _uiState.update {
                             it.copy(
@@ -214,7 +213,7 @@ class FileViewModel @Inject constructor(
 
     private fun download(context: Context, fileId: Long) {
         viewModelScope.launch {
-            fileServices.download(fileId, context)
+            fileService.download(fileId, context)
                 .catch(action = { cause ->
                     Log.i("f", "error al catch")
                     _uiState.update {
@@ -256,7 +255,7 @@ class FileViewModel @Inject constructor(
 
     private fun loadAllFiles() {
         viewModelScope.launch {
-            fileServices.getFilesByClient()
+            fileService.getFilesByClient()
                 .catch { cause ->
                     _uiState.update { it.copy(message = cause.message, isLoading = false) }
                 }
@@ -282,7 +281,7 @@ class FileViewModel @Inject constructor(
 
     private fun loadIncomeFiles() {
         viewModelScope.launch {
-            fileServices.getIncomeFilesByClient()
+            fileService.getIncomeFilesByClient()
                 .catch { cause ->
                     _uiState.update { it.copy(message = cause.message, isLoading = false) }
                 }
@@ -308,7 +307,7 @@ class FileViewModel @Inject constructor(
 
     private fun loadExpenseFiles() {
         viewModelScope.launch {
-            fileServices.getExpensesFilesByClient()
+            fileService.getExpensesFilesByClient()
                 .catch { cause ->
                     _uiState.update { it.copy(message = cause.message, isLoading = false) }
                 }
@@ -335,7 +334,7 @@ class FileViewModel @Inject constructor(
 
     private fun loadAllFiles(clientId: String) {
         viewModelScope.launch {
-            fileServices.getFilesByClient(clientId)
+            fileService.getFilesByClient(clientId)
                 .catch { cause ->
                     _uiState.update { it.copy(message = cause.message, isLoading = false) }
                 }
@@ -361,7 +360,7 @@ class FileViewModel @Inject constructor(
 
     private fun loadIncomeFiles(clientId: String) {
         viewModelScope.launch {
-            fileServices.getIncomeFilesByClient(clientId)
+            fileService.getIncomeFilesByClient(clientId)
                 .catch { cause ->
                     _uiState.update { it.copy(message = cause.message, isLoading = false) }
                 }
@@ -387,7 +386,7 @@ class FileViewModel @Inject constructor(
 
     private fun loadExpenseFiles(clientId: String) {
         viewModelScope.launch {
-            fileServices.getExpensesFilesByClient(clientId)
+            fileService.getExpensesFilesByClient(clientId)
                 .catch { cause ->
                     _uiState.update { it.copy(message = cause.message, isLoading = false) }
                 }

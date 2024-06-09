@@ -5,9 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.appproyectofindegradofranciscodasilva.data.model.Balance
 import com.example.appproyectofindegradofranciscodasilva.data.model.InvoiceType
-import com.example.appproyectofindegradofranciscodasilva.domain.services.BalanceServices
-import com.example.appproyectofindegradofranciscodasilva.domain.services.CredentialServices
-import com.example.appproyectofindegradofranciscodasilva.domain.services.FileServices
+import com.example.appproyectofindegradofranciscodasilva.domain.services.BalanceService
+import com.example.appproyectofindegradofranciscodasilva.domain.services.CredentialService
+import com.example.appproyectofindegradofranciscodasilva.domain.services.FileService
 import com.example.appproyectofindegradofranciscodasilva.utils.NetworkResultt
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,9 +21,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ResumeViewModel @Inject constructor(
-    private val balanceServices: BalanceServices,
-    private val credentialServices: CredentialServices,
-    private val fileServices: FileServices
+    private val balanceService: BalanceService,
+    private val credentialService: CredentialService,
+    private val fileService: FileService
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ResumenState())
@@ -134,7 +134,7 @@ class ResumeViewModel @Inject constructor(
 
     private fun setRole() {
         viewModelScope.launch {
-            val role = credentialServices.getRole()
+            val role = credentialService.getRole()
 
             _uiState.update {
                 it.copy(
@@ -166,7 +166,7 @@ class ResumeViewModel @Inject constructor(
             )
 
             viewModelScope.launch {
-                fileServices.upload(
+                fileService.upload(
                     _uiState.value.selectedFile!!,
                     _uiState.value.mimeType,
                     _uiState.value.newInvoiceDescription,
@@ -229,7 +229,7 @@ class ResumeViewModel @Inject constructor(
 
    /* private fun addBalance(balance: Balance) {
         viewModelScope.launch {
-            balanceServices.updateBalance(balance).catch { cause ->
+            balanceService.updateBalance(balance).catch { cause ->
                 _uiState.update {
                     it.copy(
                         message = cause.message,
@@ -274,7 +274,7 @@ class ResumeViewModel @Inject constructor(
     private fun getBalance() {
         viewModelScope.launch {
 
-            balanceServices.getQuarterBalance(
+            balanceService.getQuarterBalance(
                 _uiState.value.selectedYear.toInt(),
                 _uiState.value.selectedTrimester
             ).catch(action = { cause ->

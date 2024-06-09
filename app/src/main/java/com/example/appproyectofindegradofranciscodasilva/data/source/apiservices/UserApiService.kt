@@ -6,7 +6,7 @@ import com.example.appproyectofindegradofranciscodasilva.data.model.User
 import retrofit2.Response
 import retrofit2.http.*
 
-interface UserApiServices {
+interface UserApiService {
 
     @POST("users/update")
     suspend fun updateUser(@Body user: User): Response<ApiMessage>

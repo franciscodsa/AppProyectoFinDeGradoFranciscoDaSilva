@@ -14,7 +14,7 @@ import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface FileApiServices {
+interface FileApiService {
     @POST("files/upload")
     @Multipart
     suspend fun uploadFile(

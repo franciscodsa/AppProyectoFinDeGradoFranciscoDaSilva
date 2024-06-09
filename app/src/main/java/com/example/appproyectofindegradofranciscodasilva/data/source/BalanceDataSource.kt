@@ -5,18 +5,18 @@ import com.example.appproyectofindegradofranciscodasilva.common.Constantes
 import com.example.appproyectofindegradofranciscodasilva.data.model.ApiMessage
 import com.example.appproyectofindegradofranciscodasilva.data.model.Balance
 import com.example.appproyectofindegradofranciscodasilva.data.model.QuarterBalance
-import com.example.appproyectofindegradofranciscodasilva.data.source.apiservices.BalanceApiServices
+import com.example.appproyectofindegradofranciscodasilva.data.source.apiservices.BalanceApiService
 import com.example.appproyectofindegradofranciscodasilva.utils.NetworkResultt
 import com.squareup.moshi.Moshi
 import javax.inject.Inject
 
 class BalanceDataSource @Inject constructor(
-    private val balanceApiServices: BalanceApiServices,
+    private val balanceApiService: BalanceApiService,
     private val moshi: Moshi
 ) {
     suspend fun updateBalance(balance: Balance): NetworkResultt<ApiMessage> {
         try {
-            val response = balanceApiServices.updateBalance(balance)
+            val response = balanceApiService.updateBalance(balance)
 
             if (!response.isSuccessful) {
                 val errorMessage = response.errorBody()?.string() ?: Constantes.unknownError
@@ -43,7 +43,7 @@ class BalanceDataSource @Inject constructor(
         quarter: String
     ): NetworkResultt<QuarterBalance> {
         try {
-            val response = balanceApiServices.getBalancesByClientIdAndYearAndQuarter(clientEmail, year, quarter)
+            val response = balanceApiService.getBalancesByClientIdAndYearAndQuarter(clientEmail, year, quarter)
 
             if (!response.isSuccessful) {
                 val errorMessage = response.errorBody()?.string() ?: Constantes.unknownError

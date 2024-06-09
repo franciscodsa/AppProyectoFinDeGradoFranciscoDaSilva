@@ -4,10 +4,10 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.appproyectofindegradofranciscodasilva.data.model.Client
-import com.example.appproyectofindegradofranciscodasilva.domain.services.AccountantServices
-import com.example.appproyectofindegradofranciscodasilva.domain.services.ClientServices
-import com.example.appproyectofindegradofranciscodasilva.domain.services.CredentialServices
-import com.example.appproyectofindegradofranciscodasilva.domain.services.UserServices
+import com.example.appproyectofindegradofranciscodasilva.domain.services.AccountantService
+import com.example.appproyectofindegradofranciscodasilva.domain.services.ClientService
+import com.example.appproyectofindegradofranciscodasilva.domain.services.CredentialService
+import com.example.appproyectofindegradofranciscodasilva.domain.services.UserService
 import com.example.appproyectofindegradofranciscodasilva.utils.NetworkResultt
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,10 +20,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ClientViewModel @Inject constructor(
-    private val clientService: ClientServices,
-    private val accountantServices: AccountantServices,
-    private val credentialServices: CredentialServices,
-    private val userServices: UserServices
+    private val clientService: ClientService,
+    private val accountantService: AccountantService,
+    private val credentialService: CredentialService,
+    private val userService: UserService
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ClientState())
@@ -79,7 +79,7 @@ class ClientViewModel @Inject constructor(
 
     private fun deleteClient(clientId: String) {
         viewModelScope.launch {
-            userServices.deleteUser(clientId)
+            userService.deleteUser(clientId)
                 .catch { cause ->
                     _uiState.update {
                         it.copy(message = cause.message, isLoading = false)
@@ -88,7 +88,7 @@ class ClientViewModel @Inject constructor(
                 .collect { result ->
                     when (result) {
                         is NetworkResultt.Success -> {
-                            credentialServices.deleteCredentials(clientId)
+                            credentialService.deleteCredentials(clientId)
                                 .catch { cause ->
                                     _uiState.update {
                                         it.copy(message = cause.message, isLoading = false)
@@ -159,7 +159,7 @@ class ClientViewModel @Inject constructor(
 
     private fun setRole() {
         viewModelScope.launch {
-            val role = credentialServices.getRole()
+            val role = credentialService.getRole()
 
             _uiState.update {
                 it.copy(
@@ -173,7 +173,7 @@ class ClientViewModel @Inject constructor(
 
     private fun loadAccountantsEmails(){
         viewModelScope.launch {
-            accountantServices.getAccountants().catch { cause ->
+            accountantService.getAccountants().catch { cause ->
                 _uiState.update {
                     it.copy(
                         message = cause.message,

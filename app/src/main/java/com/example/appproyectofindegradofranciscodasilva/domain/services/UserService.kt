@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
-class UserServices @Inject constructor(
+class UserService @Inject constructor(
     private val userRepository: UserRepository,
     private val tokenManager: TokenManager
 ) {

@@ -12,7 +12,7 @@ import com.example.appproyectofindegradofranciscodasilva.data.model.ApiMessage
 import com.example.appproyectofindegradofranciscodasilva.data.model.Balance
 import com.example.appproyectofindegradofranciscodasilva.data.model.FileInfo
 import com.example.appproyectofindegradofranciscodasilva.data.model.InvoiceType
-import com.example.appproyectofindegradofranciscodasilva.data.source.apiservices.FileApiServices
+import com.example.appproyectofindegradofranciscodasilva.data.source.apiservices.FileApiService
 import com.example.appproyectofindegradofranciscodasilva.utils.NetworkResultt
 import com.squareup.moshi.Moshi
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -28,10 +28,10 @@ import javax.inject.Inject
 
 class FileDataSource @Inject constructor(
     /*@InfoServer private val retrofit: Retrofit,*/
-    private val fileApiServices: FileApiServices,
+    private val fileApiService: FileApiService,
     private val moshi: Moshi
 ) {
-   /* private val fileApiServices: FileApiServices = retrofit.create(FileApiServices::class.java)*/
+   /* private val fileApiService: FileApiService = retrofit.create(FileApiService::class.java)*/
 
     suspend fun upload(file: File, mimeType: String, description: String, clientEmail: String, invoiceType: InvoiceType, balance: Balance) : NetworkResultt<ApiMessage>{
         try {
@@ -46,7 +46,7 @@ class FileDataSource @Inject constructor(
             val expensesPart = balance.expenses.toString().toRequestBody("text/plain".toMediaTypeOrNull())
             val ivaPart = balance.iva.toString().toRequestBody("text/plain".toMediaTypeOrNull())
 
-            val response = fileApiServices.uploadFile(filePart, descriptionPart, emailPart, invoiceTypePart, incomePart, expensesPart, ivaPart)
+            val response = fileApiService.uploadFile(filePart, descriptionPart, emailPart, invoiceTypePart, incomePart, expensesPart, ivaPart)
 
             if (!response.isSuccessful){
 
@@ -74,7 +74,7 @@ class FileDataSource @Inject constructor(
 
     suspend fun download(fileId: Long, context : Context): NetworkResultt<String>{
         try {
-            val response = fileApiServices.downloadFile(fileId)
+            val response = fileApiService.downloadFile(fileId)
 
             if (!response.isSuccessful){
                 val errorMessage = response.errorBody()?.string() ?: Constantes.unknownError
@@ -112,7 +112,7 @@ class FileDataSource @Inject constructor(
 
     suspend fun getFilesByClient(clientEmail: String): NetworkResultt<List<FileInfo>> {
         return try {
-            val response = fileApiServices.getFilesByClient(clientEmail)
+            val response = fileApiService.getFilesByClient(clientEmail)
             if (response.isSuccessful) {
                 val body = response.body()
                 body?.let { NetworkResultt.Success(it) } ?: NetworkResultt.Error("No data")
@@ -127,7 +127,7 @@ class FileDataSource @Inject constructor(
 
     suspend fun getExpensesFilesByClient(clientEmail: String): NetworkResultt<List<FileInfo>> {
         return try {
-            val response = fileApiServices.getExpensesFilesByClient(clientEmail)
+            val response = fileApiService.getExpensesFilesByClient(clientEmail)
             if (response.isSuccessful) {
                 val body = response.body()
                 body?.let { NetworkResultt.Success(it) } ?: NetworkResultt.Error("No data")
@@ -142,7 +142,7 @@ class FileDataSource @Inject constructor(
 
     suspend fun getIncomeFilesByClient(clientEmail: String): NetworkResultt<List<FileInfo>> {
         return try {
-            val response = fileApiServices.getIncomeFilesByClient(clientEmail)
+            val response = fileApiService.getIncomeFilesByClient(clientEmail)
             if (response.isSuccessful) {
                 val body = response.body()
                 body?.let { NetworkResultt.Success(it) } ?: NetworkResultt.Error("No data")
@@ -157,7 +157,7 @@ class FileDataSource @Inject constructor(
 
     suspend fun deleteFile(fileId: Long): NetworkResultt<ApiMessage> {
         return try {
-            val response = fileApiServices.deleteFile(fileId)
+            val response = fileApiService.deleteFile(fileId)
             if (response.isSuccessful) {
                 val body = response.body()
                 body?.let { NetworkResultt.Success(it) } ?: NetworkResultt.Error("No data")

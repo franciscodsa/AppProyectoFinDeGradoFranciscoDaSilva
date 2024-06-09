@@ -4,10 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.appproyectofindegradofranciscodasilva.common.Constantes
 import com.example.appproyectofindegradofranciscodasilva.data.model.CredentialRequest
-import com.example.appproyectofindegradofranciscodasilva.domain.services.CredentialServices
+import com.example.appproyectofindegradofranciscodasilva.domain.services.CredentialService
 import com.example.appproyectofindegradofranciscodasilva.utils.NetworkResultt
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val credentialServices: CredentialServices
+    private val credentialService: CredentialService
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(LoginState())
@@ -55,7 +54,7 @@ class LoginViewModel @Inject constructor(
             _uiState.update { it.copy(message = Constantes.camposVaciosMessage, isLoading = false) }
         } else {
             viewModelScope.launch {
-                credentialServices.login(
+                credentialService.login(
                     CredentialRequest(
                         _uiState.value.email,
                         _uiState.value.password
@@ -96,7 +95,7 @@ class LoginViewModel @Inject constructor(
             _uiState.update { it.copy(message = Constantes.camposVaciosMessage, isLoading = false) }
         } else {
             viewModelScope.launch {
-                credentialServices.login(
+                credentialService.login(
                     CredentialRequest(
                         _uiState.value.email,
                         _uiState.value.password

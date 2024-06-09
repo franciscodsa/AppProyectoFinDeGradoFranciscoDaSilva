@@ -1,7 +1,7 @@
 package com.example.appproyectofindegradofranciscodasilva.utils
 
 import com.example.appproyectofindegradofranciscodasilva.common.Constantes
-import com.example.appproyectofindegradofranciscodasilva.data.source.apiservices.CredentialApiServices
+import com.example.appproyectofindegradofranciscodasilva.data.source.apiservices.CredentialApiService
 import com.example.appproyectofindegradofranciscodasilva.data.model.LoginInfoResponse
 
 import kotlinx.coroutines.flow.first
@@ -55,7 +55,7 @@ class AuthAuthenticator @Inject constructor(
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(okHttpClient)
                 .build()
-            val service = retrofit.create(CredentialApiServices::class.java)
+            val service = retrofit.create(CredentialApiService::class.java)
             val response = service.refreshAccessToken(refreshToken)
 
             return if (response.isSuccessful) {

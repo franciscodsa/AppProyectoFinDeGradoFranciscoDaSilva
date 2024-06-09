@@ -7,10 +7,10 @@ import com.example.appproyectofindegradofranciscodasilva.common.Constantes
 import com.example.appproyectofindegradofranciscodasilva.data.model.Accountant
 import com.example.appproyectofindegradofranciscodasilva.data.model.Client
 import com.example.appproyectofindegradofranciscodasilva.data.model.CredentialRequest
-import com.example.appproyectofindegradofranciscodasilva.domain.services.AccountantServices
+import com.example.appproyectofindegradofranciscodasilva.domain.services.AccountantService
 import com.example.appproyectofindegradofranciscodasilva.domain.services.ChatService
-import com.example.appproyectofindegradofranciscodasilva.domain.services.ClientServices
-import com.example.appproyectofindegradofranciscodasilva.domain.services.CredentialServices
+import com.example.appproyectofindegradofranciscodasilva.domain.services.ClientService
+import com.example.appproyectofindegradofranciscodasilva.domain.services.CredentialService
 import com.example.appproyectofindegradofranciscodasilva.utils.NetworkResultt
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -28,9 +28,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
-    private val credentialServices: CredentialServices,
-    private val clientServices: ClientServices,
-    private val accountantServices: AccountantServices,
+    private val credentialService: CredentialService,
+    private val clientService: ClientService,
+    private val accountantService: AccountantService,
     private val chatService: ChatService,
 ) : ViewModel() {
 
@@ -109,7 +109,7 @@ class RegisterViewModel @Inject constructor(
 
     private fun setRole() {
         viewModelScope.launch {
-            val role = credentialServices.getRole()
+            val role = credentialService.getRole()
 
             _uiState.update {
                 it.copy(
@@ -133,9 +133,9 @@ class RegisterViewModel @Inject constructor(
                     )
 
                     if (_uiState.value.selectedUserType == UserType.Cliente) {
-                        credentialServices.register(credentialRequest)
+                        credentialService.register(credentialRequest)
                     } else {
-                        credentialServices.registerAccountant(credentialRequest)
+                        credentialService.registerAccountant(credentialRequest)
                     }.flatMapConcat { credentialResult ->
                         if (credentialResult is NetworkResultt.Success) {
                             firebaseService.registerUser(credentialRequest)
@@ -148,7 +148,7 @@ class RegisterViewModel @Inject constructor(
                             chatService.createChatDocument(credentialRequest.email)
 
                             if (_uiState.value.selectedUserType == UserType.Cliente) {
-                                clientServices.addClient(
+                                clientService.addClient(
                                     Client(
                                         email = uiState.value.email,
                                         phone = uiState.value.phone,
@@ -163,7 +163,7 @@ class RegisterViewModel @Inject constructor(
                                     )
                                 )
                             } else {
-                                accountantServices.addAccountant(
+                                accountantService.addAccountant(
                                     Accountant(
                                         email = uiState.value.email,
                                         phone = uiState.value.phone,
@@ -238,16 +238,16 @@ class RegisterViewModel @Inject constructor(
 
             viewModelScope.launch {
                 if (_uiState.value.selectedUserType == UserType.Cliente) {
-                    credentialServices.register(credentialRequest)
+                    credentialService.register(credentialRequest)
                 } else {
-                    credentialServices.registerAccountant(credentialRequest)
+                    credentialService.registerAccountant(credentialRequest)
                 }.flatMapConcat { credentialResult ->
                     if (credentialResult is NetworkResultt.Success) {
 
                         chatService.createChatDocument(credentialRequest.email)
 
                         if (_uiState.value.selectedUserType == UserType.Cliente) {
-                            clientServices.addClient(
+                            clientService.addClient(
                                 Client(
                                     email = uiState.value.email,
                                     phone = uiState.value.phone,
@@ -262,7 +262,7 @@ class RegisterViewModel @Inject constructor(
                                 )
                             )
                         } else {
-                            accountantServices.addAccountant(
+                            accountantService.addAccountant(
                                 Accountant(
                                     email = uiState.value.email,
                                     phone = uiState.value.phone,
