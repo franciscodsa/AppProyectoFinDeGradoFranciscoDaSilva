@@ -1,6 +1,5 @@
 package com.example.appproyectofindegradofranciscodasilva.domain.services
 
-import android.util.Log
 import com.example.appproyectofindegradofranciscodasilva.data.model.ApiMessage
 import com.example.appproyectofindegradofranciscodasilva.data.model.CredentialRequest
 import com.example.appproyectofindegradofranciscodasilva.data.model.LoginInfoResponse
@@ -34,19 +33,18 @@ class CredentialService @Inject constructor(
                 result.data?.role?.let { tokenManager.saveRole(it) }
                 tokenManager.saveCurrentUser(credentials.email)
 
-                Log.i("AAAAAAAAAaaa",tokenManager.getCurrentUser().first().toString() + "Login")
             }
         }
 
         return loginResult
     }
 
-    suspend fun getRole(): String{
-        return tokenManager.getRole().first()?:""
+    suspend fun getRole(): String {
+        return tokenManager.getRole().first() ?: ""
     }
 
-    suspend fun getCurrentUser(): String{
-        return tokenManager.getCurrentUser().first()?:""
+    suspend fun getCurrentUser(): String {
+        return tokenManager.getCurrentUser().first() ?: ""
     }
 
     suspend fun logout() {
@@ -57,11 +55,15 @@ class CredentialService @Inject constructor(
         return credentialRepository.getAuthCode(email)
     }
 
-    fun changePassword(password: String, passwordConfirmation: String, authCode: String): Flow<NetworkResultt<ApiMessage>> {
+    fun changePassword(
+        password: String,
+        passwordConfirmation: String,
+        authCode: String
+    ): Flow<NetworkResultt<ApiMessage>> {
         return credentialRepository.changePassword(password, passwordConfirmation, authCode)
     }
 
-    fun deleteCredentials(clientEmail: String): Flow<NetworkResultt<ApiMessage>>{
+    fun deleteCredentials(clientEmail: String): Flow<NetworkResultt<ApiMessage>> {
         return credentialRepository.deleteCredentials(clientEmail)
     }
 }

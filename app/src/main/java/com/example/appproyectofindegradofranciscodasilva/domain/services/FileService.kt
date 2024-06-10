@@ -1,7 +1,6 @@
 package com.example.appproyectofindegradofranciscodasilva.domain.services
 
 import android.content.Context
-import android.util.Log
 import com.example.appproyectofindegradofranciscodasilva.data.model.ApiMessage
 import com.example.appproyectofindegradofranciscodasilva.data.model.Balance
 import com.example.appproyectofindegradofranciscodasilva.data.model.FileInfo
@@ -29,8 +28,7 @@ class FileService @Inject constructor(
     ): Flow<NetworkResultt<ApiMessage>> {
         val clientEmail = tokenManager.getCurrentUser().first() ?: ""
 
-        //todo quitar todos los log
-        Log.i("AAAAAAAAAaaa",tokenManager.getCurrentUser().first().toString()+ "upload")
+
         return fileRepository.upload(file, mimeType, description, clientEmail, invoiceType, balance)
     }
 
@@ -42,13 +40,12 @@ class FileService @Inject constructor(
 
     suspend fun getFilesByClient(): Flow<NetworkResultt<List<FileInfo>>> {
         val clientEmail = tokenManager.getCurrentUser().first() ?: ""
-        Log.i("AAAAAAAAAaaa",tokenManager.getCurrentUser().first().toString()+ "clients")
+
         return fileRepository.getFilesByClient(clientEmail)
     }
 
     suspend fun getExpensesFilesByClient(): Flow<NetworkResultt<List<FileInfo>>> {
         val clientEmail = tokenManager.getCurrentUser().first() ?: ""
-        Log.i("AAAAAAAAAaaa",tokenManager.getCurrentUser().first().toString()+ "expenses")
 
         return fileRepository.getExpensesFilesByClient(clientEmail)
     }

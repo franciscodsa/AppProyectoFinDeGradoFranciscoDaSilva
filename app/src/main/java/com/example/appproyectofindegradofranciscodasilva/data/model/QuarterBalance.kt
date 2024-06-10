@@ -1,6 +1,5 @@
 package com.example.appproyectofindegradofranciscodasilva.data.model
 
-import java.time.LocalDate
 import java.time.LocalDateTime
 
 data class QuarterBalance(

@@ -97,7 +97,7 @@ class OlvideClaveViewModel @Inject constructor(
         val state = _uiState.value
         if (state.newPassword.isEmpty() || state.confirmPassword.isEmpty() || state.authCode.isEmpty()) {
             _uiState.update { it.copy(message = Constantes.camposVaciosMessage) }
-        }else {
+        } else {
             viewModelScope.launch {
                 credentialService.changePassword(
                     state.newPassword,

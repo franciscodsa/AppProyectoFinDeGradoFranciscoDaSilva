@@ -3,7 +3,6 @@ package com.example.appproyectofindegradofranciscodasilva.ui.screens.register
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -38,7 +37,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.appproyectofindegradofranciscodasilva.R
 import com.example.appproyectofindegradofranciscodasilva.ui.navigation.FilterButton
-import com.example.appproyectofindegradofranciscodasilva.ui.screens.clients.ClientFilter
 
 @Composable
 fun RegisterScreen(
@@ -80,36 +78,42 @@ fun RegisterScreen(
             verticalArrangement = Arrangement.Center
         ) {
 
-            if (state.value.userRole == "admin"){
+            if (state.value.userRole == "admin") {
                 UserTypeButtons(
                     selectedUserType = state.value.selectedUserType,
-                    onSelectedUserType = {viewModel.handleEvent(RegisterEvent.OnSelectedUserType(it))}
+                    onSelectedUserType = { viewModel.handleEvent(RegisterEvent.OnSelectedUserType(it)) }
                 )
                 Box(
-                    modifier= Modifier
+                    modifier = Modifier
                         .weight(0.1f)
                         .fillMaxWidth(),
                     contentAlignment = Alignment.Center
-                ){
-                    Text(text = if (state.value.selectedUserType == UserType.Cliente) "Crea un cliente" else "Crea un contador", style = MaterialTheme.typography.headlineMedium)
+                ) {
+                    Text(
+                        text = if (state.value.selectedUserType == UserType.Cliente) "Crea un cliente" else "Crea un contador",
+                        style = MaterialTheme.typography.headlineMedium
+                    )
                 }
 
-            }else{
+            } else {
                 Box(
-                    modifier= Modifier
+                    modifier = Modifier
                         .weight(0.1f)
                         .fillMaxWidth(),
                     contentAlignment = Alignment.Center
-                ){
+                ) {
 
-                    Text(text = stringResource(R.string.crea_perfil), style = MaterialTheme.typography.headlineMedium)
+                    Text(
+                        text = stringResource(R.string.crea_perfil),
+                        style = MaterialTheme.typography.headlineMedium
+                    )
                 }
             }
 
             //First name
             OutlinedTextField(
                 value = state.value.firstName,
-                onValueChange = {viewModel.handleEvent(RegisterEvent.OnFirstNameTextChange(it))},
+                onValueChange = { viewModel.handleEvent(RegisterEvent.OnFirstNameTextChange(it)) },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
                 maxLines = 1,
@@ -120,7 +124,7 @@ fun RegisterScreen(
             //Last name
             OutlinedTextField(
                 value = state.value.lastNames,
-                onValueChange = {viewModel.handleEvent(RegisterEvent.OnLastNameChange(it))},
+                onValueChange = { viewModel.handleEvent(RegisterEvent.OnLastNameChange(it)) },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
                 maxLines = 1,
@@ -132,7 +136,7 @@ fun RegisterScreen(
             //Phone field
             OutlinedTextField(
                 value = state.value.phone,
-                onValueChange = {viewModel.handleEvent(RegisterEvent.OnPhoneTextChange(it))},
+                onValueChange = { viewModel.handleEvent(RegisterEvent.OnPhoneTextChange(it)) },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
                 maxLines = 1,
@@ -143,11 +147,11 @@ fun RegisterScreen(
             //date of birth
             CustomDateField(
                 year = state.value.year,
-                month= state.value.month,
-                day= state.value.day,
-                onYearFieldChange= {viewModel.handleEvent(RegisterEvent.OnYearFieldChange(it))},
-                onMonthFieldChange = {viewModel.handleEvent(RegisterEvent.OnMonthFieldChange(it))},
-                onDayFieldChange = {viewModel.handleEvent(RegisterEvent.OnDayFieldChange(it))}
+                month = state.value.month,
+                day = state.value.day,
+                onYearFieldChange = { viewModel.handleEvent(RegisterEvent.OnYearFieldChange(it)) },
+                onMonthFieldChange = { viewModel.handleEvent(RegisterEvent.OnMonthFieldChange(it)) },
+                onDayFieldChange = { viewModel.handleEvent(RegisterEvent.OnDayFieldChange(it)) }
             )
             Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.big_size_space)))
 
@@ -155,7 +159,7 @@ fun RegisterScreen(
             //Email field
             OutlinedTextField(
                 value = state.value.email,
-                onValueChange = {viewModel.handleEvent(RegisterEvent.OnEmailTextChange(it))},
+                onValueChange = { viewModel.handleEvent(RegisterEvent.OnEmailTextChange(it)) },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
                 maxLines = 1,
@@ -180,7 +184,7 @@ fun RegisterScreen(
             //Password confirmation
             OutlinedTextField(
                 value = state.value.confirmPassword,
-                onValueChange = {viewModel.handleEvent(RegisterEvent.OnPasswordConfirmTextChange(it))},
+                onValueChange = { viewModel.handleEvent(RegisterEvent.OnPasswordConfirmTextChange(it)) },
                 modifier = Modifier.fillMaxWidth(),
                 visualTransformation = PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -195,7 +199,7 @@ fun RegisterScreen(
                 }
             } else {
                 Button(
-                    onClick = {viewModel.handleEvent(RegisterEvent.Register)},
+                    onClick = { viewModel.handleEvent(RegisterEvent.Register) },
                     modifier = Modifier
                         .fillMaxWidth(),
                     colors = ButtonDefaults.buttonColors(
@@ -219,10 +223,10 @@ fun UserTypeButtons(
     selectedUserType: UserType,
     onSelectedUserType: (UserType) -> Unit
 ) {
-    Row (
+    Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Start
-    ){
+    ) {
         Spacer(modifier = Modifier.weight(1f))
         FilterButton(
             text = "Cliente",
@@ -253,13 +257,13 @@ fun CustomDateField(
     onDayFieldChange: (String) -> Unit
 ) {
 
-    Row() {
+    Row {
         OutlinedTextField(
             label = { Text(stringResource(R.string.anyo)) },
             modifier = Modifier.fillMaxWidth(0.5f),
             value = year,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            onValueChange = {onYearFieldChange(it.take(4))}
+            onValueChange = { onYearFieldChange(it.take(4)) }
         )
 
 
@@ -268,7 +272,7 @@ fun CustomDateField(
             modifier = Modifier.fillMaxWidth(0.5f),
             value = month,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            onValueChange = {onMonthFieldChange(it.take(2))            }
+            onValueChange = { onMonthFieldChange(it.take(2)) }
         )
 
 
@@ -277,7 +281,7 @@ fun CustomDateField(
             modifier = Modifier.fillMaxWidth(1f),
             value = day,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            onValueChange = {onDayFieldChange(it.take(2))}
+            onValueChange = { onDayFieldChange(it.take(2)) }
         )
     }
 }

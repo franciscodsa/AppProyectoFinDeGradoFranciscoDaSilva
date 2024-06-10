@@ -65,7 +65,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.appproyectofindegradofranciscodasilva.R
 import com.example.appproyectofindegradofranciscodasilva.ui.navigation.FilterButton
-import com.example.appproyectofindegradofranciscodasilva.ui.screens.login.AppLogo
 import java.io.File
 
 @Composable
@@ -123,7 +122,7 @@ fun ResumenScreen(
             }
         }
 
-        if (state.userRole == "user"){
+        if (state.userRole == "user") {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -138,7 +137,13 @@ fun ResumenScreen(
                         state,
                         onClose = { openBottomSheet = false },
                         onFileSelected = { viewModel.handleEvent(ResumenEvent.OnFileSelected(it)) },
-                        onMimeTypeSelected = { viewModel.handleEvent(ResumenEvent.OnMimeTypeSelected(it)) },
+                        onMimeTypeSelected = {
+                            viewModel.handleEvent(
+                                ResumenEvent.OnMimeTypeSelected(
+                                    it
+                                )
+                            )
+                        },
                         onInvoiceTypeChange = { viewModel.handleEvent(ResumenEvent.OnInvoiceTypeSelected) },
                         onTotalChange = { viewModel.handleEvent(ResumenEvent.OnNewInvoiceTotal(it)) },
                         onIvaChange = { viewModel.handleEvent(ResumenEvent.OnNewInvoiceIva(it)) },
@@ -153,8 +158,8 @@ fun ResumenScreen(
                     )
                 }
             }
-        }else{
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
+        } else {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center

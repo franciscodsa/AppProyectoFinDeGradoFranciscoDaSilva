@@ -11,10 +11,10 @@ import retrofit2.http.Query
 interface AccountantApiService {
 
     @GET("accountant")
-    suspend fun getAllAccountants() : Response<List<Accountant>>
+    suspend fun getAllAccountants(): Response<List<Accountant>>
 
     @POST("accountant/add")
-    suspend fun addAccountant(@Body accountant: Accountant) : Response<ApiMessage>
+    suspend fun addAccountant(@Body accountant: Accountant): Response<ApiMessage>
 
     @GET("accountant/byClientEmail")
     suspend fun getByClientEmail(@Query("clientEmail") clientEmail: String): Response<Accountant>

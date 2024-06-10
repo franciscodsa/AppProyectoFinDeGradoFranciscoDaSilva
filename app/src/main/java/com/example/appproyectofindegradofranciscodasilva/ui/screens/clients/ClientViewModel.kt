@@ -1,6 +1,5 @@
 package com.example.appproyectofindegradofranciscodasilva.ui.screens.clients
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.appproyectofindegradofranciscodasilva.data.model.Client
@@ -58,13 +57,13 @@ class ClientViewModel @Inject constructor(
             is ClientEvent.OnFilterChanged -> {
                 _uiState.update { it.copy(selectedFilter = event.filter) }
 
-                when(event.filter){
+                when (event.filter) {
                     ClientFilter.Todos -> loadClients()
                     ClientFilter.NoAsignados -> loadClientsWithNoAccountant()
                 }
             }
 
-            ClientEvent.MessageSeen ->  _uiState.update {
+            ClientEvent.MessageSeen -> _uiState.update {
                 it.copy(
                     message = null
                 )
@@ -97,23 +96,41 @@ class ClientViewModel @Inject constructor(
                                 .collect { deleteResult ->
                                     when (deleteResult) {
                                         is NetworkResultt.Success -> {
-                                            if (_uiState.value.userRole == "accountant"){
+                                            if (_uiState.value.userRole == "accountant") {
                                                 loadClientsByAccount()
-                                            }else if (_uiState.value.selectedFilter == ClientFilter.NoAsignados){
+                                            } else if (_uiState.value.selectedFilter == ClientFilter.NoAsignados) {
                                                 loadClientsWithNoAccountant()
-                                            } else{
+                                            } else {
                                                 loadClients()
                                             }
                                             _uiState.update {
                                                 it.copy(message = deleteResult.data?.message)
                                             }
                                         }
-                                        is NetworkResultt.Error -> _uiState.update { it.copy(message = deleteResult.message, isLoading = false) }
-                                        is NetworkResultt.Loading -> _uiState.update { it.copy(isLoading = true) }
+
+                                        is NetworkResultt.Error -> _uiState.update {
+                                            it.copy(
+                                                message = deleteResult.message,
+                                                isLoading = false
+                                            )
+                                        }
+
+                                        is NetworkResultt.Loading -> _uiState.update {
+                                            it.copy(
+                                                isLoading = true
+                                            )
+                                        }
                                     }
                                 }
                         }
-                        is NetworkResultt.Error -> _uiState.update { it.copy(message = result.message, isLoading = false) }
+
+                        is NetworkResultt.Error -> _uiState.update {
+                            it.copy(
+                                message = result.message,
+                                isLoading = false
+                            )
+                        }
+
                         is NetworkResultt.Loading -> _uiState.update { it.copy(isLoading = true) }
                     }
                 }
@@ -171,7 +188,7 @@ class ClientViewModel @Inject constructor(
     }
 
 
-    private fun loadAccountantsEmails(){
+    private fun loadAccountantsEmails() {
         viewModelScope.launch {
             accountantService.getAccountants().catch { cause ->
                 _uiState.update {
@@ -209,7 +226,8 @@ class ClientViewModel @Inject constructor(
     }
 
     private fun updateClientAccountant(client: Client) {
-        val updatedClient = client.copy(accountantEmail = _uiState.value.selectedAccountantEmail.ifEmpty { null })
+        val updatedClient =
+            client.copy(accountantEmail = _uiState.value.selectedAccountantEmail.ifEmpty { null })
 
         viewModelScope.launch {
             clientService.updateClient(updatedClient)
@@ -225,14 +243,14 @@ class ClientViewModel @Inject constructor(
                     when (result) {
                         is NetworkResultt.Success -> {
 
-                            if (_uiState.value.userRole == "accountant"){
-                                Log.i("asdasd", "acc")
+                            if (_uiState.value.userRole == "accountant") {
+
                                 loadClientsByAccount()
-                            }else if (_uiState.value.selectedFilter == ClientFilter.NoAsignados){
-                                Log.i("asdasd", "no asig")
+                            } else if (_uiState.value.selectedFilter == ClientFilter.NoAsignados) {
+
                                 loadClientsWithNoAccountant()
-                            } else{
-                                Log.i("asdasd", "all")
+                            } else {
+
                                 loadClients()
                             }
 
@@ -244,7 +262,7 @@ class ClientViewModel @Inject constructor(
                                 )
                             }
 
-                            Log.i("asdasd", "updt succe")
+
                         }
 
                         is NetworkResultt.Error -> {

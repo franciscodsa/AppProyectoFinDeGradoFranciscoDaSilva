@@ -49,7 +49,6 @@ class AccountantViewModel @Inject constructor(
     }
 
 
-
     private fun setRole() {
         viewModelScope.launch {
             val role = credentialService.getRole()

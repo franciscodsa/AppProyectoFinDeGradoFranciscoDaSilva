@@ -46,15 +46,20 @@ class CredentialRepository @Inject constructor(
         }.flowOn(Dispatchers.IO)
     }
 
-    fun changePassword(password: String, passwordConfirmation: String, authCode: String): Flow<NetworkResultt<ApiMessage>> {
+    fun changePassword(
+        password: String,
+        passwordConfirmation: String,
+        authCode: String
+    ): Flow<NetworkResultt<ApiMessage>> {
         return flow {
             emit(NetworkResultt.Loading())
-            val result = credentialsDataSource.changePassword(password, passwordConfirmation, authCode)
+            val result =
+                credentialsDataSource.changePassword(password, passwordConfirmation, authCode)
             emit(result)
         }.flowOn(Dispatchers.IO)
     }
 
-    fun deleteCredentials(clientEmail: String): Flow<NetworkResultt<ApiMessage>>{
+    fun deleteCredentials(clientEmail: String): Flow<NetworkResultt<ApiMessage>> {
         return flow {
             emit(NetworkResultt.Loading())
             val result = credentialsDataSource.deleteCredentials(clientEmail)

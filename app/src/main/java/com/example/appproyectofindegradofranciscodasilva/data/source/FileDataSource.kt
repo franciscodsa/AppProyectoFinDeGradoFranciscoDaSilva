@@ -5,7 +5,6 @@ import android.content.Context
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
-import android.util.Log
 import android.webkit.MimeTypeMap
 import com.example.appproyectofindegradofranciscodasilva.common.Constantes
 import com.example.appproyectofindegradofranciscodasilva.data.model.ApiMessage
@@ -31,57 +30,72 @@ class FileDataSource @Inject constructor(
     private val fileApiService: FileApiService,
     private val moshi: Moshi
 ) {
-   /* private val fileApiService: FileApiService = retrofit.create(FileApiService::class.java)*/
+    /* private val fileApiService: FileApiService = retrofit.create(FileApiService::class.java)*/
 
-    suspend fun upload(file: File, mimeType: String, description: String, clientEmail: String, invoiceType: InvoiceType, balance: Balance) : NetworkResultt<ApiMessage>{
+    suspend fun upload(
+        file: File,
+        mimeType: String,
+        description: String,
+        clientEmail: String,
+        invoiceType: InvoiceType,
+        balance: Balance
+    ): NetworkResultt<ApiMessage> {
         try {
-            Log.i("data", file.name)
 
             val requestBody = file.asRequestBody(mimeType.toMediaTypeOrNull())
             val filePart = MultipartBody.Part.createFormData("file", file.name, requestBody)
             val descriptionPart = description.toRequestBody("text/plain".toMediaTypeOrNull())
             val emailPart = clientEmail.toRequestBody("text/plain".toMediaTypeOrNull())
             val invoiceTypePart = invoiceType.name.toRequestBody("text/plain".toMediaTypeOrNull())
-            val incomePart = balance.income.toString().toRequestBody("text/plain".toMediaTypeOrNull())
-            val expensesPart = balance.expenses.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+            val incomePart =
+                balance.income.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+            val expensesPart =
+                balance.expenses.toString().toRequestBody("text/plain".toMediaTypeOrNull())
             val ivaPart = balance.iva.toString().toRequestBody("text/plain".toMediaTypeOrNull())
 
-            val response = fileApiService.uploadFile(filePart, descriptionPart, emailPart, invoiceTypePart, incomePart, expensesPart, ivaPart)
+            val response = fileApiService.uploadFile(
+                filePart,
+                descriptionPart,
+                emailPart,
+                invoiceTypePart,
+                incomePart,
+                expensesPart,
+                ivaPart
+            )
 
-            if (!response.isSuccessful){
+            if (!response.isSuccessful) {
 
-                Log.i("dataFailed", file.name)
                 val errorMessage = response.errorBody()?.string() ?: Constantes.unknownError
                 val adapter = moshi.adapter(ApiMessage::class.java)
                 val apiMessage = adapter.fromJson(errorMessage)
                 return NetworkResultt.Error(apiMessage?.message ?: Constantes.unknownError)
-            }else{
+            } else {
                 val body = response.body()
 
                 body?.let {
-                    Log.i("d", it.message)
+
                     return NetworkResultt.Success(it)
                 }
                 error(Constantes.noData)
 
             }
-        }catch (e: Exception) {
-            Log.e("error", e.message.toString())
+        } catch (e: Exception) {
+
             return NetworkResultt.Error(Constantes.unknownError)
         }
     }
 
 
-    suspend fun download(fileId: Long, context : Context): NetworkResultt<String>{
+    suspend fun download(fileId: Long, context: Context): NetworkResultt<String> {
         try {
             val response = fileApiService.downloadFile(fileId)
 
-            if (!response.isSuccessful){
+            if (!response.isSuccessful) {
                 val errorMessage = response.errorBody()?.string() ?: Constantes.unknownError
                 val adapter = moshi.adapter(ApiMessage::class.java)
                 val apiMessage = adapter.fromJson(errorMessage)
                 return NetworkResultt.Error(apiMessage?.message ?: Constantes.unknownError)
-            }else {
+            } else {
                 try {
                     // Verifica si la solicitud fue exitosa
                     if (response.isSuccessful) {
@@ -90,7 +104,12 @@ class FileDataSource @Inject constructor(
                         val inputStream = response.body()?.byteStream()
 
                         if (contentType != null && inputStream != null) {
-                            saveDownloadedFile(context, contentType, contentDisposition, inputStream)
+                            saveDownloadedFile(
+                                context,
+                                contentType,
+                                contentDisposition,
+                                inputStream
+                            )
                             return NetworkResultt.Success("Descarga exitosa")
                         } else {
                             return NetworkResultt.Error("No se pudo obtener el tipo MIME o el flujo de datos")
@@ -104,8 +123,8 @@ class FileDataSource @Inject constructor(
                 }
 
             }
-        }catch (e: Exception) {
-            Log.e("error", e.message.toString())
+        } catch (e: Exception) {
+
             return NetworkResultt.Error(Constantes.unknownError)
         }
     }
@@ -171,7 +190,6 @@ class FileDataSource @Inject constructor(
     }
 
 
-
     private fun saveDownloadedFile(
         context: Context,
         contentType: String,
@@ -181,11 +199,10 @@ class FileDataSource @Inject constructor(
         try {
             val fileName = extractFileName(contentDisposition) ?: generateFileName(contentType)
 
-            Log.i("DEBUG", fileName)
 
             val contentValues = ContentValues().apply {
                 put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
-               /* put(MediaStore.MediaColumns.MIME_TYPE, contentType)*/
+                /* put(MediaStore.MediaColumns.MIME_TYPE, contentType)*/
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
                 }
@@ -208,9 +225,11 @@ class FileDataSource @Inject constructor(
                 }
             } else {
 
-                Log.i("DEBUG", "else")
 
-                val target = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), fileName)
+                val target = File(
+                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+                    fileName
+                )
                 FileOutputStream(target).use { output ->
                     stream.copyTo(output)
                 }
@@ -240,7 +259,10 @@ class FileDataSource @Inject constructor(
     }
 
     private fun generateFileName(contentType: String): String {
-        return SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSS", Locale.ENGLISH).format(System.currentTimeMillis()) + getExtensionFromMimeType(contentType)
+        return SimpleDateFormat(
+            "yyyy-MM-dd-HH-mm-ss-SSS",
+            Locale.ENGLISH
+        ).format(System.currentTimeMillis()) + getExtensionFromMimeType(contentType)
     }
 
     private fun getExtensionFromMimeType(contentType: String): String {
@@ -251,8 +273,6 @@ class FileDataSource @Inject constructor(
             ""
         }
     }
-
-
 
 
 }

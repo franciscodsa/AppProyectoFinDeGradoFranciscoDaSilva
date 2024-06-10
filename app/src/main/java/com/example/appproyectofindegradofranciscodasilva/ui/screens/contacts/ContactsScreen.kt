@@ -35,7 +35,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.appproyectofindegradofranciscodasilva.data.model.Accountant
 import com.example.appproyectofindegradofranciscodasilva.data.model.Client
-import com.example.appproyectofindegradofranciscodasilva.ui.screens.clients.ClientEvent
 
 
 @OptIn(ExperimentalMaterial3Api::class)

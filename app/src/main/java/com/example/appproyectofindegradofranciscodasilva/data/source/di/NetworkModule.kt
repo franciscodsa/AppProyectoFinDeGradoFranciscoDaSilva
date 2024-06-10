@@ -102,7 +102,10 @@ object NetworkModule {
     @Named("CredentialServer")
     @Singleton
     @Provides
-    fun provideCredentialRetrofit(okHttpClient: OkHttpClient, moshiConverterFactory: MoshiConverterFactory): Retrofit {
+    fun provideCredentialRetrofit(
+        okHttpClient: OkHttpClient,
+        moshiConverterFactory: MoshiConverterFactory
+    ): Retrofit {
         return Retrofit.Builder()
             .baseUrl(Constantes.urlBaseLogin)
             .client(okHttpClient)
@@ -114,7 +117,10 @@ object NetworkModule {
     @Named("InfoServer")
     @Singleton
     @Provides
-    fun provideClientRetrofit(okHttpClient: OkHttpClient, moshiConverterFactory: MoshiConverterFactory): Retrofit {
+    fun provideClientRetrofit(
+        okHttpClient: OkHttpClient,
+        moshiConverterFactory: MoshiConverterFactory
+    ): Retrofit {
         return Retrofit.Builder()
             .baseUrl(Constantes.urlBaseInfo)
             .client(okHttpClient)
@@ -170,7 +176,7 @@ class LocalDateTimeAdapter {
 
 class LocalDateAdapter {
     @ToJson
-    fun toJson( value: LocalDate): String {
+    fun toJson(value: LocalDate): String {
         return value.format(DateTimeFormatter.ISO_LOCAL_DATE)
     }
 

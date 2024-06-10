@@ -7,7 +7,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import androidx.navigation.navigation
 import com.example.appproyectofindegradofranciscodasilva.ui.screens.archivos.FilesScreen
 import com.example.appproyectofindegradofranciscodasilva.ui.screens.chat.ChatScreen
 import com.example.appproyectofindegradofranciscodasilva.ui.screens.clients.ClientScreen
@@ -66,7 +65,7 @@ fun Navigation(
         ) {
             ResumenScreen(
                 onClientsClick = { navController.navigate("clients") },
-                onAccountansClick ={ navController.navigate("accountants")},
+                onAccountansClick = { navController.navigate("accountants") },
                 bottomNavigationBar = {
                     BottomBar(
                         navController = navController,
@@ -76,16 +75,16 @@ fun Navigation(
         }
 
         composable(
-            route="files/{clientId}",
+            route = "files/{clientId}",
             arguments = listOf(
-                navArgument(name = "clientId" ){
+                navArgument(name = "clientId") {
                     type = NavType.StringType
                     defaultValue = ""
                 }
             )
         ) {
             FilesScreen(
-                clientId = it.arguments?.getString("clientId")?:"",
+                clientId = it.arguments?.getString("clientId") ?: "",
                 bottomNavigationBar = {
                     BottomBar(
                         navController = navController,
@@ -96,16 +95,16 @@ fun Navigation(
         }
 
         composable(
-            route="chat/{clientId}",
+            route = "chat/{clientId}",
             arguments = listOf(
-                navArgument(name = "clientId"){
+                navArgument(name = "clientId") {
                     type = NavType.StringType
                     defaultValue = ""
                 }
             )
-        ){
+        ) {
             ChatScreen(
-                clientId = it.arguments?.getString("clientId")?:""
+                clientId = it.arguments?.getString("clientId") ?: ""
             )
         }
 
@@ -134,7 +133,7 @@ fun Navigation(
             "clients"
         ) {
             ClientScreen(
-                onFilesClick = {clientId ->
+                onFilesClick = { clientId ->
                     navController.navigate("files/${clientId}")
                 }
             )
@@ -143,16 +142,16 @@ fun Navigation(
         composable(
             "accountants"
         ) {
-            AccountantScreen(onAddClick = {navController.navigate("registro")})
+            AccountantScreen(onAddClick = { navController.navigate("registro") })
         }
 
 
 
         composable(
             "contacts"
-        ){
+        ) {
             ContactsScreen(
-                onChatClick = {clientId ->
+                onChatClick = { clientId ->
                     navController.navigate("chat/${clientId}")
                 },
                 bottomNavigationBar = {
@@ -166,7 +165,7 @@ fun Navigation(
 
         composable(
             "info"
-        ){
+        ) {
             InfoScreen(
                 bottomNavigationBar = {
                     BottomBar(

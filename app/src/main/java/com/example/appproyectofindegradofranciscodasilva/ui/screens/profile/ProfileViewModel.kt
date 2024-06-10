@@ -26,7 +26,6 @@ class ProfileViewModel @Inject constructor(
     val uiState: StateFlow<ProfileState> = _uiState.asStateFlow()
 
 
-
     fun handleEvent(event: ProfileEvent) {
         when (event) {
             is ProfileEvent.OnFirstNameChanged -> _uiState.update { it.copy(firstName = event.firstName) }
@@ -53,16 +52,17 @@ class ProfileViewModel @Inject constructor(
                         is NetworkResultt.Success -> _uiState.update {
                             val dateOfBirth = result.data?.dateOfBirth.toString().split("-")
                             it.copy(
-                                email = result.data?.email?: "",
-                                firstName = result.data?.firstName?: "",
-                                lastName = result.data?.lastName?: "",
-                                phone = result.data?.phone?: "",
+                                email = result.data?.email ?: "",
+                                firstName = result.data?.firstName ?: "",
+                                lastName = result.data?.lastName ?: "",
+                                phone = result.data?.phone ?: "",
                                 year = dateOfBirth[0],
                                 month = dateOfBirth[1],
                                 day = dateOfBirth[2],
                                 isLoading = false
                             )
                         }
+
                         is NetworkResultt.Error -> _uiState.update { it.copy(message = result.message) }
                         is NetworkResultt.Loading -> _uiState.update { it.copy(isLoading = true) }
                     }
@@ -78,7 +78,7 @@ class ProfileViewModel @Inject constructor(
                     firstName = it.firstName,
                     lastName = it.lastName,
                     phone = it.phone,
-                    dateOfBirth = LocalDate.of(it.year.toInt(),it.month.toInt(), it.day.toInt())
+                    dateOfBirth = LocalDate.of(it.year.toInt(), it.month.toInt(), it.day.toInt())
                 )
             }
             userService.updateUser(updatedUser)
@@ -87,9 +87,21 @@ class ProfileViewModel @Inject constructor(
                 }
                 .collect { result ->
                     when (result) {
-                        is NetworkResultt.Success -> _uiState.update { it.copy(message = result.data?.message, isLoading = false) }
-                        is NetworkResultt.Error -> _uiState.update { it.copy(message = result.message, isLoading = false) }
-                        is NetworkResultt.Loading -> _uiState.update { it.copy( isLoading = true) }
+                        is NetworkResultt.Success -> _uiState.update {
+                            it.copy(
+                                message = result.data?.message,
+                                isLoading = false
+                            )
+                        }
+
+                        is NetworkResultt.Error -> _uiState.update {
+                            it.copy(
+                                message = result.message,
+                                isLoading = false
+                            )
+                        }
+
+                        is NetworkResultt.Loading -> _uiState.update { it.copy(isLoading = true) }
                     }
                 }
         }

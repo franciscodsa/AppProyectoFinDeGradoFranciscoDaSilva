@@ -1,7 +1,6 @@
 package com.example.appproyectofindegradofranciscodasilva.ui.screens.clients
 
 import com.example.appproyectofindegradofranciscodasilva.data.model.Client
-import com.example.appproyectofindegradofranciscodasilva.ui.screens.archivos.FileFilter
 
 data class ClientState(
     val clients: List<Client> = emptyList(),
@@ -11,7 +10,7 @@ data class ClientState(
     val selectedAccountantEmail: String = "",
     val isLoading: Boolean = false,
     val selectedFilter: ClientFilter = ClientFilter.Todos,
-    val userRole: String= "",
+    val userRole: String = "",
 )
 
 enum class ClientFilter {

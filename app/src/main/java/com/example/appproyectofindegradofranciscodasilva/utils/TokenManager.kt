@@ -44,25 +44,25 @@ class TokenManager @Inject constructor(@ApplicationContext private val context: 
         }
     }
 
-    fun getCurrentUser(): Flow<String?>{
-        return context.dataStore.data.map{ preferences ->
+    fun getCurrentUser(): Flow<String?> {
+        return context.dataStore.data.map { preferences ->
             preferences[currentUser]
         }
     }
 
-    suspend fun saveCurrentUser(email: String){
+    suspend fun saveCurrentUser(email: String) {
         context.dataStore.edit { preferences ->
             preferences[currentUser] = email
         }
     }
 
-    fun getRole(): Flow<String?>{
-        return context.dataStore.data.map{ preferences ->
+    fun getRole(): Flow<String?> {
+        return context.dataStore.data.map { preferences ->
             preferences[role]
         }
     }
 
-    suspend fun saveRole(userRole: String){
+    suspend fun saveRole(userRole: String) {
         context.dataStore.edit { preferences ->
             preferences[role] = userRole
         }

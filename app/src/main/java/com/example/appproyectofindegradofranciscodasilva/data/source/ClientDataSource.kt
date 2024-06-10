@@ -1,6 +1,5 @@
 package com.example.appproyectofindegradofranciscodasilva.data.source
 
-import android.util.Log
 import com.example.appproyectofindegradofranciscodasilva.common.Constantes
 import com.example.appproyectofindegradofranciscodasilva.data.model.ApiMessage
 import com.example.appproyectofindegradofranciscodasilva.data.model.Client
@@ -16,7 +15,6 @@ class ClientDataSource @Inject constructor(
 
     suspend fun addClient(client: Client): NetworkResultt<ApiMessage> {
         try {
-            Log.i("asdasd", "AAAAAAAAAAAAAAAAAAAAAAA")
 
             val response = clientApiService.addClient(client)
 
@@ -40,7 +38,6 @@ class ClientDataSource @Inject constructor(
 
     suspend fun updateClient(client: Client): NetworkResultt<ApiMessage> {
         try {
-            Log.i("asdasd", "AAAAAAAAAAAAAAAAAAAAAAA")
 
             val response = clientApiService.updateClient(client)
 

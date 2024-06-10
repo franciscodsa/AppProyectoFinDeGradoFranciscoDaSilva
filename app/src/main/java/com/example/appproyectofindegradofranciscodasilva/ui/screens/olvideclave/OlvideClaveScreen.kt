@@ -52,7 +52,7 @@ fun OlvideClaveScreen(viewModel: OlvideClaveViewModel = hiltViewModel()) {
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
     ) { innerPadding ->
-        
+
         LaunchedEffect(state.message) {
             state.message?.let {
                 snackbarHostState.showSnackbar(

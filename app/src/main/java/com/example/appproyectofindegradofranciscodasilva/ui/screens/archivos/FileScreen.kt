@@ -65,7 +65,7 @@ fun FilesScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
 
-    if (!clientId.contains("@")){
+    if (!clientId.contains("@")) {
         LaunchedEffect(Unit) {
             viewModel.handleEvent(FileEvent.LoadAllFiles)
         }
@@ -73,7 +73,12 @@ fun FilesScreen(
         Scaffold(
             topBar = {
                 TopAppBar(
-                    title = { Text(text = "Facturas", style = MaterialTheme.typography.headlineMedium) }
+                    title = {
+                        Text(
+                            text = "Facturas",
+                            style = MaterialTheme.typography.headlineMedium
+                        )
+                    }
                 )
             },
             bottomBar = bottomNavigationBar,
@@ -81,7 +86,7 @@ fun FilesScreen(
         ) { innerPadding ->
             FileLazyColum(state, snackbarHostState, viewModel, innerPadding, clientId, context)
         }
-    }else{
+    } else {
         LaunchedEffect(Unit) {
             viewModel.handleEvent(FileEvent.LoadAllFilesByClientId(clientId))
         }
@@ -89,7 +94,12 @@ fun FilesScreen(
         Scaffold(
             topBar = {
                 TopAppBar(
-                    title = { Text(text = "Facturas", style = MaterialTheme.typography.headlineMedium) }
+                    title = {
+                        Text(
+                            text = "Facturas",
+                            style = MaterialTheme.typography.headlineMedium
+                        )
+                    }
                 )
             },
             snackbarHost = { SnackbarHost(snackbarHostState) },
@@ -140,9 +150,15 @@ private fun FileLazyColum(
                     items(items = state.value.files, key = { file -> file.id }) { file ->
                         SwipeToDeleteContainer(
                             item = file,
-                            onDelete = {viewModel.handleEvent(FileEvent.DeleteFile(it.id, clientId))}
-                        ) {
-                            file ->
+                            onDelete = {
+                                viewModel.handleEvent(
+                                    FileEvent.DeleteFile(
+                                        it.id,
+                                        clientId
+                                    )
+                                )
+                            }
+                        ) { file ->
                             ExpandableFileCard(
                                 file = file,
                                 expanded = state.value.expandedFileId == file.id,
@@ -154,7 +170,14 @@ private fun FileLazyColum(
                                     )
                                 },
                                 onUpdateClick = { fileId, total, iva ->
-                                    viewModel.handleEvent(FileEvent.UpdateFile(fileId, total, iva, clientId))
+                                    viewModel.handleEvent(
+                                        FileEvent.UpdateFile(
+                                            fileId,
+                                            total,
+                                            iva,
+                                            clientId
+                                        )
+                                    )
                                 },
                                 onTotalChange = { viewModel.handleEvent(FileEvent.OnTotalChange(it)) },
                                 onIvaChange = { viewModel.handleEvent(FileEvent.OnIvaChange(it)) },

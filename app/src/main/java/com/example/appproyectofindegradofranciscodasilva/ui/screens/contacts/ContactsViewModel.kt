@@ -1,6 +1,5 @@
 package com.example.appproyectofindegradofranciscodasilva.ui.screens.contacts
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.appproyectofindegradofranciscodasilva.data.model.Accountant
@@ -34,7 +33,7 @@ class ContactsViewModel @Inject constructor(
             is ContactsEvent.LoadContacts -> loadContacts()
             ContactsEvent.LoadCurrentUser -> loadCurrentUser()
             ContactsEvent.SetUserRole -> setRole()
-            ContactsEvent.MessageSeen ->  _uiState.update {
+            ContactsEvent.MessageSeen -> _uiState.update {
                 it.copy(
                     message = null
                 )
@@ -54,14 +53,15 @@ class ContactsViewModel @Inject constructor(
             _uiState.update { it.copy(isLoading = true) }
             val role = _uiState.value.userRole
 
-            Log.i("ASDASDASDASDASDASDA", role)
             when (role) {
                 "user" -> {
                     loadAccountant()
                 }
+
                 "accountant" -> {
                     loadClientsByAccountant()
                 }
+
                 else -> {
                     loadClients()
                 }
@@ -81,13 +81,15 @@ class ContactsViewModel @Inject constructor(
                         is NetworkResultt.Loading -> _uiState.update { it.copy(isLoading = true) }
 
                         is NetworkResultt.Success -> _uiState.update {
-                            it.copy(accountant = result.data?: Accountant(
-                                "contador@contaeasy.com",
-                                "",
-                                "Contador",
-                                "",
-                                LocalDate.now()
-                            ), isLoading = false)
+                            it.copy(
+                                accountant = result.data ?: Accountant(
+                                    "contador@contaeasy.com",
+                                    "",
+                                    "Contador",
+                                    "",
+                                    LocalDate.now()
+                                ), isLoading = false
+                            )
                         }
                     }
 

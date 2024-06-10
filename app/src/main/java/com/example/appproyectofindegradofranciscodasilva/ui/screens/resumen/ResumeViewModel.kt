@@ -1,6 +1,5 @@
 package com.example.appproyectofindegradofranciscodasilva.ui.screens.resumen
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.appproyectofindegradofranciscodasilva.data.model.Balance
@@ -90,7 +89,7 @@ class ResumeViewModel @Inject constructor(
                 )
             }
 
-            is ResumenEvent.OnFileSelected ->  _uiState.update {
+            is ResumenEvent.OnFileSelected -> _uiState.update {
                 it.copy(
                     selectedFile = event.file
                 )
@@ -101,6 +100,7 @@ class ResumeViewModel @Inject constructor(
                     mimeType = event.mimeType
                 )
             }
+
             ResumenEvent.UploadFile -> upload()
 
             is ResumenEvent.OnNewInvoiceDescription -> _uiState.update {
@@ -127,7 +127,7 @@ class ResumeViewModel @Inject constructor(
                 )
             }
 
-            is ResumenEvent.SetUserRole ->  setRole()
+            is ResumenEvent.SetUserRole -> setRole()
 
         }
     }
@@ -146,8 +146,8 @@ class ResumeViewModel @Inject constructor(
     }
 
     private fun upload() {
-        Log.i("isExpense", _uiState.value.isExpense.toString())
-        if (_uiState.value.selectedFile == null || _uiState.value.newInvoiceDescription.isEmpty() || (_uiState.value.newInvoiceIva.isEmpty() || _uiState.value.newInvoiceIva.toDoubleOrNull() == null )||  (_uiState.value.newInvoiceTotal.isEmpty() || _uiState.value.newInvoiceTotal.toDoubleOrNull() == null )) {
+
+        if (_uiState.value.selectedFile == null || _uiState.value.newInvoiceDescription.isEmpty() || (_uiState.value.newInvoiceIva.isEmpty() || _uiState.value.newInvoiceIva.toDoubleOrNull() == null) || (_uiState.value.newInvoiceTotal.isEmpty() || _uiState.value.newInvoiceTotal.toDoubleOrNull() == null)) {
             _uiState.update {
                 it.copy(
                     message = "Seleccione archivo y verifique formato de cifras (Ej: 100.00)",
@@ -156,9 +156,10 @@ class ResumeViewModel @Inject constructor(
 
         } else {
 
-            val invoiceType = if (_uiState.value.isExpense) InvoiceType.EXPENSE else InvoiceType.INCOME
+            val invoiceType =
+                if (_uiState.value.isExpense) InvoiceType.EXPENSE else InvoiceType.INCOME
             val balance = Balance(
-                id= 0,
+                id = 0,
                 income = if (invoiceType == InvoiceType.INCOME) _uiState.value.newInvoiceTotal.toDouble() else 0.0,
                 expenses = if (invoiceType == InvoiceType.EXPENSE) _uiState.value.newInvoiceTotal.toDouble() else 0.0,
                 iva = _uiState.value.newInvoiceIva.toDouble(),
@@ -193,7 +194,7 @@ class ResumeViewModel @Inject constructor(
                         }
 
                         is NetworkResultt.Loading -> {
-                            Log.i("f", "loading")
+
                             _uiState.update { it.copy(isLoading = true) }
                         }
 
@@ -211,14 +212,14 @@ class ResumeViewModel @Inject constructor(
                             }
 
                             getBalance()
-                         /*   val balance = Balance(
-                                income = if (invoiceType == InvoiceType.INCOME) _uiState.value.newInvoiceTotal.toDouble() else 0.0,
-                                expenses = if (invoiceType == InvoiceType.EXPENSE) _uiState.value.newInvoiceTotal.toDouble() else 0.0,
-                                iva = _uiState.value.newInvoiceIva.toDouble(),
-                                clientEmail = null
-                            )
+                            /*   val balance = Balance(
+                                   income = if (invoiceType == InvoiceType.INCOME) _uiState.value.newInvoiceTotal.toDouble() else 0.0,
+                                   expenses = if (invoiceType == InvoiceType.EXPENSE) _uiState.value.newInvoiceTotal.toDouble() else 0.0,
+                                   iva = _uiState.value.newInvoiceIva.toDouble(),
+                                   clientEmail = null
+                               )
 
-                            addBalance(balance)*/
+                               addBalance(balance)*/
                         }
                     }
                 }
@@ -227,48 +228,48 @@ class ResumeViewModel @Inject constructor(
     }
 
 
-   /* private fun addBalance(balance: Balance) {
-        viewModelScope.launch {
-            balanceService.updateBalance(balance).catch { cause ->
-                _uiState.update {
-                    it.copy(
-                        message = cause.message,
-                        isLoading = false
-                    )
-                }
-            }.collect { result ->
-                when (result) {
-                    is NetworkResultt.Error -> {
-                        _uiState.update {
-                            it.copy(
-                                message = result.message,
-                                isLoading = false
-                            )
-                        }
-                    }
-                    is NetworkResultt.Loading -> {
-                        _uiState.update { it.copy(isLoading = true) }
-                    }
-                    is NetworkResultt.Success -> {
-                        _uiState.update {
-                            it.copy(
-                                message = "Archivo subido y balance agregado exitosamente.",
-                                isLoading = false,
-                                newInvoiceTotal = "",
-                                newInvoiceIva = "",
-                                newInvoiceDescription = "",
-                                selectedFile = null,
-                                mimeType = ""
-                            )
-                        }
+    /* private fun addBalance(balance: Balance) {
+         viewModelScope.launch {
+             balanceService.updateBalance(balance).catch { cause ->
+                 _uiState.update {
+                     it.copy(
+                         message = cause.message,
+                         isLoading = false
+                     )
+                 }
+             }.collect { result ->
+                 when (result) {
+                     is NetworkResultt.Error -> {
+                         _uiState.update {
+                             it.copy(
+                                 message = result.message,
+                                 isLoading = false
+                             )
+                         }
+                     }
+                     is NetworkResultt.Loading -> {
+                         _uiState.update { it.copy(isLoading = true) }
+                     }
+                     is NetworkResultt.Success -> {
+                         _uiState.update {
+                             it.copy(
+                                 message = "Archivo subido y balance agregado exitosamente.",
+                                 isLoading = false,
+                                 newInvoiceTotal = "",
+                                 newInvoiceIva = "",
+                                 newInvoiceDescription = "",
+                                 selectedFile = null,
+                                 mimeType = ""
+                             )
+                         }
 
-                        getBalance()
-                    }
-                }
-            }
-        }
-    }
-*/
+                         getBalance()
+                     }
+                 }
+             }
+         }
+     }
+ */
 
 
     private fun getBalance() {

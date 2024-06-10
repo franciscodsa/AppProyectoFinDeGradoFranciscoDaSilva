@@ -1,6 +1,5 @@
 package com.example.appproyectofindegradofranciscodasilva.data.source
 
-import android.util.Log
 import com.example.appproyectofindegradofranciscodasilva.common.Constantes
 import com.example.appproyectofindegradofranciscodasilva.data.model.ApiMessage
 import com.example.appproyectofindegradofranciscodasilva.data.model.Balance
@@ -32,7 +31,7 @@ class BalanceDataSource @Inject constructor(
                 error(Constantes.noData)
             }
         } catch (e: Exception) {
-            Log.e("error", e.message.toString())
+
             return NetworkResultt.Error(Constantes.unknownError)
         }
     }
@@ -43,7 +42,8 @@ class BalanceDataSource @Inject constructor(
         quarter: String
     ): NetworkResultt<QuarterBalance> {
         try {
-            val response = balanceApiService.getBalancesByClientIdAndYearAndQuarter(clientEmail, year, quarter)
+            val response =
+                balanceApiService.getBalancesByClientIdAndYearAndQuarter(clientEmail, year, quarter)
 
             if (!response.isSuccessful) {
                 val errorMessage = response.errorBody()?.string() ?: Constantes.unknownError
@@ -59,7 +59,7 @@ class BalanceDataSource @Inject constructor(
                 error(Constantes.noData)
             }
         } catch (e: Exception) {
-            Log.e("error", e.message.toString())
+
             return NetworkResultt.Error(Constantes.unknownError)
         }
     }

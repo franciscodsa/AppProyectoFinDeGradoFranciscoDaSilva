@@ -1,13 +1,11 @@
 package com.example.appproyectofindegradofranciscodasilva.data.source
 
-import android.util.Log
+
 import com.example.appproyectofindegradofranciscodasilva.common.Constantes
 import com.example.appproyectofindegradofranciscodasilva.data.model.ApiMessage
 import com.example.appproyectofindegradofranciscodasilva.data.model.CredentialRequest
 import com.example.appproyectofindegradofranciscodasilva.data.model.LoginInfoResponse
 import com.example.appproyectofindegradofranciscodasilva.data.source.apiservices.CredentialApiService
-
-
 import com.example.appproyectofindegradofranciscodasilva.utils.NetworkResultt
 import com.squareup.moshi.Moshi
 import javax.inject.Inject
@@ -36,7 +34,6 @@ class CredentialsDataSource @Inject constructor(
                 error(Constantes.noData)
             }
         } catch (e: Exception) {
-            Log.e("AAAEEE", e.message.toString())
             return NetworkResultt.Error(Constantes.unknownError)
         }
     }
@@ -107,9 +104,14 @@ class CredentialsDataSource @Inject constructor(
         }
     }
 
-    suspend fun changePassword(password: String, passwordConfirmation: String, authCode: String): NetworkResultt<ApiMessage> {
+    suspend fun changePassword(
+        password: String,
+        passwordConfirmation: String,
+        authCode: String
+    ): NetworkResultt<ApiMessage> {
         try {
-            val response = credentialApiService.changePassword(password, passwordConfirmation, authCode)
+            val response =
+                credentialApiService.changePassword(password, passwordConfirmation, authCode)
 
             if (!response.isSuccessful) {
                 val errorMessage = response.errorBody()?.string() ?: Constantes.unknownError

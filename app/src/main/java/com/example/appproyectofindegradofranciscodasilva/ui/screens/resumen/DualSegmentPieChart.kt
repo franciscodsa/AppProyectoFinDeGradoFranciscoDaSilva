@@ -43,29 +43,37 @@ fun DualSegmentPieChart(
     chartBarWidth: Dp = 25.dp,
     animDuration: Int = 1000,
 ) {
+    // Suma total de los valores del gráfico
     val totalSum = data.values.sum()
+    // Lista de valores flotantes que representan los ángulos de los segmentos
     val floatValue = data.values.map { 360 * it.toFloat() / totalSum.toFloat() }
+    // Colores para los segmentos del gráfico
     val colors = listOf(Color.Green, Color.Red)
 
+    // Estado mutable para controlar si la animación ha sido reproducida
     var animationPlayed by remember { mutableStateOf(false) }
     var lastValue = 0f
 
+    // Animación del tamaño del gráfico
     val animateSize by animateFloatAsState(
         targetValue = if (animationPlayed) radiusOuter.value else 0f,
         animationSpec = tween(
             durationMillis = animDuration,
             easing = LinearOutSlowInEasing
-        )
+        ), label = "animate size"
     )
 
+
+    // Animación de la rotación del gráfico
     val animateRotation by animateFloatAsState(
         targetValue = if (animationPlayed) 360f else 0f,
         animationSpec = tween(
             durationMillis = animDuration,
             easing = LinearOutSlowInEasing
-        )
+        ), label = "animate rotation"
     )
 
+    // Efecto lanzado para iniciar la animación
     LaunchedEffect(Unit) {
         animationPlayed = true
     }
@@ -85,6 +93,7 @@ fun DualSegmentPieChart(
                     .size(radiusOuter * 2)
                     .rotate(animateRotation)
             ) {
+                // Dibuja los segmentos del gráfico
                 floatValue.forEachIndexed { index, value ->
                     drawArc(
                         color = colors[index],
@@ -100,6 +109,7 @@ fun DualSegmentPieChart(
 
         Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.medium_size_space)))
 
+        // Muestra los detalles del gráfico
         DetailsPieChart(data = data, colors = colors)
     }
 }
@@ -113,6 +123,7 @@ fun DetailsPieChart(data: Map<String, Double>, colors: List<Color>) {
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
+            // Muestra los detalles de cada segmento
             data.values.forEachIndexed { index, value ->
                 DetailsPieChartItem(
                     data = Pair(data.keys.elementAt(index), value),
@@ -139,8 +150,8 @@ fun DetailsPieChartItem(
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
-
-            Column() {
+            // Cuadro de color que representa el segmento
+            Column {
                 Row {
                     Box(
                         modifier = Modifier
@@ -152,6 +163,7 @@ fun DetailsPieChartItem(
                             .size(height)
                     )
                     Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.small_size_space)))
+                    // Texto con la etiqueta del segmento
                     Text(
                         text = data.first,
                         style = TextStyle(fontWeight = FontWeight.Bold)
@@ -159,6 +171,7 @@ fun DetailsPieChartItem(
                 }
 
                 Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.small_size_space)))
+                // Texto con el valor del segmento
                 Text(
                     text = String.format("%.2f€", data.second),
                 )

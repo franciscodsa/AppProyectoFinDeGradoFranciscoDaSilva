@@ -1,7 +1,6 @@
 package com.example.appproyectofindegradofranciscodasilva.ui.screens.archivos
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.appproyectofindegradofranciscodasilva.data.model.Balance
@@ -54,14 +53,14 @@ class FileViewModel @Inject constructor(
 
             is FileEvent.OnFilterChanged -> {
 
-                if (!event.clientId.contains("@")){
+                if (!event.clientId.contains("@")) {
                     _uiState.update { it.copy(selectedFilter = event.filter) }
                     when (event.filter) {
                         FileFilter.Todos -> loadAllFiles()
                         FileFilter.Ingresos -> loadIncomeFiles()
                         FileFilter.Gastos -> loadExpenseFiles()
                     }
-                }else{
+                } else {
                     _uiState.update { it.copy(selectedFilter = event.filter) }
                     when (event.filter) {
                         FileFilter.Todos -> loadAllFiles(event.clientId)
@@ -88,7 +87,12 @@ class FileViewModel @Inject constructor(
                 }
             }
 
-            is FileEvent.UpdateFile -> update(event.balanceId, event.total, event.iva, event.clientId)
+            is FileEvent.UpdateFile -> update(
+                event.balanceId,
+                event.total,
+                event.iva,
+                event.clientId
+            )
 
             is FileEvent.OnExpandedFileChange -> _uiState.update {
                 it.copy(expandedFileId = event.fileId)
@@ -118,13 +122,13 @@ class FileViewModel @Inject constructor(
                                 it.copy(message = result.data?.message)
                             }
 
-                            if (!clientId.contains("@")){
+                            if (!clientId.contains("@")) {
                                 when (_uiState.value.selectedFilter) {
                                     FileFilter.Todos -> loadAllFiles()
                                     FileFilter.Ingresos -> loadIncomeFiles()
                                     FileFilter.Gastos -> loadExpenseFiles()
                                 }
-                            }else{
+                            } else {
                                 when (_uiState.value.selectedFilter) {
                                     FileFilter.Todos -> loadAllFiles(clientId)
                                     FileFilter.Ingresos -> loadIncomeFiles(clientId)
@@ -133,7 +137,14 @@ class FileViewModel @Inject constructor(
                             }
 
                         }
-                        is NetworkResultt.Error -> _uiState.update { it.copy(message = result.message, isLoading = false) }
+
+                        is NetworkResultt.Error -> _uiState.update {
+                            it.copy(
+                                message = result.message,
+                                isLoading = false
+                            )
+                        }
+
                         is NetworkResultt.Loading -> _uiState.update { it.copy(isLoading = true) }
                     }
                 }
@@ -189,13 +200,13 @@ class FileViewModel @Inject constructor(
                                     )
                                 }
 
-                                if (!clientId.contains("@")){
+                                if (!clientId.contains("@")) {
                                     when (_uiState.value.selectedFilter) {
                                         FileFilter.Todos -> loadAllFiles()
                                         FileFilter.Ingresos -> loadIncomeFiles()
                                         FileFilter.Gastos -> loadExpenseFiles()
                                     }
-                                }else{
+                                } else {
                                     when (_uiState.value.selectedFilter) {
                                         FileFilter.Todos -> loadAllFiles(clientId)
                                         FileFilter.Ingresos -> loadIncomeFiles(clientId)
@@ -215,7 +226,7 @@ class FileViewModel @Inject constructor(
         viewModelScope.launch {
             fileService.download(fileId, context)
                 .catch(action = { cause ->
-                    Log.i("f", "error al catch")
+
                     _uiState.update {
                         it.copy(
                             message = cause.message,
@@ -225,7 +236,7 @@ class FileViewModel @Inject constructor(
                 }).collect { result ->
                     when (result) {
                         is NetworkResultt.Error -> {
-                            Log.i("f", "error en when")
+
                             _uiState.update {
                                 it.copy(
                                     isLoading = false
@@ -234,7 +245,7 @@ class FileViewModel @Inject constructor(
                         }
 
                         is NetworkResultt.Loading -> {
-                            Log.i("f", "loading")
+
                             _uiState.update { it.copy(isLoading = true) }
                         }
 
@@ -250,7 +261,6 @@ class FileViewModel @Inject constructor(
                 }
         }
     }
-
 
 
     private fun loadAllFiles() {

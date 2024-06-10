@@ -12,14 +12,23 @@ class ChatRepository @Inject constructor(
     private val db: FirebaseFirestore
 ) {
 
-    fun addMessage(clientEmail: String, message: Map<String, Any>, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+    fun addMessage(
+        clientEmail: String,
+        message: Map<String, Any>,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
         db.collection("chats").document(clientEmail)
             .collection("messages").add(message)
             .addOnSuccessListener { onSuccess() }
             .addOnFailureListener { e -> onFailure(e) }
     }
 
-    fun getMessages(clientEmail: String, onMessagesLoaded: (List<Message>) -> Unit, onFailure: (Exception) -> Unit): ListenerRegistration {
+    fun getMessages(
+        clientEmail: String,
+        onMessagesLoaded: (List<Message>) -> Unit,
+        onFailure: (Exception) -> Unit
+    ): ListenerRegistration {
         return db.collection("chats").document(clientEmail).collection("messages")
             .orderBy("timestamp", Query.Direction.DESCENDING)
             .addSnapshotListener { snapshots, e ->

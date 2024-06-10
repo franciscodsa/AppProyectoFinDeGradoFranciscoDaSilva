@@ -46,8 +46,10 @@ fun ExpandableFloatingActionButton(
                     modifier = Modifier.padding(8.dp)
                 ) {
                     Text(
-                        modifier = Modifier.clip(RoundedCornerShape(8.dp))
-                            .background(MaterialTheme.colorScheme.primary.copy(alpha = 1f)).padding(8.dp),
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(MaterialTheme.colorScheme.primary.copy(alpha = 1f))
+                            .padding(8.dp),
                         text = "Clientes",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onPrimary
@@ -67,8 +69,10 @@ fun ExpandableFloatingActionButton(
                     modifier = Modifier.padding(8.dp)
                 ) {
                     Text(
-                        modifier = Modifier.clip(RoundedCornerShape(8.dp))
-                            .background(MaterialTheme.colorScheme.primary.copy(alpha = 1f)).padding(8.dp),
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(MaterialTheme.colorScheme.primary.copy(alpha = 1f))
+                            .padding(8.dp),
                         text = "Contadores",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onPrimary

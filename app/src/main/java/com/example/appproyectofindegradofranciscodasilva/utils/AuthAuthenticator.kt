@@ -1,9 +1,8 @@
 package com.example.appproyectofindegradofranciscodasilva.utils
 
 import com.example.appproyectofindegradofranciscodasilva.common.Constantes
-import com.example.appproyectofindegradofranciscodasilva.data.source.apiservices.CredentialApiService
 import com.example.appproyectofindegradofranciscodasilva.data.model.LoginInfoResponse
-
+import com.example.appproyectofindegradofranciscodasilva.data.source.apiservices.CredentialApiService
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import okhttp3.Authenticator
@@ -37,7 +36,10 @@ class AuthAuthenticator @Inject constructor(
                 accessTokenRefreshed?.let { tokenManager.saveAccessToken(it) }
 
                 //construye la llamada de nuevo colocando el nuevo access token en el header
-                response.request.newBuilder().header(ConstantesUtils.authorization, "${ConstantesUtils.bearer} $accessTokenRefreshed")
+                response.request.newBuilder().header(
+                    ConstantesUtils.authorization,
+                    "${ConstantesUtils.bearer} $accessTokenRefreshed"
+                )
                     .build()
             }
         }

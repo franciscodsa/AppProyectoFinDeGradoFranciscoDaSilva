@@ -13,16 +13,16 @@ class ClientService @Inject constructor(
     private val clientRepository: ClientRepository,
     private val tokenManager: TokenManager
 ) {
-    fun addClient(client: Client): Flow<NetworkResultt<ApiMessage>>{
+    fun addClient(client: Client): Flow<NetworkResultt<ApiMessage>> {
         return clientRepository.addClient(client)
     }
 
-    fun updateClient(client: Client): Flow<NetworkResultt<ApiMessage>>{
+    fun updateClient(client: Client): Flow<NetworkResultt<ApiMessage>> {
         return clientRepository.updateClient(client)
     }
 
     fun getClients(): Flow<NetworkResultt<List<Client>>> {
-       return clientRepository.getClients()
+        return clientRepository.getClients()
     }
 
     fun getClientsWithNoAccountant(): Flow<NetworkResultt<List<Client>>> {
@@ -30,6 +30,6 @@ class ClientService @Inject constructor(
     }
 
     suspend fun getClientsByAccountant(): Flow<NetworkResultt<List<Client>>> {
-        return clientRepository.getClientsByAccount(tokenManager.getCurrentUser().first()?: "")
+        return clientRepository.getClientsByAccount(tokenManager.getCurrentUser().first() ?: "")
     }
 }

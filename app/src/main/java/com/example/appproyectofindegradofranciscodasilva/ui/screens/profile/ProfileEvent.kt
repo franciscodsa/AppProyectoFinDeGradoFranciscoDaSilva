@@ -10,5 +10,5 @@ sealed class ProfileEvent {
     object SaveChanges : ProfileEvent()
     object Logout : ProfileEvent()
     object MessageSeen : ProfileEvent()
-    object LoadUserData: ProfileEvent()
+    object LoadUserData : ProfileEvent()
 }

@@ -8,15 +8,15 @@ data class RegisterState(
     val firstName: String = "",
     val lastNames: String = "",
     val phone: String = "",
-    val year: String= "",
-    val month: String= "",
-    val day: String= "",
+    val year: String = "",
+    val month: String = "",
+    val day: String = "",
     val isLoading: Boolean = false,
     val message: String? = null,
-    val userRole: String= "",
+    val userRole: String = "",
     val selectedUserType: UserType = UserType.Cliente
 )
 
-enum class UserType{
+enum class UserType {
     Cliente, Contador
 }
