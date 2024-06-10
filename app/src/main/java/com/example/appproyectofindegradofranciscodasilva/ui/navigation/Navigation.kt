@@ -13,6 +13,7 @@ import com.example.appproyectofindegradofranciscodasilva.ui.screens.chat.ChatScr
 import com.example.appproyectofindegradofranciscodasilva.ui.screens.clients.ClientScreen
 import com.example.appproyectofindegradofranciscodasilva.ui.screens.contacts.ContactsScreen
 import com.example.appproyectofindegradofranciscodasilva.ui.screens.contadores.AccountantScreen
+import com.example.appproyectofindegradofranciscodasilva.ui.screens.info.InfoScreen
 import com.example.appproyectofindegradofranciscodasilva.ui.screens.login.LoginScreen
 import com.example.appproyectofindegradofranciscodasilva.ui.screens.olvideclave.OlvideClaveScreen
 import com.example.appproyectofindegradofranciscodasilva.ui.screens.profile.ProfileScreen
@@ -43,20 +44,13 @@ fun Navigation(
                 },
                 toClaveOlvidadaScreen = {
                     navController.navigate("olvide")
-                }/*,
-                bottomNavigationBar = {
-                    BottomBar(
-                        navController = navController,
-                        screens = screens
-                    )
-                }*/
+                }
             )
         }
         composable(
             "registro"
         ) {
             RegisterScreen(
-
             )
         }
 
@@ -169,5 +163,19 @@ fun Navigation(
                 }
             )
         }
+
+        composable(
+            "info"
+        ){
+            InfoScreen(
+                bottomNavigationBar = {
+                    BottomBar(
+                        navController = navController,
+                        screens = screens
+                    )
+                }
+            )
+        }
+
     }
 }

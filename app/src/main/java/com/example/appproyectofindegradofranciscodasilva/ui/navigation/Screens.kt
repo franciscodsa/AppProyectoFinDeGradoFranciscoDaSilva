@@ -6,11 +6,13 @@ import androidx.compose.material.icons.filled.Chat
 import androidx.compose.material.icons.filled.ChatBubble
 import androidx.compose.material.icons.filled.Folder
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.outlined.Apps
 import androidx.compose.material.icons.outlined.ChatBubbleOutline
 import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.ui.graphics.vector.ImageVector
 
@@ -33,6 +35,12 @@ val screens = listOf(
         Icons.Filled.ChatBubble,
         Icons.Outlined.ChatBubbleOutline,
         "Chat"
+    ),
+    Screens(
+        "info",
+        Icons.Filled.Info,
+        Icons.Outlined.Info,
+        "Info"
     ),
     Screens(
         "profile",
