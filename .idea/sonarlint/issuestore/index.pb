@@ -206,6 +206,4 @@ bapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/domain/serv
 ”
 dapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/domain/services/ClientService.kt,d\a\dac46f0f962cd968ce4088f5c97c7ae8ae3f85fd
 ‘
-aapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/ui/screens/info.InfoScreen.kt,7\e\7e495aa556eae2ba7df59dbecdd71296c22c90a3
-‘
 aapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/ui/screens/info/InfoScreen.kt,a\a\aabee5ee1a234501280f31dc60303c0e655fe6a8

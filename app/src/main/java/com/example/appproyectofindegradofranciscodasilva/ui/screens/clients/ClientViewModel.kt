@@ -28,9 +28,6 @@ class ClientViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(ClientState())
     val uiState: StateFlow<ClientState> = _uiState.asStateFlow()
 
-    /*init {
-        loadClients()
-    }*/
 
     fun handleEvent(event: ClientEvent) {
         when (event) {

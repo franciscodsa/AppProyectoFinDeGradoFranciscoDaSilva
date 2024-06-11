@@ -9,21 +9,6 @@ class ChatService @Inject constructor(
     private val chatRepository: ChatRepository
 ) {
 
-    /*  fun createChatDocument(clientEmail: String): String {
-          val chatRef = firebaseFirestore.collection("chats").document(clientEmail)
-          val chatData = hashMapOf(
-              "clientEmail" to clientEmail
-          )
-
-          val result = chatRef.set(chatData)
-
-          return if (result.isSuccessful) {
-              "Creado"
-          } else {
-              "Error creando chat"
-          }
-      }*/
-
     fun createChatDocument(clientEmail: String) {
         chatRepository.createChatDocument(clientEmail)
     }

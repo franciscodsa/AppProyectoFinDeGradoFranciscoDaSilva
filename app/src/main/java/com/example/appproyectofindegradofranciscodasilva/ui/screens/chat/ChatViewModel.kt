@@ -24,10 +24,6 @@ class ChatViewModel @Inject constructor(
 
     private var listenerRegistration: ListenerRegistration? = null
 
-    init {
-        // Puedes cargar los mensajes iniciales si es necesario
-        // loadMessages()
-    }
 
     fun handleEvent(event: ChatEvent) {
         when (event) {

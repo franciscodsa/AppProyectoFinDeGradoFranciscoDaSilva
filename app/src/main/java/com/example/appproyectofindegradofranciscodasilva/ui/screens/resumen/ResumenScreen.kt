@@ -524,25 +524,3 @@ fun IngresosGastosToggle(
     }
 }
 
-/*@Composable
-fun ToggleButton(
-    text: String,
-    selected: Boolean,
-    onClick: () -> Unit
-) {
-    Button(
-        onClick = onClick,
-        colors = ButtonDefaults.buttonColors(
-            containerColor = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface.copy(
-                alpha = 0.3f
-            ),
-            contentColor = if (selected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface
-        ),
-        modifier = Modifier.padding(start = 8.dp)
-    ) {
-        Text(
-            text = text,
-            style = MaterialTheme.typography.bodySmall,
-        )
-    }
-}*/
