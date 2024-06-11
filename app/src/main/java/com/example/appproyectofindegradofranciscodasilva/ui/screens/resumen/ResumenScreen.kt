@@ -390,6 +390,7 @@ fun BottomSheetContent(
         sheetState = bottomSheetState
     ) {
         val context = LocalContext.current
+        // Usamos `rememberLauncherForActivityResult` para recordar el resultado de la actividad de selección de archivos
         val launcher =
             rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { result: Uri? ->
                 result?.let { uri ->
@@ -400,6 +401,7 @@ fun BottomSheetContent(
                     cursor?.moveToFirst()
                     val name = nameIndex?.let { cursor.getString(it) }
                     cursor?.close()
+                    // Creamos un archivo temporal
                     val selectedFile = File(context.cacheDir, name ?: "")
                     contentResolver.openInputStream(uri)?.use { inputStream ->
                         selectedFile.outputStream().use { outputStream ->
@@ -407,6 +409,7 @@ fun BottomSheetContent(
                         }
                     }
                     selectedFileName = name ?: ""
+                    // Llamamos a las funciones de devolución de llamada para manejar el archivo seleccionado y su tipo MIME
                     onMimeTypeSelected(mimeType)
                     onFileSelected(selectedFile)
                 }
@@ -478,6 +481,7 @@ fun BottomSheetContent(
             }
             Row {
                 Spacer(modifier = Modifier.weight(1f))
+                // Botón para abrir el selector de archivos del teléfono.
                 Button(onClick = { launcher.launch("*/*") }) {
                     Text("Seleccionar archivo")
                 }
