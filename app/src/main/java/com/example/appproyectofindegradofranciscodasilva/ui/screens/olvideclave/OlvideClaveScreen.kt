@@ -129,6 +129,7 @@ fun OlvideClaveScreen(viewModel: OlvideClaveViewModel = hiltViewModel()) {
                     label = { Text(text = stringResource(R.string.auth_code)) },
                     trailingIcon = {
                         IconButton(onClick = {
+                            //Perimte pegar texto copiado usando el boton al final del outlined text field
                             val clipboardText = clipboardManager.getText()?.toString() ?: ""
                             viewModel.handleEvent(OlvideClaveEvent.OnAuthCodeChange(clipboardText))
                         }) {
