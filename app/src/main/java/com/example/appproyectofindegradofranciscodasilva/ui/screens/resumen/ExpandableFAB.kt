@@ -23,7 +23,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.dp
+import com.example.appproyectofindegradofranciscodasilva.R
 
 @Composable
 fun ExpandableFloatingActionButton(
@@ -43,18 +45,18 @@ fun ExpandableFloatingActionButton(
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(8.dp)
+                    modifier = Modifier.padding(dimensionResource(id = R.dimen.medium_size_space))
                 ) {
                     Text(
                         modifier = Modifier
-                            .clip(RoundedCornerShape(8.dp))
+                            .clip(RoundedCornerShape(dimensionResource(id = R.dimen.medium_size_space)))
                             .background(MaterialTheme.colorScheme.primary.copy(alpha = 1f))
-                            .padding(8.dp),
+                            .padding(dimensionResource(id = R.dimen.medium_size_space)),
                         text = "Clientes",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onPrimary
                     )
-                    Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(dimensionResource(id = R.dimen.medium_size_space)))
                     FloatingActionButton(
                         onClick = onClientesClick,
                         shape = CircleShape,
@@ -66,18 +68,18 @@ fun ExpandableFloatingActionButton(
                 }
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(8.dp)
+                    modifier = Modifier.padding(dimensionResource(id = R.dimen.medium_size_space))
                 ) {
                     Text(
                         modifier = Modifier
-                            .clip(RoundedCornerShape(8.dp))
+                            .clip(RoundedCornerShape(dimensionResource(id = R.dimen.medium_size_space)))
                             .background(MaterialTheme.colorScheme.primary.copy(alpha = 1f))
-                            .padding(8.dp),
+                            .padding(dimensionResource(id = R.dimen.medium_size_space)),
                         text = "Contadores",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onPrimary
                     )
-                    Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(dimensionResource(id = R.dimen.medium_size_space)))
                     FloatingActionButton(
                         onClick = onContadoresClick,
                         shape = CircleShape,

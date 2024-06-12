@@ -34,9 +34,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.appproyectofindegradofranciscodasilva.R
 import com.example.appproyectofindegradofranciscodasilva.data.model.Accountant
 import com.example.appproyectofindegradofranciscodasilva.ui.navigation.SwipeToDeleteContainer
 
@@ -90,7 +92,7 @@ fun AccountantScreen(
             Column(
                 modifier = Modifier
                     .padding(innerPadding)
-                    .padding(16.dp)
+                    .padding(dimensionResource(id = R.dimen.big_size_space))
                     .fillMaxSize()
             ) {
                 LazyColumn {
@@ -109,7 +111,7 @@ fun AccountantScreen(
                                 }
                             )
                         }
-                        Spacer(modifier = Modifier.height(8.dp))
+                        Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.medium_size_space)))
                     }
                 }
             }
@@ -127,13 +129,13 @@ fun AccountantCard(
         modifier = Modifier
             .fillMaxWidth()
             .clickable { onExpandChange() },
-        shape = RoundedCornerShape(8.dp),
+        shape = RoundedCornerShape(dimensionResource(id = R.dimen.medium_size_space)),
         elevation = CardDefaults.cardElevation()
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
+                .padding(dimensionResource(id = R.dimen.big_size_space))
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically
@@ -155,7 +157,7 @@ fun AccountantCard(
             }
 
             if (expanded) {
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.medium_size_space)))
                 Text(
                     text = "Teléfono: ${accountant.phone}",
                     style = MaterialTheme.typography.bodyMedium

@@ -224,16 +224,16 @@ fun CustomDropdown(
 
     Column(
         modifier = modifier
-            .clip(RoundedCornerShape(8.dp))
+            .clip(RoundedCornerShape(dimensionResource(id = R.dimen.medium_size_space)))
             .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f))
-            .padding(8.dp)
+            .padding(dimensionResource(id = R.dimen.medium_size_space))
     ) {
         Text(
             text = label,
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.primary
         )
-        Spacer(modifier = Modifier.height(4.dp))
+        Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.small_size_space)))
         Divider()
         Box(
             modifier = Modifier
@@ -243,7 +243,7 @@ fun CustomDropdown(
                     color = MaterialTheme.colorScheme.surface.copy(alpha = 0.12f),
                     shape = RoundedCornerShape(4.dp)
                 )
-                .padding(horizontal = 12.dp, vertical = 8.dp)
+                .padding(horizontal = 12.dp, vertical = dimensionResource(id = R.dimen.medium_size_space))
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -310,17 +310,17 @@ fun ExpandableCard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp)
+            .padding(dimensionResource(id = R.dimen.big_size_space))
             .clickable { expanded = !expanded }
-            .shadow(4.dp, RoundedCornerShape(8.dp)),
-        shape = RoundedCornerShape(8.dp),
+            .shadow(dimensionResource(id = R.dimen.small_size_space), RoundedCornerShape(dimensionResource(id = R.dimen.medium_size_space))),
+        shape = RoundedCornerShape(dimensionResource(id = R.dimen.medium_size_space)),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation =dimensionResource(id = R.dimen.medium_size_space))
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
+                .padding(dimensionResource(id = R.dimen.big_size_space))
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -336,14 +336,14 @@ fun ExpandableCard(
                     contentDescription = if (expanded) "Collapse" else "Expand"
                 )
             }
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.medium_size_space)))
             Text(
                 text = "Total: ${String.format("%.2f€", total)}",
                 style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )
             if (expanded) {
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.big_size_space)))
                 Column(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally
@@ -352,12 +352,12 @@ fun ExpandableCard(
                         text = "IRPF: ${String.format("%.2f€", irpf)}",
                         style = MaterialTheme.typography.bodyLarge
                     )
-                    Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.medium_size_space)))
                     Text(
                         text = "IVA: ${String.format("%.2f€", iva)}",
                         style = MaterialTheme.typography.bodyLarge
                     )
-                    Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.medium_size_space)))
                     Text(
                         text = warningMessage,
                         style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.error),
@@ -418,12 +418,12 @@ fun BottomSheetContent(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
+                .padding(dimensionResource(id = R.dimen.big_size_space))
         ) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 16.dp),
+                    .padding(bottom = dimensionResource(id = R.dimen.big_size_space)),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
@@ -444,7 +444,7 @@ fun BottomSheetContent(
                     onInvoiceTypeChange = onInvoiceTypeChange
                 )
             }
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.big_size_space)))
             OutlinedTextField(
                 value = state.newInvoiceTotal,
                 onValueChange = onTotalChange,
@@ -453,7 +453,7 @@ fun BottomSheetContent(
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth()
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.medium_size_space)))
             OutlinedTextField(
                 value = state.newInvoiceIva,
                 onValueChange = onIvaChange,
@@ -462,14 +462,14 @@ fun BottomSheetContent(
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth()
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.medium_size_space)))
             OutlinedTextField(
                 value = state.newInvoiceDescription,
                 onValueChange = onDescriptionChange,
                 label = { Text("Descripción") },
                 modifier = Modifier.fillMaxWidth()
             )
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.big_size_space)))
             Row {
                 Spacer(modifier = Modifier.weight(1f))
                 OutlinedTextField(

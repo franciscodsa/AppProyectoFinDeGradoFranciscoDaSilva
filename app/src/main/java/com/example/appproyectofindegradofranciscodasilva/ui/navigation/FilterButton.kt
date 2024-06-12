@@ -8,7 +8,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.dimensionResource
+import com.example.appproyectofindegradofranciscodasilva.R
 
 
 @Composable
@@ -25,7 +26,7 @@ fun FilterButton(
             ),
             contentColor = if (selected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface
         ),
-        contentPadding = PaddingValues(4.dp),
+        contentPadding = PaddingValues(dimensionResource(id = R.dimen.small_size_space)),
         modifier = Modifier
             .height(ButtonDefaults.MinHeight)
     ) {

@@ -235,7 +235,7 @@ fun UserTypeButtons(
                 onSelectedUserType(UserType.Cliente)
             }
         )
-        Spacer(modifier = Modifier.width(8.dp))
+        Spacer(modifier = Modifier.width(dimensionResource(id = R.dimen.medium_size_space)))
         FilterButton(
             text = "Contador",
             selected = selectedUserType == UserType.Contador,

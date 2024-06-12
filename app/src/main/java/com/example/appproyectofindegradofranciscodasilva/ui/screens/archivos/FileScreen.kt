@@ -47,9 +47,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.dimensionResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.appproyectofindegradofranciscodasilva.R
 import com.example.appproyectofindegradofranciscodasilva.data.model.FileInfo
 import com.example.appproyectofindegradofranciscodasilva.ui.navigation.FilterButton
 import com.example.appproyectofindegradofranciscodasilva.ui.navigation.SwipeToDeleteContainer
@@ -133,13 +134,13 @@ private fun FileLazyColum(
         modifier = Modifier
             .fillMaxSize()
             .padding(innerPadding)
-            .padding(16.dp)
+            .padding(dimensionResource(id = R.dimen.big_size_space))
     ) {
         FilterButtons(
             selectedFilter = state.value.selectedFilter,
             onFilterChange = { viewModel.handleEvent(FileEvent.OnFilterChanged(it, clientId)) }
         )
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.big_size_space)))
         Box(modifier = Modifier.fillMaxSize()) {
             if (state.value.isLoading) {
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
@@ -186,7 +187,7 @@ private fun FileLazyColum(
                                 }
                             )
                         }
-                        Spacer(modifier = Modifier.height(8.dp))
+                        Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.medium_size_space)))
                     }
                 }
             }
@@ -211,7 +212,7 @@ fun FilterButtons(
                 onFilterChange(FileFilter.Todos)
             }
         )
-        Spacer(modifier = Modifier.width(8.dp))
+        Spacer(modifier = Modifier.width(dimensionResource(id = R.dimen.medium_size_space)))
         FilterButton(
             text = "Ingresos",
             selected = selectedFilter == FileFilter.Ingresos,
@@ -219,7 +220,7 @@ fun FilterButtons(
                 onFilterChange(FileFilter.Ingresos)
             }
         )
-        Spacer(modifier = Modifier.width(8.dp))
+        Spacer(modifier = Modifier.width(dimensionResource(id = R.dimen.medium_size_space)))
         FilterButton(
             text = "Gastos",
             selected = selectedFilter == FileFilter.Gastos,
@@ -250,14 +251,14 @@ fun ExpandableFileCard(
             .clickable {
                 onExpandChange()
             },
-        shape = RoundedCornerShape(8.dp),
+        shape = RoundedCornerShape(dimensionResource(id = R.dimen.medium_size_space)),
         elevation = CardDefaults.cardElevation()
     ) {
         Column {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp),
+                    .padding(dimensionResource(id = R.dimen.medium_size_space)),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column(
@@ -270,17 +271,17 @@ fun ExpandableFileCard(
                             imageVector = Icons.Default.InsertDriveFile,
                             contentDescription = "Archivo"
                         )
-                        Spacer(modifier = Modifier.width(8.dp))
+                        Spacer(modifier = Modifier.width(dimensionResource(id = R.dimen.medium_size_space)))
                         Text(text = file.fileName, style = MaterialTheme.typography.titleMedium)
                     }
 
                     if (expanded) {
-                        Spacer(modifier = Modifier.height(8.dp))
+                        Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.medium_size_space)))
                         Text(
                             text = "Descripción: ${file.description}",
                             style = MaterialTheme.typography.bodyMedium
                         )
-                        Spacer(modifier = Modifier.height(8.dp))
+                        Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.medium_size_space)))
                         Text(
                             text = "Fecha: ${file.date}",
                             style = MaterialTheme.typography.bodyMedium
@@ -292,14 +293,14 @@ fun ExpandableFileCard(
                                 label = { Text("Total") },
                                 modifier = Modifier.fillMaxWidth()
                             )
-                            Spacer(modifier = Modifier.height(8.dp))
+                            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.medium_size_space)))
                             OutlinedTextField(
                                 value = iva,
                                 onValueChange = { onIvaChange(it) },
                                 label = { Text("IVA") },
                                 modifier = Modifier.fillMaxWidth()
                             )
-                            Spacer(modifier = Modifier.height(8.dp))
+                            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.medium_size_space)))
                         } else {
                             Text(
                                 text = "Total: ${file.total}",
@@ -314,7 +315,7 @@ fun ExpandableFileCard(
                 }
 
                 Column {
-                    Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(dimensionResource(id = R.dimen.medium_size_space)))
 
                     if (expanded) {
 

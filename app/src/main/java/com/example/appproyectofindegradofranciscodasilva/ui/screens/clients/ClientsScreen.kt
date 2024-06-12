@@ -40,9 +40,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.appproyectofindegradofranciscodasilva.R
 import com.example.appproyectofindegradofranciscodasilva.data.model.Client
 import com.example.appproyectofindegradofranciscodasilva.ui.navigation.FilterButton
 import com.example.appproyectofindegradofranciscodasilva.ui.navigation.SwipeToDeleteContainer
@@ -97,7 +99,7 @@ fun ClientScreen(
         Column(
             modifier = Modifier
                 .padding(innerPadding)
-                .padding(16.dp)
+                .padding(dimensionResource(id = R.dimen.big_size_space))
                 .fillMaxSize()
         ) {
             if (state.userRole == "admin") {
@@ -106,7 +108,7 @@ fun ClientScreen(
                     onFilterChange = { viewModel.handleEvent(ClientEvent.OnFilterChanged(it)) }
                 )
             }
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.big_size_space)))
             LazyColumn {
                 items(state.clients, key = { client -> client.email }) { client ->
                     SwipeToDeleteContainer(
@@ -141,7 +143,7 @@ fun ClientScreen(
                             }
                         )
                     }
-                    Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.medium_size_space)))
                 }
             }
         }
@@ -167,7 +169,7 @@ fun FilterButtons(
                 onFilterChange(ClientFilter.Todos)
             }
         )
-        Spacer(modifier = Modifier.width(8.dp))
+        Spacer(modifier = Modifier.width(dimensionResource(id = R.dimen.medium_size_space)))
         FilterButton(
             text = "No Asignados",
             selected = selectedFilter == ClientFilter.NoAsignados,
@@ -197,19 +199,19 @@ fun ClientCard(
         modifier = Modifier
             .fillMaxWidth()
             .clickable { onExpandChange() },
-        shape = RoundedCornerShape(8.dp),
+        shape = RoundedCornerShape(dimensionResource(id = R.dimen.medium_size_space)),
         elevation = CardDefaults.cardElevation()
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
+                .padding(dimensionResource(id = R.dimen.big_size_space))
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(imageVector = Icons.Default.Person, contentDescription = "Client")
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(dimensionResource(id = R.dimen.medium_size_space)))
                 Column {
                     Text(
                         text = "${client.firstName} ${client.lastName}",
@@ -226,7 +228,7 @@ fun ClientCard(
                 }
             }
             if (expanded) {
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.medium_size_space)))
                 Row {
                     Column(modifier = Modifier.weight(1f)) {
                         Text(
@@ -237,7 +239,7 @@ fun ClientCard(
                             text = "Fecha de Nacimiento: ${client.dateOfBirth}",
                             style = MaterialTheme.typography.bodyMedium
                         )
-                        Spacer(modifier = Modifier.height(8.dp))
+                        Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.medium_size_space)))
 
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             if (isEditing) {
@@ -257,7 +259,7 @@ fun ClientCard(
                                 )
                             }
                         }
-                        Spacer(modifier = Modifier.height(8.dp))
+                        Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.medium_size_space)))
                         Row {
                             Button(onClick = { onFilesClick(client.email) }) {
                                 Text(text = "Archivos")

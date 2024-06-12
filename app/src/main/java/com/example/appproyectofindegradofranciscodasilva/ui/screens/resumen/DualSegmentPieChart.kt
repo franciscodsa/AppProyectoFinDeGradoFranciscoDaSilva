@@ -119,7 +119,7 @@ fun DetailsPieChart(data: Map<String, Double>, colors: List<Color>) {
     Column {
         Row(
             modifier = Modifier
-                .padding(top = 8.dp)
+                .padding(top = dimensionResource(id = R.dimen.medium_size_space))
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
@@ -143,7 +143,7 @@ fun DetailsPieChartItem(
 
     Surface(
         modifier = Modifier
-            .padding(16.dp),
+            .padding(dimensionResource(id = R.dimen.big_size_space)),
         color = Color.Transparent
     ) {
 

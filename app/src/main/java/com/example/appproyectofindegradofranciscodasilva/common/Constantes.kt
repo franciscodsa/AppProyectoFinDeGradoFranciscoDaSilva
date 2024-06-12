@@ -6,8 +6,8 @@ object Constantes {
     const val unknownError = "Error desconocido"
 
     //NetworkModule
-    const val urlBaseLogin = "http://192.168.1.131:8080/"
-    const val urlBaseInfo = "http://192.168.1.131:8082/"
+    const val urlBaseLogin = "https://informatica.iesquevedo.es/contaeasy/auth/"
+    const val urlBaseInfo = "https://informatica.iesquevedo.es/contaeasy/info/"
 
     const val refreshToken = "refreshToken"
     const val login = "login"

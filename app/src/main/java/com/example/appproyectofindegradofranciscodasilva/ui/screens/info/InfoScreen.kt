@@ -22,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextAlign
@@ -45,7 +46,7 @@ fun InfoScreen(bottomNavigationBar: @Composable () -> Unit = {}) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .padding(16.dp),
+                .padding(dimensionResource(id = R.dimen.big_size_space)),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -56,7 +57,7 @@ fun InfoScreen(bottomNavigationBar: @Composable () -> Unit = {}) {
                 )
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.big_size_space)))
 
             Row(
                 verticalAlignment = Alignment.CenterVertically
@@ -64,10 +65,10 @@ fun InfoScreen(bottomNavigationBar: @Composable () -> Unit = {}) {
                 Image(
                     painter = painterResource(id = R.drawable.ic_youtube),
                     contentDescription = "YouTube Icon",
-                    modifier = Modifier.size(24.dp)
+                    modifier = Modifier.size(dimensionResource(id = R.dimen.bigger_size_space))
                 )
 
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(dimensionResource(id = R.dimen.medium_size_space)))
 
                 ClickableText(
                     text = AnnotatedString("Ver Tutoriales"),
@@ -84,7 +85,7 @@ fun InfoScreen(bottomNavigationBar: @Composable () -> Unit = {}) {
                 )
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.big_size_space)))
 
             Text(
                 text = "Recuerda que siempre puedes preguntar cualquier duda que tengas a tu contador usando el chat",

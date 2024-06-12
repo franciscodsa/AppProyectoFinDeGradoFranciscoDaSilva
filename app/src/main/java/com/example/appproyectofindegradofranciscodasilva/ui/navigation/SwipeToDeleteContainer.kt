@@ -26,7 +26,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.dimensionResource
+import com.example.appproyectofindegradofranciscodasilva.R
 import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -89,7 +90,7 @@ fun DeleteBackground(
         modifier = Modifier
             .fillMaxSize()
             .background(color)
-            .padding(16.dp),
+            .padding(dimensionResource(id = R.dimen.big_size_space)),
         contentAlignment = Alignment.CenterEnd
     ) {
         Icon(

@@ -33,8 +33,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.dimensionResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.appproyectofindegradofranciscodasilva.R
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -86,7 +87,7 @@ fun ChatScreen(
                     modifier = Modifier
                         .weight(1f)
                         .fillMaxWidth()
-                        .padding(8.dp),
+                        .padding(dimensionResource(id = R.dimen.medium_size_space)),
                     reverseLayout = true
                 ) {
                     items(state.messages) { message ->
@@ -99,26 +100,26 @@ fun ChatScreen(
                             if (isCurrentUser) Spacer(modifier = Modifier.weight(0.2f))
                             Card(
                                 modifier = Modifier
-                                    .padding(4.dp)
+                                    .padding(dimensionResource(id = R.dimen.small_size_space))
                                     .weight(0.8f),
                                 shape = MaterialTheme.shapes.medium
                             ) {
                                 Column(
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .padding(8.dp)
+                                        .padding(dimensionResource(id = R.dimen.medium_size_space))
                                 ) {
                                     Text(
                                         text = message.senderEmail,
                                         style = MaterialTheme.typography.bodySmall,
                                         color = MaterialTheme.colorScheme.primary
                                     )
-                                    Spacer(modifier = Modifier.height(4.dp))
+                                    Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.small_size_space)))
                                     Text(
                                         text = message.content,
                                         style = MaterialTheme.typography.bodyMedium
                                     )
-                                    Spacer(modifier = Modifier.height(4.dp))
+                                    Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.small_size_space)))
                                     Text(
                                         text = SimpleDateFormat(
                                             "yyyy-MM-dd HH:mm:ss",
@@ -141,7 +142,7 @@ fun ChatScreen(
                         IconButton(
                             onClick = { viewModel.handleEvent(ChatEvent.SendMessage) },
                             enabled = !state.isLoading,
-                            modifier = Modifier.padding(8.dp)
+                            modifier = Modifier.padding(dimensionResource(id = R.dimen.medium_size_space))
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Send,
@@ -153,7 +154,7 @@ fun ChatScreen(
                     onValueChange = { viewModel.handleEvent(ChatEvent.OnMessageTextChange(it)) },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(8.dp)
+                        .padding(dimensionResource(id = R.dimen.medium_size_space))
                 )
 
             }
