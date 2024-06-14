@@ -207,3 +207,7 @@ bapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/domain/serv
 dapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/domain/services/ClientService.kt,d\a\dac46f0f962cd968ce4088f5c97c7ae8ae3f85fd
 ‘
 aapp/src/main/java/com/example/appproyectofindegradofranciscodasilva/ui/screens/info/InfoScreen.kt,a\a\aabee5ee1a234501280f31dc60303c0e655fe6a8
+•
+eapp/src/androidTest/java/com/example/appproyectofindegradofranciscodasilva/ExampleInstrumentedTest.kt,b\6\b6d3512a0f4e27be83ddc3d9248ddcafd87e3837
+†
+Vapp/src/test/java/com/example/appproyectofindegradofranciscodasilva/ExampleUnitTest.kt,3\2\3290ff10b28ebba639bdaac71a66438ed8774c60
